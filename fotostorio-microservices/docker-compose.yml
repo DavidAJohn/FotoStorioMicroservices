@@ -1,8 +1,14 @@
 version: '3.4'
 
 services:
+  productsdb:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+
   products.api:
     image: ${DOCKER_REGISTRY-}productsapi
     build:
       context: .
       dockerfile: Services/Products/Products.API/Dockerfile
+
+volumes:
+  mssqldata:
