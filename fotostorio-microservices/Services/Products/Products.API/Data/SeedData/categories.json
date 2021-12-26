@@ -1,0 +1,14 @@
+[
+    {
+        "Id": 1,
+        "Name": "DSLR Cameras"
+    },
+    {
+        "Id": 2,
+        "Name": "Mirrorless Cameras"
+    },
+    {
+        "Id": 3,
+        "Name": "Lenses"
+    }
+]

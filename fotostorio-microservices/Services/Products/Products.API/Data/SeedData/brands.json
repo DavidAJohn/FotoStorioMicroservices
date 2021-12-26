@@ -1,0 +1,18 @@
+[
+    {
+        "Id": 1,
+        "Name": "Canon"
+    },
+    {
+        "Id": 2,
+        "Name": "Nikon"
+    },
+    {
+        "Id": 3,
+        "Name": "Sony"
+    },
+    {
+        "Id": 4,
+        "Name": "Fujifilm"
+    }
+]
