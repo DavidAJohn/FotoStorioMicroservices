@@ -1,0 +1,26 @@
+[
+  {
+    "Id": 1,
+    "Name": "Nikon F-Mount"
+  },
+  {
+    "Id": 2,
+    "Name": "Nikon Z-Mount"
+  },
+  {
+    "Id": 3,
+    "Name": "Canon EF Mount"
+  },
+  {
+    "Id": 4,
+    "Name": "Canon RF Mount"
+  },
+  {
+    "Id": 5,
+    "Name": "Fujifilm X-Mount"
+  },
+  {
+    "Id": 6,
+    "Name": "Sony E-Mount"
+  }
+]

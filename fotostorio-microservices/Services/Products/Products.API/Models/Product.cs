@@ -32,6 +32,11 @@ namespace Products.API.Models
         public Category Category { get; set; }
 
         [Required]
+        public int MountId { get; set; }
+
+        public Mount Mount { get; set; }
+
+        [Required]
         public bool IsAvailable { get; set; } = true;
     }
 }
