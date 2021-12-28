@@ -13,7 +13,11 @@ services:
       - mssqldata:/var/opt/mssql
 
   products.api:
+    container_name: products.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:ProductsConnectionString=Server=productsdb;Database=ProductsDb;User Id=sa;Password=aDmin1234!;"
+    depends_on:
+      - productsdb
     ports:
-      - "80"
+      - "8001:80"
