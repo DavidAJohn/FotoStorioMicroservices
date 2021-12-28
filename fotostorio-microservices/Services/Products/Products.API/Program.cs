@@ -5,12 +5,13 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Products.API.Data;
 using System;
+using System.Threading.Tasks;
 
 namespace Products.API
 {
     public class Program
     {
-        public async static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
 
