@@ -9,30 +9,42 @@ namespace Products.API.Data
 {
     public class ProductRepository : RepositoryBase<Product>, IProductRepository
     {
+        private readonly ApplicationDbContext _repositoryContext;
+
         public ProductRepository(ApplicationDbContext repositoryContext) : base(repositoryContext)
         {
+            _repositoryContext = repositoryContext;
         }
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            return await GetAll()
-                .OrderBy(p => p.Id)
-                .ToListAsync();
+            return await GetAll();
         }
 
         public async Task<Product> GetProductByIdAsync(int Id)
         {
-            return await GetByCondition(p => p.Id.Equals(Id))
-                .FirstOrDefaultAsync();
+            return await GetByCondition(p => p.Id.Equals(Id));
         }
 
         public async Task<Product> GetProductWithDetailsAsync(int Id)
         {
-            return await GetByCondition(p => p.Id.Equals(Id))
-                .Include(p => p.Brand)
-                .Include(p => p.Category)
-                .Include(p => p.Mount)
-                .FirstOrDefaultAsync();
+            return await GetByCondition(p => p.Id.Equals(Id));
+        }
+
+        public async Task<Product> CreateProduct(Product product)
+        {
+            await Create(product);
+            return product;
+        }
+
+        public async Task<bool> UpdateProduct(Product product)
+        {
+            return await Update(product);
+        }
+
+        public async Task<bool> DeleteProduct(Product product)
+        {
+            return await Delete(product);
         }
     }
 }
