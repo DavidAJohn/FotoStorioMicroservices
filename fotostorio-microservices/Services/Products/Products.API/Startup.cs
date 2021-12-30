@@ -34,6 +34,9 @@ namespace Products.API
             });
 
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IMountRepository, MountRepository>();
 
             services.AddAutoMapper(typeof(AutoMapperProfiles));
 
