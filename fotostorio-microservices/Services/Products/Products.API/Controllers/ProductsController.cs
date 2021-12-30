@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Products.API.Contracts;
 using Products.API.Models;
+using Products.API.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,12 +20,14 @@ namespace Products.API.Controllers
             _productRepository = productRepository;
         }
 
+        // GET api/products
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             try
             {
-                var products = await _productRepository.GetAllProductsAsync();
+                var spec = new ProductsWithDetailsSpecification();
+                var products = await _productRepository.ListWithSpecificationAsync(spec);
 
                 return Ok(products);
             }
@@ -35,12 +38,14 @@ namespace Products.API.Controllers
             }
         }
 
+        // GET api/products/{id}
         [HttpGet("{id}", Name = "GetProductById")]
         public async Task<ActionResult> GetProductById(int id)
         {
             try
             {
-                var product = await _productRepository.GetProductWithDetailsAsync(id);
+                var spec = new ProductsWithDetailsSpecification(id);
+                var product = await _productRepository.GetEntityWithSpecification(spec);
 
                 if (product == null)
                 {
@@ -59,6 +64,7 @@ namespace Products.API.Controllers
             }
         }
 
+        // POST api/products
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
         {
@@ -79,10 +85,11 @@ namespace Products.API.Controllers
             }
         }
 
+        // PUT api/products/{id}
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateProduct(int id, [FromBody] Product product)
         {
-            var productToUpdate = await _productRepository.GetProductByIdAsync(id);
+            var productToUpdate = await _productRepository.GetByIdAsync(id);
 
             if (productToUpdate == null)
             {
@@ -101,10 +108,11 @@ namespace Products.API.Controllers
             }
         }
 
+        // DELETE api/products/{id}
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteProduct(int id)
         {
-            var product = await _productRepository.GetProductByIdAsync(id);
+            var product = await _productRepository.GetByIdAsync(id);
 
             if (product == null)
             {
