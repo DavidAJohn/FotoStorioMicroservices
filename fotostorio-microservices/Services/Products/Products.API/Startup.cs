@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Products.API.Contracts;
 using Products.API.Data;
+using Products.API.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,8 @@ namespace Products.API
             });
 
             services.AddScoped<IProductRepository, ProductRepository>();
+
+            services.AddAutoMapper(typeof(AutoMapperProfiles));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
