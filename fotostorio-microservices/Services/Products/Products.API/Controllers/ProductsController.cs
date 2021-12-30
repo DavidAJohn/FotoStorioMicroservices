@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Products.API.Contracts;
+using Products.API.DTOs;
 using Products.API.Models;
 using Products.API.Specifications;
 using System;
@@ -13,23 +15,25 @@ namespace Products.API.Controllers
     {
         private readonly ILogger<ProductsController> _logger;
         private readonly IProductRepository _productRepository;
+        private readonly IMapper _mapper;
 
-        public ProductsController(ILogger<ProductsController> logger, IProductRepository productRepository)
+        public ProductsController(ILogger<ProductsController> logger, IProductRepository productRepository, IMapper mapper)
         {
             _logger = logger;
             _productRepository = productRepository;
+            _mapper = mapper;
         }
 
         // GET api/products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts()
         {
             try
             {
                 var spec = new ProductsWithDetailsSpecification();
                 var products = await _productRepository.ListWithSpecificationAsync(spec);
 
-                return Ok(products);
+                return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products));
             }
             catch (Exception ex)
             {
@@ -40,7 +44,7 @@ namespace Products.API.Controllers
 
         // GET api/products/{id}
         [HttpGet("{id}", Name = "GetProductById")]
-        public async Task<ActionResult> GetProductById(int id)
+        public async Task<ActionResult<ProductDTO>> GetProductById(int id)
         {
             try
             {
@@ -54,7 +58,7 @@ namespace Products.API.Controllers
                 }
                 else
                 {
-                    return Ok(product);
+                    return _mapper.Map<Product, ProductDTO>(product);
                 }
             }
             catch (Exception ex)
@@ -66,44 +70,51 @@ namespace Products.API.Controllers
 
         // POST api/products
         [HttpPost]
-        public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
+        public async Task<ActionResult<ProductDTO>> CreateProduct([FromBody] ProductCreateDTO productCreateDTO)
         {
-            if (product == null)
+            if (productCreateDTO == null)
             {
                 return BadRequest();
             }
 
             try
             {
+                var product = _mapper.Map<Product>(productCreateDTO);
                 await _productRepository.Create(product);
-                return CreatedAtRoute(nameof(GetProductById), new { Id = product.Id }, product);
+                var productDTO = _mapper.Map<Product, ProductDTO>(product);
+
+                return CreatedAtRoute(nameof(GetProductById), new { Id = productDTO.Id }, productDTO);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error in CreateProduct : {ex.Message}");
+
                 return BadRequest();
             }
         }
 
         // PUT api/products/{id}
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateProduct(int id, [FromBody] Product product)
+        public async Task<ActionResult> UpdateProduct(int id, [FromBody] ProductUpdateDTO productUpdateDTO)
         {
-            var productToUpdate = await _productRepository.GetByIdAsync(id);
+            var product = await _productRepository.GetByIdAsync(id);
 
-            if (productToUpdate == null)
+            if (product == null)
             {
                 return NotFound();
             }
 
             try
             {
+                _mapper.Map(productUpdateDTO, product);
                 await _productRepository.Update(product);
+
                 return NoContent();
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error in UpdateProduct : {ex.Message}");
+
                 return BadRequest();
             }
         }
@@ -122,11 +133,13 @@ namespace Products.API.Controllers
             try
             {
                 await _productRepository.Delete(product);
+
                 return NoContent();
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error in DeleteProduct : {ex.Message}");
+
                 return BadRequest();
             }
         }
