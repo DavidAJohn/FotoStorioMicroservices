@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Products.API.Data;
+using Microsoft.Extensions.Logging;
+using Products.API.Contracts;
 using Products.API.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,29 +10,58 @@ namespace Products.API.Controllers
 {
     public class BrandsController : BaseApiController
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ILogger<BrandsController> _logger;
+        private readonly IBrandRepository _brandRepository;
 
-        public BrandsController(ApplicationDbContext context)
+        public BrandsController(ILogger<BrandsController> logger, IBrandRepository brandRepository)
         {
-            _context = context;
+            _logger = logger;
+            _brandRepository = brandRepository;
         }
 
+        // GET api/brands
         [HttpGet]
-        public async Task<IEnumerable<Brand>> GetBrands()
+        public async Task<ActionResult<IEnumerable<Brand>>> GetBrands()
         {
-            var brands = await _context.Brands
-                .ToListAsync();
+            try
+            {
+                var brands = await _brandRepository.ListAllAsync();
 
-            return brands;
+                return Ok(brands);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in GetBrands : {ex.Message}");
+
+                return StatusCode(500, "Internal server error");
+            }
         }
 
+        // GET api/brands/{id}
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBrandById(int id)
+        public async Task<ActionResult> GetBrandById(int id)
         {
-            var brand = await _context.Brands
-                .SingleOrDefaultAsync(b => b.Id == id);
+            try
+            {
+                var brand = await _brandRepository.GetByIdAsync(id);
 
-            return Ok(brand);
+                if (brand == null)
+                {
+                    _logger.LogError($"Brand with id: {id}, not found");
+
+                    return NotFound();
+                }
+                else
+                {
+                    return Ok(brand);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in GetBrandById : {ex.Message}");
+
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }
