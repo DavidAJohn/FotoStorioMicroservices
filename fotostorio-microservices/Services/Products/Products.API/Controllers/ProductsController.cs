@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Products.API.Contracts;
 using Products.API.DTOs;
+using Products.API.Extensions;
 using Products.API.Helpers;
 using Products.API.Models;
 using Products.API.Specifications;
@@ -18,12 +19,14 @@ namespace Products.API.Controllers
         private readonly ILogger<ProductsController> _logger;
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ProductsController(ILogger<ProductsController> logger, IProductRepository productRepository, IMapper mapper)
+        public ProductsController(ILogger<ProductsController> logger, IProductRepository productRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _productRepository = productRepository;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET api/products
@@ -39,6 +42,11 @@ namespace Products.API.Controllers
             try
             {
                 var spec = new ProductsWithDetailsSpecification(productParams);
+                var countSpec = new ProductsWithFiltersForCountSpecification(productParams); // gets a count after filtering
+                var totalItems = await _productRepository.CountAsync(countSpec);
+
+                // add pagination response headers
+                _httpContextAccessor.HttpContext.AddPaginationResponseHeaders(totalItems, productParams.PageSize, productParams.PageIndex);
                 var products = await _productRepository.ListWithSpecificationAsync(spec);
 
                 return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products));

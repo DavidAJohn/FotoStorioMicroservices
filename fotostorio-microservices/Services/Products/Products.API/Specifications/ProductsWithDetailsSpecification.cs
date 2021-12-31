@@ -19,6 +19,9 @@ namespace Products.API.Specifications
             AddInclude(p => p.Category);
             AddInclude(p => p.Mount);
 
+            // Paging
+            ApplyPaging(productParams.PageSize * (productParams.PageIndex - 1), productParams.PageSize);
+
             // Sorting
             if (!string.IsNullOrEmpty(productParams.Sort))
             {

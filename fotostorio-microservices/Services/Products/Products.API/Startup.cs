@@ -1,19 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Products.API.Contracts;
 using Products.API.Data;
 using Products.API.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Products.API
 {
@@ -26,7 +20,6 @@ namespace Products.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options => {
@@ -38,6 +31,8 @@ namespace Products.API
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IMountRepository, MountRepository>();
 
+            services.AddHttpContextAccessor();
+
             services.AddAutoMapper(typeof(AutoMapperProfiles));
 
             services.AddControllers();
@@ -47,7 +42,6 @@ namespace Products.API
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

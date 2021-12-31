@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Products.API.Contracts;
 using Products.API.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Products.API.Data
@@ -41,7 +39,12 @@ namespace Products.API.Data
             return await ApplySpecification(specification).ToListAsync();
         }
 
-        public async Task<T> Create(T entity)
+        public async Task<int> CountAsync(ISpecification<T> specification)
+        {
+            return await ApplySpecification(specification).CountAsync();
+        }
+
+            public async Task<T> Create(T entity)
         {
             await _repositoryContext.Set<T>().AddAsync(entity);
             await Save();
