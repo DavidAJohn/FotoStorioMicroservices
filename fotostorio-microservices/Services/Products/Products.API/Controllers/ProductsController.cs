@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Products.API.Contracts;
 using Products.API.DTOs;
+using Products.API.Helpers;
 using Products.API.Models;
 using Products.API.Specifications;
 using System;
@@ -33,11 +34,11 @@ namespace Products.API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts([FromQuery] ProductSpecificationParams productParams)
         {
             try
             {
-                var spec = new ProductsWithDetailsSpecification();
+                var spec = new ProductsWithDetailsSpecification(productParams);
                 var products = await _productRepository.ListWithSpecificationAsync(spec);
 
                 return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products));
