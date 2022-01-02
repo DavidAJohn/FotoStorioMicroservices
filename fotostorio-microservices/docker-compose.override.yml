@@ -12,6 +12,12 @@ services:
     volumes: 
       - mssqldata:/var/opt/mssql
 
+  basketdb:
+    container_name: basketdb
+    restart: always
+    ports:
+      - "6379:6379"
+
   products.api:
     container_name: products.api
     environment:
@@ -21,3 +27,13 @@ services:
       - productsdb
     ports:
       - "8001:80"
+
+  basket.api:
+    container_name: basket.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "CacheSettings:ConnectionString=basketdb:6379"
+    depends_on:
+      - basketdb
+    ports:
+      - "8002:80"

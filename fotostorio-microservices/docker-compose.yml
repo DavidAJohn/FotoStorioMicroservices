@@ -4,11 +4,20 @@ services:
   productsdb:
     image: mcr.microsoft.com/mssql/server:2017-latest
 
+  basketdb:
+    image: redis:alpine
+
   products.api:
     image: ${DOCKER_REGISTRY-}productsapi
     build:
       context: .
       dockerfile: Services/Products/Products.API/Dockerfile
+
+  basket.api:
+    image: ${DOCKER_REGISTRY-}basketapi
+    build:
+      context: .
+      dockerfile: Services/Basket/Basket.API/Dockerfile
 
 volumes:
   mssqldata:
