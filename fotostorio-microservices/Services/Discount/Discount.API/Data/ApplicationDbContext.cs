@@ -10,7 +10,7 @@ namespace Discount.API.Data
         }
 
         public DbSet<ProductDiscount> ProductDiscounts { get; set; }
-        public DbSet<Campaign> Campaign { get; set; }
+        public DbSet<Campaign> Campaigns { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
