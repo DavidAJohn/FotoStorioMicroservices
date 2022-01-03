@@ -1,4 +1,5 @@
-﻿using Discount.API.Data;
+﻿using Discount.API.Contracts;
+using Discount.API.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -31,6 +32,9 @@ namespace Discount.API
             services.AddDbContext<ApplicationDbContext>(options => {
                 options.UseSqlServer(_configuration.GetConnectionString("DiscountConnectionString"));
             });
+
+            services.AddScoped<IDiscountRepository, DiscountRepository>();
+            services.AddScoped<ICampaignRepository, CampaignRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
