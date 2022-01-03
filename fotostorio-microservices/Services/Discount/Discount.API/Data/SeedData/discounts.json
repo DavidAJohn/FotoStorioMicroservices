@@ -1,0 +1,27 @@
+[
+  {
+    "Sku": "NIKZ62C",
+    "CampaignId": 1,
+    "SalePrice": 1799
+  },
+  {
+    "Sku": "NIKZ72C",
+    "CampaignId": 1,
+    "SalePrice": 2749
+  },
+  {
+    "Sku": "NIK2470L",
+    "CampaignId": 2,
+    "SalePrice": 899
+  },
+  {
+    "Sku": "CANEF24L",
+    "CampaignId": 2,
+    "SalePrice": 1579
+  },
+  {
+    "Sku": "FUJ1855L",
+    "CampaignId": 2,
+    "SalePrice": 549
+  }
+]
