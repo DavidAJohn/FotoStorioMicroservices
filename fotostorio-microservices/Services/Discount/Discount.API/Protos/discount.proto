@@ -3,11 +3,8 @@
 option csharp_namespace = "Discount.Api.Protos";
 
 service DiscountProtoService {
-	rpc GetAllDiscounts (GetAllDiscountsRequest) returns (GetAllDiscountsResponse);
-	rpc GetCurrentDiscounts (GetCurrentDiscountsRequest) returns (GetCurrentDiscountsResponse);
 	rpc GetCurrentDiscountById (GetCurrentDiscountByIdRequest) returns (DiscountModel);
 	rpc GetCurrentDiscountBySku (GetCurrentDiscountBySkuRequest) returns (DiscountModel);
-
 	rpc CreateDiscount (CreateDiscountRequest) returns (DiscountModel);
 	rpc UpdateDiscount (UpdateDiscountRequest) returns (DiscountModel);
 	rpc DeleteDiscount (DeleteDiscountRequest) returns (DeleteDiscountResponse);
@@ -18,18 +15,6 @@ message DiscountModel {
 	string sku = 2;
 	string campaignId = 3;
 	int32 salePrice = 4;
-}
-
-message GetAllDiscountsRequest { }
-
-message GetAllDiscountsResponse { 
-	repeated DiscountModel discount = 1;
-}
-
-message GetCurrentDiscountsRequest { }
-
-message GetCurrentDiscountsResponse { 
-	repeated DiscountModel discount = 1;
 }
 
 message GetCurrentDiscountByIdRequest {

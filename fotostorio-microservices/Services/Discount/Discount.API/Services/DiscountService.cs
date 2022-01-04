@@ -18,34 +18,6 @@ namespace Discount.API.Services
             _logger = logger;
         }
 
-        public override async Task<GetAllDiscountsResponse> GetAllDiscounts(GetAllDiscountsRequest request, ServerCallContext context)
-        {
-            var discounts = await _repository.GetAllDiscountsAsync();
-
-            if (discounts == null)
-            {
-                throw new RpcException(new Status(StatusCode.NotFound, $"Discounts not found (all)"));
-            }
-
-            _logger.LogInformation("Discounts retrieved via GetAllDiscountsAsync method");
-
-            return discounts;
-        }
-
-        public override async Task<GetCurrentDiscountsResponse> GetCurrentDiscounts(GetCurrentDiscountsRequest request, ServerCallContext context)
-        {
-            var discounts = await _repository.GetCurrentDiscountsAsync();
-
-            if (discounts == null)
-            {
-                throw new RpcException(new Status(StatusCode.NotFound, $"Discounts not found (current)"));
-            }
-
-            _logger.LogInformation("Discounts retrieved via GetCurrentDiscountsAsync method");
-
-            return discounts;
-        }
-
         public override async Task<DiscountModel> GetCurrentDiscountById(GetCurrentDiscountByIdRequest request, ServerCallContext context)
         {
             var discount = await _repository.GetCurrentDiscountByIdAsync(request.Id);
