@@ -1,5 +1,6 @@
 ﻿using Discount.API.Contracts;
 using Discount.API.Data;
+using Discount.API.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -35,6 +36,8 @@ namespace Discount.API
 
             services.AddScoped<IDiscountRepository, DiscountRepository>();
             services.AddScoped<ICampaignRepository, CampaignRepository>();
+
+            services.AddAutoMapper(typeof(AutoMapperProfiles));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

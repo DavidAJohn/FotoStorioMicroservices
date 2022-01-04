@@ -1,4 +1,5 @@
-﻿using Discount.Api.Protos;
+﻿using AutoMapper;
+using Discount.Api.Protos;
 using Discount.API.Contracts;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
@@ -11,11 +12,13 @@ namespace Discount.API.Services
     {
         private readonly IDiscountRepository _repository;
         private readonly ILogger<DiscountService> _logger;
+        private readonly IMapper _mapper;
 
-        public DiscountService(IDiscountRepository repository, ILogger<DiscountService> logger)
+        public DiscountService(IDiscountRepository repository, ILogger<DiscountService> logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public override async Task<DiscountModel> GetCurrentDiscountById(GetCurrentDiscountByIdRequest request, ServerCallContext context)
@@ -29,7 +32,8 @@ namespace Discount.API.Services
 
             _logger.LogInformation("Discount retrieved for Id : {id}", discount.Id);
 
-            return discount;
+            var discountModel = _mapper.Map<DiscountModel>(discount);
+            return discountModel;
         }
 
         public override async Task<DiscountModel> GetCurrentDiscountBySku(GetCurrentDiscountBySkuRequest request, ServerCallContext context)
@@ -43,7 +47,8 @@ namespace Discount.API.Services
 
             _logger.LogInformation("Discount retrieved for Sku : {sku}", discount.Sku);
 
-            return discount;
+            var discountModel = _mapper.Map<DiscountModel>(discount);
+            return discountModel;
         }
     }
 }
