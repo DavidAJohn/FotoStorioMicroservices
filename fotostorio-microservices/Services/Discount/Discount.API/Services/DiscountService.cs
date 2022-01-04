@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Discount.Api.Protos;
 using Discount.API.Contracts;
+using Discount.API.Models;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Discount.API.Services
@@ -49,6 +49,42 @@ namespace Discount.API.Services
 
             var discountModel = _mapper.Map<DiscountModel>(discount);
             return discountModel;
+        }
+
+        public override async Task<DiscountModel> CreateDiscount(CreateDiscountRequest request, ServerCallContext context)
+        {
+            var discount = _mapper.Map<ProductDiscount>(request.Discount);
+
+            await _repository.CreateDiscountAsync(discount);
+            _logger.LogInformation("Discount was successfully created for Sku : {Sku}, SalePrice : {SalePrice}", discount.Sku, discount.SalePrice);
+
+            var discountModel = _mapper.Map<DiscountModel>(discount);
+            return discountModel;
+        }
+
+        public override async Task<DiscountModel> UpdateDiscount(UpdateDiscountRequest request, ServerCallContext context)
+        {
+            var discount = _mapper.Map<ProductDiscount>(request.Discount);
+
+            await _repository.UpdateDiscountAsync(discount);
+            _logger.LogInformation("Discount was successfully updated - Sku : {Sku}, SalePrice : {SalePrice}", discount.Sku, discount.SalePrice);
+
+            var discountModel = _mapper.Map<DiscountModel>(discount);
+            return discountModel;
+        }
+
+        public override async Task<DeleteDiscountResponse> DeleteDiscount(DeleteDiscountRequest request, ServerCallContext context)
+        {
+            var deleted = await _repository.DeleteDiscountAsync(request.Id);
+
+            var response = new DeleteDiscountResponse
+            {
+                Success = deleted
+            };
+
+            _logger.LogInformation("Discount with Id:{Id} was deleted", request.Id);
+
+            return response;
         }
     }
 }
