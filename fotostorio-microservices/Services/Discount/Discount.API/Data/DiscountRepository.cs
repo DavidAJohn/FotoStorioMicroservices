@@ -53,6 +53,9 @@ namespace Discount.API.Data
         {
             using var connection = new SqlConnection(_config.GetConnectionString("DiscountConnectionString"));
 
+            var dp = new DynamicParameters();
+            dp.Add("@Id", id);
+
             var sql = @"SELECT p.[Id]
                           ,[Sku]
                           ,[SalePrice]
@@ -61,7 +64,7 @@ namespace Discount.API.Data
                       WHERE (c.StartDate < GETDATE() AND c.EndDate > DATEADD(dd,1, GETDATE()))
                       AND p.[Id] = @Id";
 
-            var discount = await connection.QueryFirstOrDefaultAsync<ProductDiscount>(sql, new { Id = id });
+            var discount = await connection.QueryFirstOrDefaultAsync<ProductDiscount>(sql, dp);
 
             if (discount == null)
             {
@@ -80,6 +83,9 @@ namespace Discount.API.Data
         {
             using var connection = new SqlConnection(_config.GetConnectionString("DiscountConnectionString"));
 
+            var dp = new DynamicParameters();
+            dp.Add("@Sku", sku);
+
             var sql = @"SELECT p.[Id]
                           ,[Sku]
                           ,[SalePrice]
@@ -88,7 +94,7 @@ namespace Discount.API.Data
                       WHERE (c.StartDate < GETDATE() AND c.EndDate > DATEADD(dd,1, GETDATE()))
                       AND p.[Sku] = @Sku";
 
-            var discount = await connection.QueryFirstOrDefaultAsync<ProductDiscount>(sql, new { Sku = sku });
+            var discount = await connection.QueryFirstOrDefaultAsync<ProductDiscount>(sql, dp);
 
             if (discount == null)
             {
@@ -107,6 +113,11 @@ namespace Discount.API.Data
         {
             using var connection = new SqlConnection(_config.GetConnectionString("DiscountConnectionString"));
 
+            var dp = new DynamicParameters();
+            dp.Add("@Sku", discount.Sku);
+            dp.Add("@CampaignId", discount.CampaignId);
+            dp.Add("@SalePrice", discount.SalePrice);
+
             var sql = @"INSERT INTO [dbo].[ProductDiscounts]
                            ([Sku]
                            ,[CampaignId]
@@ -116,12 +127,7 @@ namespace Discount.API.Data
                            @CampaignId,
                            @SalePrice)";
 
-            var affected = await connection.ExecuteAsync(sql, 
-                new { 
-                    Sku = discount.Sku, 
-                    CampaignId = discount.CampaignId, 
-                    SalePrice = discount.SalePrice 
-                });
+            var affected = await connection.ExecuteAsync(sql, dp);
 
             if (affected == 0)
                 return false;
@@ -133,6 +139,12 @@ namespace Discount.API.Data
         {
             using var connection = new SqlConnection(_config.GetConnectionString("DiscountConnectionString"));
 
+            var dp = new DynamicParameters();
+            dp.Add("@Sku", discount.Sku);
+            dp.Add("@CampaignId", discount.CampaignId);
+            dp.Add("@SalePrice", discount.SalePrice);
+            dp.Add("@Id", discount.Id);
+
             var sql = @"UPDATE [dbo].[ProductDiscounts] 
                         SET
                            [Sku]=@Sku,
@@ -140,14 +152,7 @@ namespace Discount.API.Data
                            [SalePrice]=@SalePrice
                         WHERE [Id]=@Id";
 
-            var affected = await connection.ExecuteAsync(sql,
-                new
-                {
-                    Sku = discount.Sku,
-                    CampaignId = discount.CampaignId,
-                    SalePrice = discount.SalePrice,
-                    Id = discount.Id
-                });
+            var affected = await connection.ExecuteAsync(sql, dp);
 
             if (affected == 0)
                 return false;
