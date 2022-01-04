@@ -59,7 +59,7 @@ namespace Discount.API.Data
                       FROM [ProductDiscounts] p
                       INNER JOIN [Campaigns] c ON p.CampaignId = c.Id
                       WHERE (c.StartDate < GETDATE() AND c.EndDate > DATEADD(dd,1, GETDATE()))
-                      AND p.[Id] = @id";
+                      AND p.[Id] = @Id";
 
             var discount = await connection.QueryFirstOrDefaultAsync<ProductDiscount>(sql, new { Id = id });
 
@@ -86,7 +86,7 @@ namespace Discount.API.Data
                       FROM [ProductDiscounts] p
                       INNER JOIN [Campaigns] c ON p.CampaignId = c.Id
                       WHERE (c.StartDate < GETDATE() AND c.EndDate > DATEADD(dd,1, GETDATE()))
-                      AND p.[Sku] = @sku";
+                      AND p.[Sku] = @Sku";
 
             var discount = await connection.QueryFirstOrDefaultAsync<ProductDiscount>(sql, new { Sku = sku });
 
@@ -103,19 +103,68 @@ namespace Discount.API.Data
             return discount;
         }
 
-        public Task<bool> CreateDiscountAsync(ProductDiscount discount)
+        public async Task<bool> CreateDiscountAsync(ProductDiscount discount)
         {
-            throw new System.NotImplementedException();
+            using var connection = new SqlConnection(_config.GetConnectionString("DiscountConnectionString"));
+
+            var sql = @"INSERT INTO [dbo].[ProductDiscounts]
+                           ([Sku]
+                           ,[CampaignId]
+                           ,[SalePrice])
+                      VALUES
+                           (@Sku,
+                           @CampaignId,
+                           @SalePrice)";
+
+            var affected = await connection.ExecuteAsync(sql, 
+                new { 
+                    Sku = discount.Sku, 
+                    CampaignId = discount.CampaignId, 
+                    SalePrice = discount.SalePrice 
+                });
+
+            if (affected == 0)
+                return false;
+
+            return true;
         }
 
-        public Task<bool> UpdateDiscountAsync(ProductDiscount discount)
+        public async Task<bool> UpdateDiscountAsync(ProductDiscount discount)
         {
-            throw new System.NotImplementedException();
+            using var connection = new SqlConnection(_config.GetConnectionString("DiscountConnectionString"));
+
+            var sql = @"UPDATE [dbo].[ProductDiscounts] 
+                        SET
+                           [Sku]=@Sku,
+                           [CampaignId]=@CampaignId,
+                           [SalePrice]=@SalePrice
+                        WHERE [Id]=@Id";
+
+            var affected = await connection.ExecuteAsync(sql,
+                new
+                {
+                    Sku = discount.Sku,
+                    CampaignId = discount.CampaignId,
+                    SalePrice = discount.SalePrice,
+                    Id = discount.Id
+                });
+
+            if (affected == 0)
+                return false;
+
+            return true;
         }
 
-        public Task<bool> DeleteDiscountAsync(int id)
+        public async Task<bool> DeleteDiscountAsync(int id)
         {
-            throw new System.NotImplementedException();
+            using var connection = new SqlConnection(_config.GetConnectionString("DiscountConnectionString"));
+
+            var affected = await connection.ExecuteAsync("DELETE FROM [dbo].[ProductDiscounts] WHERE Id = @Id", new { Id = id });
+
+            if (affected == 0)
+                return false;
+
+            return true;
         }
     }
 }
