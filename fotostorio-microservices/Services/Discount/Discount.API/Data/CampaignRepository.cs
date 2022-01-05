@@ -64,19 +64,67 @@ namespace Discount.API.Data
             return campaigns;
         }
 
-        public Task<bool> CreateCampaignAsync(Campaign campaign)
+        public async Task<bool> CreateCampaignAsync(Campaign campaign)
         {
-            throw new System.NotImplementedException();
+            using var connection = new SqlConnection(_config.GetConnectionString("DiscountConnectionString"));
+
+            var dp = new DynamicParameters();
+            dp.Add("@Name", campaign.Name);
+            dp.Add("@StartDate", campaign.StartDate);
+            dp.Add("@EndDate", campaign.EndDate);
+
+            var sql = @"INSERT INTO [dbo].[Campaigns]
+                           ([Name]
+                           ,[StartDate]
+                           ,[EndDate])
+                      VALUES
+                           (@Name,
+                           @StartDate,
+                           @EndDate)";
+
+            var affected = await connection.ExecuteAsync(sql, dp);
+
+            if (affected == 0)
+                return false;
+
+            return true;
         }
 
-        public Task<bool> UpdateCampaignAsync(Campaign campaign)
+        public async Task<bool> UpdateCampaignAsync(Campaign campaign)
         {
-            throw new System.NotImplementedException();
+            using var connection = new SqlConnection(_config.GetConnectionString("DiscountConnectionString"));
+
+            var dp = new DynamicParameters();
+            dp.Add("@Name", campaign.Name);
+            dp.Add("@StartDate", campaign.StartDate);
+            dp.Add("@EndDate", campaign.EndDate);
+            dp.Add("@Id", campaign.Id);
+
+            var sql = @"UPDATE [dbo].[Campaigns] 
+                        SET
+                           [Name]=@Name,
+                           [StartDate]=@StartDate,
+                           [EndDate]=@EndDate
+                        WHERE [Id]=@Id";
+
+            var affected = await connection.ExecuteAsync(sql, dp);
+
+            if (affected == 0)
+                return false;
+
+            return true;
         }
 
-        public Task<bool> DeleteCampaignAsync(int id)
+        public async Task<bool> DeleteCampaignAsync(int id)
         {
-            throw new System.NotImplementedException();
+            using var connection = new SqlConnection(_config.GetConnectionString("DiscountConnectionString"));
+
+            var affected = await connection.ExecuteAsync("DELETE FROM [dbo].[Campaigns] WHERE Id = @Id", new { Id = id });
+
+            if (affected == 0)
+                return false;
+
+            return true;
         }
     }
 }
