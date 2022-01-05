@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Basket.API.Entities;
+using Basket.API.GrpcServices;
 using Basket.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -12,10 +13,12 @@ namespace Basket.API.Controllers
     {
         private readonly IBasketRepository _basketRepository;
         private readonly IMapper _mapper;
+        private readonly DiscountGrpcService _discountGrpcService;
 
-        public BasketController(IBasketRepository basketRepository, IMapper mapper)
+        public BasketController(IBasketRepository basketRepository, IMapper mapper, DiscountGrpcService discountGrpcService)
         {
             _mapper = mapper;
+            _discountGrpcService = discountGrpcService;
             _basketRepository = basketRepository;
         }
 
@@ -28,8 +31,18 @@ namespace Basket.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasketDTO basket)
+        public async Task<ActionResult<CustomerBasket>> UpdateBasket([FromBody] CustomerBasketDTO basket)
         {
+            // for each basket item, check if there is a discounted price from the Discount.API gRPC service
+            foreach (var item in basket.BasketItems)
+            {
+                var discount = await _discountGrpcService.GetDiscount(item.Product.Sku);
+
+                // if discount.SalePrice = 0, item has no current discount
+                item.Product.Price = (discount.SalePrice < item.Product.Price && discount.SalePrice != 0) 
+                    ? discount.SalePrice : item.Product.Price;
+            }
+
             var customerBasket = _mapper.Map<CustomerBasketDTO, CustomerBasket>(basket);
             var updatedBasket = await _basketRepository.UpdateBasketAsync(customerBasket);
 
