@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Protos\campaign.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\discount.proto" GrpcServices="Server" />
   </ItemGroup>
 

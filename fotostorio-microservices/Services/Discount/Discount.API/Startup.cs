@@ -47,6 +47,7 @@ namespace Discount.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<DiscountService>();
+                endpoints.MapGrpcService<CampaignService>();
 
                 endpoints.MapGet("/", async context =>
                 {

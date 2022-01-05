@@ -9,6 +9,7 @@ namespace Discount.API.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<ProductDiscount, DiscountModel>().ReverseMap();
+            CreateMap<Campaign, CampaignModel>().ReverseMap();
         }
     }
 }
