@@ -10,7 +10,18 @@ services:
     ports:
       - "1434:1433"
     volumes: 
-      - mssqldata:/var/opt/mssql
+      - products_mssqldata:/var/opt/mssql
+
+  discountdb:
+    container_name: discountdb
+    environment:
+      SA_PASSWORD: "aDmin1234!"
+      ACCEPT_EULA: "Y"
+    restart: always
+    ports:
+      - "1435:1433"
+    volumes: 
+      - discount_mssqldata:/var/opt/mssql
 
   basketdb:
     container_name: basketdb
@@ -33,7 +44,18 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "CacheSettings:ConnectionString=basketdb:6379"
+      - "GrpcSettings:DiscountUri=http://discount.api"
     depends_on:
       - basketdb
     ports:
       - "8002:80"
+
+  discount.api:
+    container_name: discount.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:DiscountConnectionString=Server=discountdb;Database=DiscountDb;User Id=sa;Password=aDmin1234!;"
+    depends_on:
+      - discountdb
+    ports:
+      - "8003:80"
