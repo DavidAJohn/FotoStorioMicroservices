@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateways", "ApiGateways"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingGateway", "ApiGateways\ShoppingGateway\ShoppingGateway.csproj", "{63AEBA02-02F3-4A83-A119-53FA3BCF9CAB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Discount.minAPI", "Services\Discount\Discount.minAPI\Discount.minAPI.csproj", "{346A9BF7-9222-4755-85F2-80ED3FCE03F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{63AEBA02-02F3-4A83-A119-53FA3BCF9CAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63AEBA02-02F3-4A83-A119-53FA3BCF9CAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63AEBA02-02F3-4A83-A119-53FA3BCF9CAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{346A9BF7-9222-4755-85F2-80ED3FCE03F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{346A9BF7-9222-4755-85F2-80ED3FCE03F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{346A9BF7-9222-4755-85F2-80ED3FCE03F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{346A9BF7-9222-4755-85F2-80ED3FCE03F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 		{A4CF7176-5539-4B62-B99F-7FD81B3D31DC} = {641831ED-544E-4786-9AAF-8A1564B133B6}
 		{A370C9E4-40B5-4821-8E7D-96601D845C42} = {A4CF7176-5539-4B62-B99F-7FD81B3D31DC}
 		{63AEBA02-02F3-4A83-A119-53FA3BCF9CAB} = {84657A82-E7AE-438A-BEE8-52B41C25464D}
+		{346A9BF7-9222-4755-85F2-80ED3FCE03F6} = {A4CF7176-5539-4B62-B99F-7FD81B3D31DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {89395D95-86FD-4BC3-B2AC-DC0D1F22C656}
