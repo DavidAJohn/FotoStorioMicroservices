@@ -11,7 +11,7 @@ namespace Discount.minAPI.Models
         [Required]
         public int CampaignId { get; set; }
 
-        public Campaign Campaign { get; set; }
+        public string Campaign { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18,2)")]
