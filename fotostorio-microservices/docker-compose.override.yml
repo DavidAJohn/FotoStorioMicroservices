@@ -59,3 +59,13 @@ services:
       - discountdb
     ports:
       - "8003:80"
+
+  shoppinggateway:
+    container_name: shoppinggateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - products.api
+      - basket.api
+    ports:
+      - "8010:80"

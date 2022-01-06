@@ -28,6 +28,12 @@ services:
       context: .
       dockerfile: Services/Discount/Discount.API/Dockerfile
 
+  shoppinggateway:
+    image: ${DOCKER_REGISTRY-}shoppinggateway
+    build:
+      context: .
+      dockerfile: ApiGateways/ShoppingGateway/Dockerfile
+
 volumes:
   products_mssqldata:
   discount_mssqldata:
