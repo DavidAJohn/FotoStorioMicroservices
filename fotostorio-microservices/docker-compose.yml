@@ -40,6 +40,12 @@ services:
       context: .
       dockerfile: Services/Discount/Discount.minAPI/Dockerfile
 
+  products.aggregator:
+    image: ${DOCKER_REGISTRY-}productsaggregator
+    build:
+      context: .
+      dockerfile: ApiGateways/Products.Aggregator/Dockerfile
+
 volumes:
   products_mssqldata:
   discount_mssqldata:

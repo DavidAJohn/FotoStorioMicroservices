@@ -79,3 +79,15 @@ services:
       - discountdb
     ports:
       - "8004:80"
+
+  products.aggregator:
+    container_name: products.aggregator
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ApiSettings:ProductsUrl=http://products.api"
+      - "ApiSettings:DiscountUrl=http://discount.minapi"
+    depends_on:
+      - products.api
+      - discount.minapi
+    ports:
+      - "8005:80"
