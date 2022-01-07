@@ -34,6 +34,12 @@ services:
       context: .
       dockerfile: ApiGateways/ShoppingGateway/Dockerfile
 
+  discount.minapi:
+    image: ${DOCKER_REGISTRY-}discountminapi
+    build:
+      context: .
+      dockerfile: Services/Discount/Discount.minAPI/Dockerfile
+
 volumes:
   products_mssqldata:
   discount_mssqldata:

@@ -69,3 +69,13 @@ services:
       - basket.api
     ports:
       - "8010:80"
+
+  discount.minapi:
+    container_name: discount.minapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:DiscountConnectionString=Server=discountdb;Database=DiscountDb;User Id=sa;Password=aDmin1234!;"
+    depends_on:
+      - discountdb
+    ports:
+      - "8004:80"
