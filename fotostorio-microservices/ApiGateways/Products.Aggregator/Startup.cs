@@ -27,6 +27,8 @@ namespace Products.Aggregator
             services.AddHttpClient<IDiscountService, DiscountService>(c =>
                 c.BaseAddress = new Uri(Configuration["ApiSettings:DiscountUrl"]));
 
+            services.AddHttpContextAccessor();
+
             services.AddAutoMapper(typeof(AutoMapperProfiles));
 
             services.AddControllers();

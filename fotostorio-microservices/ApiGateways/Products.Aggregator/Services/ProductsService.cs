@@ -1,7 +1,11 @@
-﻿using Products.Aggregator.Extensions;
+﻿using Microsoft.AspNetCore.WebUtilities;
 using Products.Aggregator.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Products.Aggregator.Services
@@ -15,11 +19,88 @@ namespace Products.Aggregator.Services
             _httpClient = httpClient;
         }
 
-        public async Task<IEnumerable<ProductResponse>> GetProducts()
+        public async Task<PagedList<ProductResponse>> GetProductsAsync(ProductParameters productParams)
         {
-            var response = await _httpClient.GetAsync("/api/products");
+            try
+            {
+                var request = new HttpRequestMessage();
 
-            return await response.ReadContentAs<List<ProductResponse>>();
+                if (productParams != null)
+                {
+                    var queryStringParams = new Dictionary<string, string>
+                    {
+                        ["pageIndex"] = productParams.PageIndex < 1 ? "1" : productParams.PageIndex.ToString(),
+                    };
+
+                    // conditionally add a page size param (number of items to return)
+                    if (productParams.PageSize != 0)
+                    {
+                        queryStringParams.Add("pageSize", productParams.PageSize.ToString());
+                    };
+
+                    // conditionally add a search term
+                    if (!String.IsNullOrEmpty(productParams.Search))
+                    {
+                        queryStringParams.Add("search", productParams.Search.ToString());
+                    };
+
+                    // conditionally add a categoryId param
+                    if (productParams.CategoryId != 0)
+                    {
+                        queryStringParams.Add("categoryId", productParams.CategoryId.ToString());
+                    };
+
+                    // conditionally add a brandId param
+                    if (productParams.BrandId != 0)
+                    {
+                        queryStringParams.Add("brandId", productParams.BrandId.ToString());
+                    };
+
+                    // conditionally add a mountId param
+                    if (productParams.MountId != 0)
+                    {
+                        queryStringParams.Add("mountId", productParams.MountId.ToString());
+                    };
+
+                    // conditionally add a sort param
+                    if (!String.IsNullOrEmpty(productParams.Sort))
+                    {
+                        queryStringParams.Add("sort", productParams.Sort.ToString());
+                    };
+
+                    request = new HttpRequestMessage(HttpMethod.Get, QueryHelpers.AddQueryString("/api/products", queryStringParams));
+                }
+                else
+                {
+                    request = new HttpRequestMessage(HttpMethod.Get, "/api/products");
+                }
+
+                HttpResponseMessage response = await _httpClient.SendAsync(request);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    var pagedResponse = new PagedList<ProductResponse>
+                    {
+                        Items = JsonSerializer.Deserialize<List<ProductResponse>>(
+                            content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                        ),
+                        Metadata = JsonSerializer.Deserialize<PagingMetadata>(
+                            response.Headers.GetValues("Pagination")
+                            .First(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                        )
+                    };
+
+                    return pagedResponse;
+                }
+
+                return null;
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
+            }
         }
     }
 }
