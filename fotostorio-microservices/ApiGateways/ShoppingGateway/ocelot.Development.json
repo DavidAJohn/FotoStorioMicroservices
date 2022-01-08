@@ -1,41 +1,22 @@
 {
   "Routes": [
-    //Products API
+    // Products.Aggregator -> Catalog
     {
-      "DownstreamPathTemplate": "/api/Products",
+      "DownstreamPathTemplate": "/api/aggr/Products?{querystring}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "products.api",
+          "Host": "products.aggregator",
           "Port": "80"
         }
       ],
-      "UpstreamPathTemplate": "/Catalog",
-      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "UpstreamPathTemplate": "/Catalog?{querystring}",
+      "UpstreamHttpMethod": [ "GET" ],
       "FileCacheOptions": { "TtlSeconds": 30 },
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
         "Period": "1s",
-        "PeriodTimespan": 1,
-        "Limit": 1
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/Products/{id}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "products.api",
-          "Port": "80"
-        }
-      ],
-      "UpstreamPathTemplate": "/Catalog/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ],
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "2s",
         "PeriodTimespan": 1,
         "Limit": 1
       }

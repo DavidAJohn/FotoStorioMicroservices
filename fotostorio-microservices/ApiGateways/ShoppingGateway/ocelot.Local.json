@@ -1,17 +1,17 @@
 {
   "Routes": [
-    //Products API
+    // Products.Aggregator -> Catalog
     {
-      "DownstreamPathTemplate": "/api/Products",
+      "DownstreamPathTemplate": "/api/aggr/Products?{querystring}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "8001"
+          "Port": "8005"
         }
       ],
-      "UpstreamPathTemplate": "/Catalog",
-      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "UpstreamPathTemplate": "/Catalog?{querystring}",
+      "UpstreamHttpMethod": [ "GET" ],
       "FileCacheOptions": { "TtlSeconds": 30 },
       "RateLimitOptions": {
         "ClientWhitelist": [],
