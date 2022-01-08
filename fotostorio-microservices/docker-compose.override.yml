@@ -91,3 +91,14 @@ services:
       - discount.minapi
     ports:
       - "8005:80"
+
+  marketing.gateway:
+    container_name: marketing.gateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - discount.minapi
+      - products.api
+      - products.aggregator
+    ports:
+      - "8011:80"
