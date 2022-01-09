@@ -60,16 +60,6 @@ services:
     ports:
       - "8003:80"
 
-  shoppinggateway:
-    container_name: shoppinggateway
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    depends_on:
-      - products.api
-      - basket.api
-    ports:
-      - "8010:80"
-
   discount.minapi:
     container_name: discount.minapi
     environment:
@@ -79,6 +69,16 @@ services:
       - discountdb
     ports:
       - "8004:80"
+
+  store.gateway:
+    container_name: store.gateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - products.aggregator
+      - basket.api
+    ports:
+      - "8010:80"
 
   products.aggregator:
     container_name: products.aggregator

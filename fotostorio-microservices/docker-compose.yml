@@ -28,12 +28,6 @@ services:
       context: .
       dockerfile: Services/Discount/Discount.API/Dockerfile
 
-  shoppinggateway:
-    image: ${DOCKER_REGISTRY-}shoppinggateway
-    build:
-      context: .
-      dockerfile: ApiGateways/ShoppingGateway/Dockerfile
-
   discount.minapi:
     image: ${DOCKER_REGISTRY-}discountminapi
     build:
@@ -45,6 +39,12 @@ services:
     build:
       context: .
       dockerfile: ApiGateways/Products.Aggregator/Dockerfile
+
+  store.gateway:
+    image: ${DOCKER_REGISTRY-}storegateway
+    build:
+      context: .
+      dockerfile: ApiGateways/Store.Gateway/Dockerfile
 
   marketing.gateway:
     image: ${DOCKER_REGISTRY-}marketinggateway

@@ -6,8 +6,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": "8005"
+          "Host": "products.aggregator",
+          "Port": "80"
         }
       ],
       "UpstreamPathTemplate": "/Catalog?{querystring}",
@@ -22,20 +22,21 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/Products/{id}",
+      "DownstreamPathTemplate": "/api/aggr/Products",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": "8001"
+          "Host": "products.aggregator",
+          "Port": "80"
         }
       ],
-      "UpstreamPathTemplate": "/Catalog/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ],
+      "UpstreamPathTemplate": "/Catalog",
+      "UpstreamHttpMethod": [ "GET" ],
+      "FileCacheOptions": { "TtlSeconds": 30 },
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
-        "Period": "2s",
+        "Period": "1s",
         "PeriodTimespan": 1,
         "Limit": 1
       }
@@ -46,8 +47,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": "8002"
+          "Host": "basket.api",
+          "Port": "80"
         }
       ],
       "UpstreamPathTemplate": "/Basket?id={id}",
@@ -65,8 +66,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": "8002"
+          "Host": "basket.api",
+          "Port": "80"
         }
       ],
       "UpstreamPathTemplate": "/Basket",
@@ -77,3 +78,4 @@
     "BaseUrl": "http://localhost:5010"
   }
 }
+

@@ -7,7 +7,7 @@ using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Cache.CacheManager;
 
-namespace ShoppingGateway
+namespace Store.Gateway
 {
     public class Startup
     {
