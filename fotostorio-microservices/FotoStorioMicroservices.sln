@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Products.Aggregator", "ApiG
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marketing.Gateway", "ApiGateways\Marketing.Gateway\Marketing.Gateway.csproj", "{62021632-545D-47A6-9287-B1C330C14894}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin.Gateway", "ApiGateways\Admin.Gateway\Admin.Gateway.csproj", "{D629FFA4-B06A-4F7C-887D-92576F790486}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{62021632-545D-47A6-9287-B1C330C14894}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62021632-545D-47A6-9287-B1C330C14894}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62021632-545D-47A6-9287-B1C330C14894}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D629FFA4-B06A-4F7C-887D-92576F790486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D629FFA4-B06A-4F7C-887D-92576F790486}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D629FFA4-B06A-4F7C-887D-92576F790486}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D629FFA4-B06A-4F7C-887D-92576F790486}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +88,7 @@ Global
 		{346A9BF7-9222-4755-85F2-80ED3FCE03F6} = {A4CF7176-5539-4B62-B99F-7FD81B3D31DC}
 		{D88B799D-7EAB-4FB7-B74C-DC67E4E4604E} = {84657A82-E7AE-438A-BEE8-52B41C25464D}
 		{62021632-545D-47A6-9287-B1C330C14894} = {84657A82-E7AE-438A-BEE8-52B41C25464D}
+		{D629FFA4-B06A-4F7C-887D-92576F790486} = {84657A82-E7AE-438A-BEE8-52B41C25464D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {89395D95-86FD-4BC3-B2AC-DC0D1F22C656}
