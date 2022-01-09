@@ -75,7 +75,6 @@
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:5010"
+    "BaseUrl": "http://localhost:8010"
   }
 }
-

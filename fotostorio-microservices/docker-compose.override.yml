@@ -90,7 +90,7 @@ services:
       - products.api
       - discount.minapi
     ports:
-      - "8005:80"
+      - "8015:80"
 
   marketing.gateway:
     container_name: marketing.gateway

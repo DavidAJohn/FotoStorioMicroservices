@@ -7,7 +7,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "8005"
+          "Port": "8015"
         }
       ],
       "UpstreamPathTemplate": "/Catalog?{querystring}",
@@ -27,7 +27,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "8005"
+          "Port": "8015"
         }
       ],
       "UpstreamPathTemplate": "/Catalog",
