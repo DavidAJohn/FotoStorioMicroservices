@@ -52,6 +52,12 @@ services:
       context: .
       dockerfile: ApiGateways/Marketing.Gateway/Dockerfile
 
+  admin.gateway:
+    image: ${DOCKER_REGISTRY-}admingateway
+    build:
+      context: .
+      dockerfile: ApiGateways/Admin.Gateway/Dockerfile
+
 volumes:
   products_mssqldata:
   discount_mssqldata:

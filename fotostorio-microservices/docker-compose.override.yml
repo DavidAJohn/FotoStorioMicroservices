@@ -102,3 +102,13 @@ services:
       - products.aggregator
     ports:
       - "8011:80"
+
+  admin.gateway:
+    container_name: admin.gateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - products.api
+      - products.aggregator
+    ports:
+      - "8012:80"
