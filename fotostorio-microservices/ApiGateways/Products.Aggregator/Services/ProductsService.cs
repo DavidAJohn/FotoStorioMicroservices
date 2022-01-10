@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
-using Products.Aggregator.Extensions;
+using Microsoft.Extensions.Logging;
 using Products.Aggregator.Models;
 using System;
 using System.Collections.Generic;
@@ -14,10 +14,12 @@ namespace Products.Aggregator.Services
     public class ProductsService : IProductsService
     {
         private readonly HttpClient _httpClient;
+        private readonly ILogger<ProductsService> _logger;
 
-        public ProductsService(HttpClient httpClient)
+        public ProductsService(HttpClient httpClient, ILogger<ProductsService> logger)
         {
             _httpClient = httpClient;
+            _logger = logger;
         }
 
         public async Task<PagedList<ProductResponse>> GetProductsAsync(ProductParameters productParams)
@@ -100,15 +102,33 @@ namespace Products.Aggregator.Services
             }
             catch (HttpRequestException ex)
             {
+                _logger.LogError("Error in Products Service -> GetProductsAsync");
                 throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
             }
         }
 
         public async Task<ProductResponse> GetProductByIdAsync(int id)
         {
-            var response = await _httpClient.GetAsync($"/api/products/{id}");
+            try
+            {
+                var response = await _httpClient.GetAsync($"/api/products/{id}");
 
-            return await response.ReadContentAs<ProductResponse>();
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var product = JsonSerializer.Deserialize<ProductResponse>
+                        (content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                    return product;
+                }
+
+                return null;
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError($"Error in Products Service -> GetProductByIdAsync, Id = {id}");
+                throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
+            }
         }
     }
 }
