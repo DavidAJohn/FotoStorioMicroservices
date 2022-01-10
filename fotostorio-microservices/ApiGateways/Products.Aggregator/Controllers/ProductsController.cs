@@ -65,5 +65,24 @@ namespace Products.Aggregator.Controllers
 
             return Ok(aggregatedProducts);
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AggregatedProduct>> GetProductById(int id)
+        {
+            var product = await _productsService.GetProductByIdAsync(id);
+
+            if (product == null) return NotFound();
+
+            // check if there is a reduced sale price for the item via a request to the discount api
+            var aggregatedProduct = _mapper.Map<AggregatedProduct>(product);
+            var discount = await _discountService.GetDiscountBySku(product.Sku);
+
+            // if there is a discounted price then use it,
+            // otherwise set the sale price to the same as the existing price
+            aggregatedProduct.SalePrice = discount.SalePrice != 0 && discount.SalePrice < product.Price
+                ? discount.SalePrice : product.Price;
+
+            return Ok(aggregatedProduct);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using Products.Aggregator.Extensions;
 using Products.Aggregator.Models;
 using System;
 using System.Collections.Generic;
@@ -101,6 +102,13 @@ namespace Products.Aggregator.Services
             {
                 throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
             }
+        }
+
+        public async Task<ProductResponse> GetProductByIdAsync(int id)
+        {
+            var response = await _httpClient.GetAsync($"/api/products/{id}");
+
+            return await response.ReadContentAs<ProductResponse>();
         }
     }
 }

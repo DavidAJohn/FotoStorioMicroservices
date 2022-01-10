@@ -41,6 +41,26 @@
         "Limit": 1
       }
     },
+    {
+      "DownstreamPathTemplate": "/api/aggr/Products/{value}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "products.aggregator",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Catalog/{value}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "FileCacheOptions": { "TtlSeconds": 30 },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 1
+      }
+    },
     //Basket API
     {
       "DownstreamPathTemplate": "/api/Basket?id={id}",
