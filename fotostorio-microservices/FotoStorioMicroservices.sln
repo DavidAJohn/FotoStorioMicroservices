@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientApps", "ClientApps", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Gateway", "ApiGateways\Store.Gateway\Store.Gateway.csproj", "{BAD92053-5CC6-4461-8FD5-24A025AE3B21}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.BlazorWasm", "ClientApps\Store.BlazorWasm\Store.BlazorWasm.csproj", "{711286D5-364B-47AD-9D98-12B690C9E322}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{BAD92053-5CC6-4461-8FD5-24A025AE3B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAD92053-5CC6-4461-8FD5-24A025AE3B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAD92053-5CC6-4461-8FD5-24A025AE3B21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{711286D5-364B-47AD-9D98-12B690C9E322}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{711286D5-364B-47AD-9D98-12B690C9E322}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{711286D5-364B-47AD-9D98-12B690C9E322}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{711286D5-364B-47AD-9D98-12B690C9E322}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,6 +97,7 @@ Global
 		{62021632-545D-47A6-9287-B1C330C14894} = {84657A82-E7AE-438A-BEE8-52B41C25464D}
 		{D629FFA4-B06A-4F7C-887D-92576F790486} = {84657A82-E7AE-438A-BEE8-52B41C25464D}
 		{BAD92053-5CC6-4461-8FD5-24A025AE3B21} = {84657A82-E7AE-438A-BEE8-52B41C25464D}
+		{711286D5-364B-47AD-9D98-12B690C9E322} = {C3EC1547-AA18-478B-81F1-312054F9F6AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {89395D95-86FD-4BC3-B2AC-DC0D1F22C656}

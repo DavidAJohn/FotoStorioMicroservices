@@ -348,3 +348,8 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Custom additions
+**/wwwroot/css/tailwind.css
+*.jpg
+*.png

@@ -1,0 +1,14 @@
+{
+  "name": "storeblazorwasm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David A John",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.0.12"
+  }
+}

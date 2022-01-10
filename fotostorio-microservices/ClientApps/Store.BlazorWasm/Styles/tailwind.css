@@ -1,0 +1,44 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+
+.product-card {
+    @apply bg-white rounded-md overflow-hidden shadow-md relative;
+}
+
+.product-badge {
+    @apply bg-yellow-300 text-gray-800 text-xs uppercase font-bold rounded-full p-2 absolute top-0 ml-2 mt-2;
+}
+
+.btn-fotofuchsia {
+    @apply p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm hover:opacity-90;
+}
+
+.btn-fotoblue {
+    @apply p-2 my-3 bg-fotoblue text-white rounded-sm text-sm hover:opacity-90;
+}
+
+.alert-box {
+    @apply bg-red-100 border-solid border border-red-700 text-red-700 font-semibold my-8 py-2 rounded-sm relative w-full;
+}
