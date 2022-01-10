@@ -62,14 +62,20 @@
       "UpstreamPathTemplate": "/Marketing/Catalog?{querystring}",
       "Priority": 1,
       "UpstreamHttpMethod": [ "GET" ],
-      "FileCacheOptions": { "TtlSeconds": 30 },
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "5s",
-        "PeriodTimespan": 1,
-        "Limit": 1
-      }
+      "FileCacheOptions": { "TtlSeconds": 15 }
+    },
+    {
+      "DownstreamPathTemplate": "/api/aggr/Products/{value}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": "8015"
+        }
+      ],
+      "UpstreamPathTemplate": "/Marketing/Catalog/{value}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "FileCacheOptions": { "TtlSeconds": 15 }
     },
     {
       "DownstreamPathTemplate": "/api/Products",
@@ -82,34 +88,7 @@
       ],
       "UpstreamPathTemplate": "/Marketing/Catalog",
       "UpstreamHttpMethod": [ "GET" ],
-      "FileCacheOptions": { "TtlSeconds": 30 },
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "5s",
-        "PeriodTimespan": 1,
-        "Limit": 1
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/Products/{value}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": "8001"
-        }
-      ],
-      "UpstreamPathTemplate": "/Marketing/Catalog/{value}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "FileCacheOptions": { "TtlSeconds": 30 },
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "5s",
-        "PeriodTimespan": 1,
-        "Limit": 1
-      }
+      "FileCacheOptions": { "TtlSeconds": 15 }
     }
   ],
   "GlobalConfiguration": {
