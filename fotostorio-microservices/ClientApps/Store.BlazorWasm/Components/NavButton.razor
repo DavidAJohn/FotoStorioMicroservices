@@ -1,0 +1,12 @@
+﻿<button class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm hover:opacity-90 fotofuchsia-ripple">
+    <a href="@Href" class="hover:text-white">@ButtonText</a>
+</button>
+
+@code {
+    [Parameter]
+    public string @Href { get; set; }
+
+    [Parameter]
+    public string @ButtonText { get; set; }
+}
+

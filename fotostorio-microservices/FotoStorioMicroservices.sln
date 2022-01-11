@@ -33,7 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientApps", "ClientApps", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Gateway", "ApiGateways\Store.Gateway\Store.Gateway.csproj", "{BAD92053-5CC6-4461-8FD5-24A025AE3B21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.BlazorWasm", "ClientApps\Store.BlazorWasm\Store.BlazorWasm.csproj", "{711286D5-364B-47AD-9D98-12B690C9E322}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.BlazorWasm", "ClientApps\Store.BlazorWasm\Store.BlazorWasm.csproj", "{711286D5-364B-47AD-9D98-12B690C9E322}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

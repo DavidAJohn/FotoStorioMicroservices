@@ -3,6 +3,7 @@ module.exports = {
         "./Pages/*.razor",
         "./Pages/**/*.razor",
         "./Shared/*.razor",
+        "./Components/*.razor",
         "./App.razor"
     ],
   theme: {
