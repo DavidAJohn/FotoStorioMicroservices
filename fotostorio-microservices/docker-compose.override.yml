@@ -74,6 +74,7 @@ services:
     container_name: store.gateway
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - "Cors_Url=http://store.gateway"
     depends_on:
       - products.aggregator
       - basket.api
