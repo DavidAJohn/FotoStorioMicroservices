@@ -1,0 +1,61 @@
+﻿@page "/products/"
+
+@using Store.BlazorWasm.Contracts
+@using Store.BlazorWasm.Models
+
+@inject IProductService productService
+
+<div class="main">
+    @if (errorMessage != "")
+    {
+        <div class="alert alert-danger" role="alert">
+            <h4>@errorMessage</h4>
+        </div>
+    }
+    else if (products == null)
+    {
+        <text>Loading products...</text>
+    }
+    else
+    {
+        @foreach (var product in products)
+        {
+            <div>
+                <div>
+                    <h4>
+                        <a href="/products/details/@product.Id">
+                            @product.Name (£@product.SalePrice)
+                        </a>
+                    </h4>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    List<Product> products;
+    private string errorMessage = "";
+
+    [CascadingParameter]
+    public ErrorLogger Error { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetProducts();
+    }
+
+    private async Task GetProducts() 
+    {
+        try
+        {
+            products = await productService.GetProductsAsync();
+            errorMessage = "";
+        }
+        catch (Exception ex)
+        {
+            Error.ProcessError(ex, "Pages/Products/Index.GetProducts()");
+            errorMessage = "Could not retrieve products";
+        }
+    }
+}

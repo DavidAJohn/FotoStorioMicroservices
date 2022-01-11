@@ -1,0 +1,55 @@
+﻿@page "/products/details/{id:int}"
+
+@using Store.BlazorWasm.Models
+@using Store.BlazorWasm.Contracts
+
+@inject IProductService productService
+
+@if (errorMessage != "")
+    {
+        <div class="alert alert-danger" role="alert">
+            <h4>@errorMessage</h4>
+        </div>
+    }
+else if (product == null)
+    {
+        <text>Loading product details...</text>
+    }
+else 
+    {
+        <div>
+            <h4>@product.Name</h4>
+            <p>£@product.Price</p>
+        </div>
+    }
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Product product;
+
+    private string errorMessage = "";
+
+    [CascadingParameter]
+    public ErrorLogger Error { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetProductById();
+    }
+
+    private async Task GetProductById()
+    {
+        try 
+        {
+            product = await productService.GetProductByIdAsync(Id);
+            errorMessage = "";
+        }
+        catch (Exception ex)
+        {
+            Error.ProcessError(ex, "Pages/Products/Details.GetProductById()");
+            errorMessage = "Could not retrieve details for this product";
+        }
+    }
+}
