@@ -1,0 +1,65 @@
+﻿@using Microsoft.Extensions.Logging
+@inject ILogger<ErrorLogger> Logger
+
+@using Microsoft.AspNetCore.Components.WebAssembly.Hosting
+@inject IWebAssemblyHostEnvironment env
+
+<CascadingValue Value=this>
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    /// <summary>ProcessError uses <see cref="Microsoft.Extensions.Logging.ILogger"/> to log exceptions via a Cascading Parameter added to the App.razor file
+    /// <para>The level of detail logged depends on the environment, accessed via <see cref="Microsoft.AspNetCore.Components.WebAssembly.Hosting.IWebAssemblyHostEnvironment"/></para> 
+    /// <para>You can optionally exclude the stack trace, even in Development mode. An overload method also allows you to add the name of the component where the exception occurred.</para>
+    /// </summary>
+    public void ProcessError(Exception ex, bool excludeStackTrace = false)
+    {
+        if (env.IsDevelopment())
+        {
+            if (excludeStackTrace)
+            {
+                Logger.LogError("ERROR | Type: {Type} | Message: {Message}",
+                    ex.GetType(), ex.Message);
+            }
+            else
+            {
+                Logger.LogError("ERROR | Type: {Type} | Message: {Message} | Stack Trace: {StackTrace}",
+                    ex.GetType(), ex.Message, ex.StackTrace);
+            }
+        }
+        else
+        {
+            Logger.LogError("ERROR | Type: {Type} | Message: {Message}", ex.GetType(), ex.Message);
+        }
+    }
+
+    /// <summary>ProcessError uses <see cref="Microsoft.Extensions.Logging.ILogger" /> to log exceptions via a Cascading Parameter added to the App.razor file
+    /// <para>The level of detail logged depends on the environment, accessed via <see cref="Microsoft.AspNetCore.Components.WebAssembly.Hosting.IWebAssemblyHostEnvironment"/></para> 
+    /// <para>You can optionally exclude the stack trace, even in Development mode. An overload method also allows you to add the name of the component where the exception occurred.</para>
+    /// </summary>
+    public void ProcessError(Exception ex, string componentName, bool excludeStackTrace = false)
+    {
+        if (env.IsDevelopment())
+        {
+            if (excludeStackTrace)
+            {
+                Logger.LogError("ERROR | At: {componentName} | Type: {Type} | Message: {Message}",
+                    componentName, ex.GetType(), ex.Message);
+            }
+            else
+            {
+                Logger.LogError("ERROR | At: {componentName} | Type: {Type} | Message: {Message} | Stack Trace: {StackTrace}",
+                    componentName, ex.GetType(), ex.Message, ex.StackTrace);
+            }
+        }
+        else
+        {
+            Logger.LogError("ERROR | At: {componentName} | Type: {Type} | Message: {Message}",
+                componentName, ex.GetType(), ex.Message);
+        }
+    }
+}
