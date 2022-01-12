@@ -1,7 +1,62 @@
 ﻿@page "/"
 
-<div class="container">
-    <h1>Hello, world!</h1>
+@inject IJSRuntime JsRuntime;
 
-    <div class="py-4 text-xl text-indigo-600 hover:bg-indigo-600 hover:text-slate-50">Welcome to your new app</div>
+<div class="container max-w-7xl min-h-screen">
+    <div id="promo-carousel" class="carousel slide d-none d-md-block" data-bs-ride="carousel">
+        <!-- slide location indicators -->
+        <ol class="carousel-indicators">
+            <li data-bs-target="#promo-carousel" data-bs-slide-to='0' class="active" ></li>
+            <li data-bs-target="#promo-carousel" data-bs-slide-to='1' ></li>
+            <li data-bs-target="#promo-carousel" data-bs-slide-to='2' ></li>
+        </ol>
+        <!-- main carousel images -->
+        <div class="carousel-inner">
+            <div class="carousel-item carousel-image-1 active" >
+                <img class="d-block" src="https://bookwormslibrary.blob.core.windows.net/promo/carousel-image1.png" alt="">
+                <div class="carousel-caption d-none d-md-block text-dark">
+                    <NavLink href="/products/details/5">
+                        <button class="my-3 btn btn-outline-dark">View Product 5</button>
+                    </NavLink>
+                </div>
+            </div>
+            <div class="carousel-item carousel-image-2" >
+                <img class="d-block" src="https://bookwormslibrary.blob.core.windows.net/promo/carousel-image2.png" alt="">
+                <div class="carousel-caption d-none d-md-block text-light">
+                    <NavLink href="/products/details/6">
+                        <button class="my-3 btn btn-outline-light">View Product 6</button>
+                    </NavLink>
+                </div>
+            </div>
+            <div class="carousel-item carousel-image-3" >
+                <NavLink href="/products?categoryId=3">
+                    <img class="d-block" src="https://bookwormslibrary.blob.core.windows.net/promo/carousel-image3.png" alt="">
+                    <div class="carousel-caption d-none d-md-block text-light">
+                        <button class="my-3 btn btn-outline-light">Click anywhere for Category 3</button>
+                    </div>
+                </NavLink>
+            </div>
+        </div>
+        <!-- next/prev buttons -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#promo-carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#promo-carousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
 </div>
+
+@functions {     
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)     
+    {         
+        if (firstRender)         
+        {             
+            await JsRuntime.InvokeAsync<object>("initialiseCarousel");             
+            firstRender = false;         
+        }
+    }     
+}

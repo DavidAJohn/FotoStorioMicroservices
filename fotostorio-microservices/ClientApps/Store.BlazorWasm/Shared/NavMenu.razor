@@ -1,32 +1,29 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Store.BlazorWasm</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
-
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="products">
-                <span class="oi oi-camera-slr"></span> Products
-            </NavLink>
-        </li>
-    </ul>
-</div>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}
+﻿<nav class="bg-blue-900 hidden sm:block">
+  <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-center h-16">
+      <div>
+        <div class="text-white text-sm">
+          <NavLink href="products?category=1" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">DSLR Cameras</NavLink>
+        </div>
+      </div>
+      <div class="mx-2 text-white">|</div>
+      <div>
+        <div class="text-white text-sm hover:border-b-2 ">
+          <NavLink href="products?category=2" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">Mirrorless Cameras</NavLink>
+        </div>
+      </div>
+      <div class="mx-2 text-white">|</div>
+      <div>
+        <div class="text-white text-sm">
+          <NavLink href="products?category=3" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">Lenses</NavLink>
+        </div>
+      </div>
+      <div class="mx-2 text-white">|</div>
+      <div>
+        <div class="text-white text-sm">
+          <a href="#" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">Special Offers</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
