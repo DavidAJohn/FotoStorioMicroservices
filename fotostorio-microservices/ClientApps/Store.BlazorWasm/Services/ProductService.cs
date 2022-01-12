@@ -94,4 +94,52 @@ public class ProductService : IProductService
             throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
         }
     }
+
+    public async Task<List<Brand>> GetProductBrandsAsync()
+    {
+        try
+        {
+            var client = _httpClient.CreateClient("CatalogAPI");
+            var brands = await client.GetFromJsonAsync<List<Brand>>("Brands");
+
+            return brands;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError(ex.StatusCode + " " + ex.Message);
+            throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
+        }
+    }
+
+    public async Task<List<Category>> GetProductCategoriesAsync()
+    {
+        try
+        {
+            var client = _httpClient.CreateClient("CatalogAPI");
+            var categories = await client.GetFromJsonAsync<List<Category>>("Categories");
+
+            return categories;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError(ex.StatusCode + " " + ex.Message);
+            throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
+        }
+    }
+
+    public async Task<List<Mount>> GetProductMountsAsync()
+    {
+        try
+        {
+            var client = _httpClient.CreateClient("CatalogAPI");
+            var mounts = await client.GetFromJsonAsync<List<Mount>>("Mounts");
+
+            return mounts;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError(ex.StatusCode + " " + ex.Message);
+            throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
+        }
+    }
 }

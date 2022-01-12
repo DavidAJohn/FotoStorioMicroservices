@@ -1,29 +1,33 @@
-﻿<nav class="bg-blue-900 hidden sm:block">
-  <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-center h-16">
-      <div>
-        <div class="text-white text-sm">
-          <NavLink href="products?category=1" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">DSLR Cameras</NavLink>
+﻿@using Store.BlazorWasm.Models
+
+<nav class="bg-blue-900 hidden sm:block">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-center h-16">
+
+            @if (navMenuItems != null)
+            {
+                @foreach (NavMenuItem navItem in navMenuItems)
+                {
+                    <div>
+                        <div class="text-white text-sm">
+                            <NavLink href="@navItem.Url" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">@navItem.DisplayName</NavLink>
+                        </div>
+                    </div>
+                    <div class="mx-2 text-white">|</div>
+                }
+
+                <div>
+                    <div class="text-white text-sm">
+                        <a href="#" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">Special Offers</a>
+                    </div>
+                </div>
+            }
+
         </div>
-      </div>
-      <div class="mx-2 text-white">|</div>
-      <div>
-        <div class="text-white text-sm hover:border-b-2 ">
-          <NavLink href="products?category=2" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">Mirrorless Cameras</NavLink>
-        </div>
-      </div>
-      <div class="mx-2 text-white">|</div>
-      <div>
-        <div class="text-white text-sm">
-          <NavLink href="products?category=3" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">Lenses</NavLink>
-        </div>
-      </div>
-      <div class="mx-2 text-white">|</div>
-      <div>
-        <div class="text-white text-sm">
-          <a href="#" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">Special Offers</a>
-        </div>
-      </div>
     </div>
-  </div>
 </nav>
+
+@code {
+    [Parameter]
+    public List<NavMenuItem> navMenuItems { get; set; }
+}

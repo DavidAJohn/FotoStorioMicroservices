@@ -1,76 +1,81 @@
 ﻿@inherits LayoutComponentBase
 
+@using Store.BlazorWasm.Contracts
+@using Store.BlazorWasm.Models
+
+@inject IProductService productService
+
 <!-- navbar top layer -->
 <nav class="bg-fotoblue" id="navbar-top">
 
-  <div class="md:container"> <!-- start container -->
-    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-      <div class="relative flex items-center justify-between h-16">
+    <div class="md:container">
+        <!-- start container -->
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="relative flex items-center justify-between h-16">
 
-          <!-- Hamburger button for mobile menu -->
-          <div class="absolute inset-y-0 left-0 flex items-center sm:hidden" @onclick="ToggleNavMenu">
-            <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
-              <span class="sr-only">Open main menu</span>
+                <!-- Hamburger button for mobile menu -->
+                <div class="absolute inset-y-0 left-0 flex items-center sm:hidden" @onclick="ToggleNavMenu">
+                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
 
-              <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-              <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
 
-          <!-- Site name and logo -->
-          <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-              <div class="block md:hidden h-12 w-auto items-center ml-4">
-                  <span class="flex items-center justify-center">
-                      <i class="bi-camera" style="font-size: 2rem; color: white;"></i>
-                  </span>
-              </div>
-              <!-- Only show large icon and name on md(768px) screens and above -->
-              <div class="hidden md:block h-12 w-auto items-center">
-                  <span class="flex items-center justify-center">
-                      <i class="bi-camera" style="font-size: 2.5rem; color: white; margin-top: -7px; margin-left: 3px;"></i>
-                      <a class="text-white text-xl ml-4 pb-2" href="/">Foto Storio</a>
-                  </span>
-              </div>
-          </div>
+                <!-- Site name and logo -->
+                <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+                    <div class="block md:hidden h-12 w-auto items-center ml-4">
+                        <span class="flex items-center justify-center">
+                            <i class="bi-camera" style="font-size: 2rem; color: white;"></i>
+                        </span>
+                    </div>
+                    <!-- Only show large icon and name on md(768px) screens and above -->
+                    <div class="hidden md:block h-12 w-auto items-center">
+                        <span class="flex items-center justify-center">
+                            <i class="bi-camera" style="font-size: 2.5rem; color: white; margin-top: -7px; margin-left: 3px;"></i>
+                            <a class="text-white text-xl ml-4 pb-2" href="/">Foto Storio</a>
+                        </span>
+                    </div>
+                </div>
 
-          <!-- Login/Register/User Details and cart -->
-          <div class="flex flex-row items-center">
-            <div class="text-white text-sm font-medium mr-4">
-              <a href="/login" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Log In</a>
-              <a href="/register" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Register</a> 
+                <!-- Login/Register/User Details and cart -->
+                <div class="flex flex-row items-center">
+                    <div class="text-white text-sm font-medium mr-4">
+                        <a href="/login" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Log In</a>
+                        <a href="/register" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Register</a>
+                    </div>
+
+                    <div class="flex flex-row justify-between items-center">
+                        <span class=" text-white text-sm font-medium">Your Cart:</span>
+                        <span class=" text-white ml-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </span>
+                        <span id="cart-items" class="text-white text-sm ml-2 mr-3 md:mr-2">3</span>
+                    </div>
+                </div>
+
             </div>
-
-            <div class="flex flex-row items-center h-16">
-              <span class=" text-white text-sm font-medium">Your Basket:</span>
-              <span class=" text-white ml-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-              </span>
-              <span id="cart-items" class="text-white text-sm ml-2 mr-3 md:mr-2">3</span>
-            </div>
-          </div>
-
-      </div>
+        </div>
+    </div> <!-- end container -->
+    <!-- Mobile menu -->
+    <div class="sm:hidden @NavMenuCssClass" id="mobile-menu">
+        <MobileMenu navMenuItems=@NavMenuItems />
     </div>
-  </div> <!-- end container -->
-
-  <!-- Mobile menu -->
-  <div class="sm:hidden @NavMenuCssClass" id="mobile-menu">
-    <MobileMenu />
-  </div>
 
 </nav>
 
 <!-- navbar second layer -->
-<NavMenu />
+<NavMenu navMenuItems=@NavMenuItems />
 
 <!-- main body content -->
-<main role="main" class="flex-shrink-0 container max-w-7xl pb-12">
+<main role="main" class="container max-w-7xl pb-12">
     <div class="container">
         <div class="py-5">
             @Body
@@ -99,11 +104,11 @@
                 <h5 class="mb-4 uppercase text-gray-400 font-bold">Links</h5>
                 <div>
                     <div>
-                        <i class="mr-2 bi bi-github"></i> 
+                        <i class="mr-2 bi bi-github"></i>
                         <a href="https://github.com/DavidAJohn/FotoStorio" class="text-gray-100 hover:text-gray-400">GitHub source</a>
                     </div>
                     <div>
-                        <i class="mr-2 bi bi-border-all"></i> 
+                        <i class="mr-2 bi bi-border-all"></i>
                         <a href="https://blazor.net" class="text-gray-100 hover:text-gray-400">Blazor.net</a>
                     </div>
                     <div>
@@ -120,24 +125,24 @@
                 <h5 class="mb-4 uppercase text-gray-400 font-bold">Social</h5>
                 <ul class="list-none">
                     <li>
-                        <i class="mr-2 bi bi-facebook"></i> 
+                        <i class="mr-2 bi bi-facebook"></i>
                         <a href="https://facebook.com" class="text-gray-100 hover:text-gray-400">Facebook</a>
                     </li>
                     <li>
-                        <i class="mr-2 bi bi-twitter"></i> 
+                        <i class="mr-2 bi bi-twitter"></i>
                         <a href="https://twitter.com" class="text-gray-100 hover:text-gray-400">Twitter</a>
                     </li>
                     <li>
-                        <i class="mr-2 bi bi-instagram"></i> 
+                        <i class="mr-2 bi bi-instagram"></i>
                         <a href="https://instagram.com" class="text-gray-100 hover:text-gray-400">Instagram</a>
                     </li>
                     <li>
-                        <i class="mr-2 bi bi-twitch"></i> 
+                        <i class="mr-2 bi bi-twitch"></i>
                         <a href="https://twitch.com" class="text-gray-100 hover:text-gray-400">Twitch</a>
                     </li>
                 </ul>
             </div>
-               
+
         </div>
     </div>
 
@@ -153,6 +158,8 @@
 
     private string currentYear;
 
+    public List<NavMenuItem> NavMenuItems = new List<NavMenuItem>();
+
     protected override void OnInitialized()
     {
         // set footer copyright year
@@ -160,8 +167,24 @@
         currentYear = currentDateTime.Year.ToString();
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        await GetNavItems();
+    }
+
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+    private async Task GetNavItems()
+    {
+        var categories = await productService.GetProductCategoriesAsync();
+
+        foreach (Category category in categories)
+        {
+            NavMenuItems.Add(new NavMenuItem { DisplayName = category.Name, Url = $"products?category={category.Id}" });
+        }
+    }
+
 }
