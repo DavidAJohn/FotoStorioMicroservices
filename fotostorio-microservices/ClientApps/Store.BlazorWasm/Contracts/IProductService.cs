@@ -6,5 +6,8 @@ namespace Store.BlazorWasm.Contracts
     {
         Task<List<Product>> GetProductsAsync();
         Task<Product> GetProductByIdAsync(int id);
+        Task<List<Product>> GetProductsByBrandAsync(int brandId);
+        Task<List<Product>> GetProductsByCategoryAsync(int categoryId);
+        Task<List<Product>> GetProductsByMountAsync(int mountId);
     }
 }
