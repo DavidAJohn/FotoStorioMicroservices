@@ -1,0 +1,39 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Discount.Grpc.Protos";
+
+service CampaignProtoService {
+	rpc GetCampaignById (GetCampaignByIdRequest) returns (CampaignModel);
+	rpc CreateCampaign (CreateCampaignRequest) returns (CampaignModel);
+	rpc UpdateCampaign (UpdateCampaignRequest) returns (CampaignModel);
+	rpc DeleteCampaign (DeleteCampaignRequest) returns (DeleteCampaignResponse);
+}
+
+message CampaignModel {
+	int32 id = 1;
+	string name = 2;
+	google.protobuf.Timestamp startDate = 3;
+	google.protobuf.Timestamp endDate = 4;
+}
+
+message GetCampaignByIdRequest {
+	int32 id = 1;	
+}
+
+message CreateCampaignRequest {
+	CampaignModel campaign = 1;
+}
+
+message UpdateCampaignRequest {
+	CampaignModel campaign = 1;
+}
+
+message DeleteCampaignRequest {
+	int32 id = 1;
+}
+
+message DeleteCampaignResponse {
+	bool success = 1;
+}

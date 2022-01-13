@@ -1,0 +1,47 @@
+[
+  {
+    "Sku": "SONA73C",
+    "CampaignId": 1,
+    "SalePrice": 1499
+  },
+  {
+    "Sku": "SONA7R3C",
+    "CampaignId": 1,
+    "SalePrice": 1879
+  },
+  {
+    "Sku": "CANEF24L",
+    "CampaignId": 2,
+    "SalePrice": 1579
+  },
+  {
+    "Sku": "FUJ1855L",
+    "CampaignId": 2,
+    "SalePrice": 549
+  },
+  {
+    "Sku": "NIKZ62C",
+    "CampaignId": 3,
+    "SalePrice": 1799
+  },
+  {
+    "Sku": "NIKZ72C",
+    "CampaignId": 3,
+    "SalePrice": 2749
+  },
+  {
+    "Sku": "NIK2470L",
+    "CampaignId": 3,
+    "SalePrice": 899
+  },
+  {
+    "Sku": "FUJXT4C",
+    "CampaignId": 4,
+    "SalePrice": 1849
+  },
+  {
+    "Sku": "FUJXT3C",
+    "CampaignId": 4,
+    "SalePrice": 1224
+  }
+]

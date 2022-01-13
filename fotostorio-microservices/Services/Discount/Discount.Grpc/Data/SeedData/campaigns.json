@@ -1,0 +1,18 @@
+[
+  {
+    "Id": 1,
+    "Name": "Previous Month Discount"
+  },
+  {
+    "Id": 2,
+    "Name": "Miscellaneous Lens Discount"
+  },
+  {
+    "Id": 3,
+    "Name": "Nikon Mirrorless Camera Sale"
+  },
+  {
+    "Id": 4,
+    "Name": "Next Month Discount"
+  }
+]
