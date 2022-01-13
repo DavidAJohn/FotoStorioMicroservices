@@ -2,51 +2,77 @@
 
 @inject IJSRuntime JsRuntime;
 
-<div class="container max-w-7xl min-h-screen">
-    <div id="promo-carousel" class="carousel slide d-none d-md-block" data-bs-ride="carousel">
-        <!-- slide location indicators -->
-        <ol class="carousel-indicators">
-            <li data-bs-target="#promo-carousel" data-bs-slide-to='0' class="active" ></li>
-            <li data-bs-target="#promo-carousel" data-bs-slide-to='1' ></li>
-            <li data-bs-target="#promo-carousel" data-bs-slide-to='2' ></li>
-        </ol>
-        <!-- main carousel images -->
-        <div class="carousel-inner">
-            <div class="carousel-item carousel-image-1 active" >
-                <img class="d-block" src="https://bookwormslibrary.blob.core.windows.net/promo/carousel-image1.png" alt="">
-                <div class="carousel-caption d-none d-md-block text-dark">
-                    <NavLink href="/products/details/5">
-                        <button class="my-3 btn btn-outline-dark">View Product 5</button>
-                    </NavLink>
-                </div>
-            </div>
-            <div class="carousel-item carousel-image-2" >
-                <img class="d-block" src="https://bookwormslibrary.blob.core.windows.net/promo/carousel-image2.png" alt="">
-                <div class="carousel-caption d-none d-md-block text-light">
-                    <NavLink href="/products/details/6">
-                        <button class="my-3 btn btn-outline-light">View Product 6</button>
-                    </NavLink>
-                </div>
-            </div>
-            <div class="carousel-item carousel-image-3" >
-                <NavLink href="/products?categoryId=3">
-                    <img class="d-block" src="https://bookwormslibrary.blob.core.windows.net/promo/carousel-image3.png" alt="">
-                    <div class="carousel-caption d-none d-md-block text-light">
-                        <button class="my-3 btn btn-outline-light">Click anywhere for Category 3</button>
+<div class="min-h-screen">
+    <div class="container max-w-7xl">
+        <div id="promo-carousel" class="carousel slide d-none d-md-block max-h-112" data-bs-ride="carousel">
+            <!-- slide location indicators -->
+            <ol class="carousel-indicators">
+                <li data-bs-target="#promo-carousel" data-bs-slide-to='0' class="active" ></li>
+                <li data-bs-target="#promo-carousel" data-bs-slide-to='1' ></li>
+                <li data-bs-target="#promo-carousel" data-bs-slide-to='2' ></li>
+            </ol>
+            <!-- main carousel images -->
+            <div class="carousel-inner">
+                <div class="carousel-item carousel-image-1 active" >
+                    <img class="d-block" src="https://i.ibb.co/YBx7hWx/fuji-x-t3-promo.jpg" alt="">
+                    <div class="carousel-caption d-none d-md-block text-dark">
+                        <NavLink href="/products/details/18">
+                            <button class="my-3 btn btn-outline-light">View the Fujifilm X-T3</button>
+                        </NavLink>
                     </div>
-                </NavLink>
+                </div>
+                <div class="carousel-item carousel-image-2" >
+                    <img class="d-block" src="https://i.ibb.co/XYjPGNT/nikon-z6ii-promo.jpg" alt="">
+                    <div class="carousel-caption d-none d-md-block text-light">
+                        <NavLink href="/products/details/21">
+                            <button class="my-3 btn btn-outline-light">Explore the Nikon Z6 II</button>
+                        </NavLink>
+                    </div>
+                </div>
+                <div class="carousel-item carousel-image-3" >
+                    <NavLink href="/products?categoryId=3">
+                        <img class="d-block" src="https://i.ibb.co/ZBNS2r4/promo-black.jpg" alt="">
+                        <div class="carousel-caption d-none d-md-block text-light">
+                            <button class="my-3 btn btn-outline-light">View our range of lenses</button>
+                        </div>
+                    </NavLink>
+                </div>
+            </div>
+            <!-- next/prev buttons -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#promo-carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#promo-carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- category grid -->
+    <div class="container max-w-7xl mt-24">
+        <div class="grid grid-cols-3 grid-row-2 gap-4 justify-items-stretch">
+            <div class="row-span-2 bg-gray-900 text-gray-50 h-72">Search our whole product range</div>
+            <div class="bg-gray-900 text-gray-50">View Mirrorless cameras</div>
+            <div class="bg-gray-900 text-gray-50">View DSLRs</div>
+            <div class="bg-gray-900 text-gray-50">View all Lenses</div>
+            <div class="bg-gray-900 text-gray-50">Special Offers</div>
+        </div>
+    </div>
+
+    <!-- brands -->
+    <div class="container">
+        <div class="container max-w-7xl mt-24 rounded-md shadow-md py-4 bg-white">
+            <div class="flex justify-around">
+                <div class="h-28 w-28"><a href="products?brandId=1"><img src="https://i.ibb.co/fvbhwJK/canon-logo.jpg" /></a></div>
+                <div class="h-28 w-28"><a href="products?brandId=2"><img src="https://i.ibb.co/cXRskMX/nikon-logo.jpg" /></a></div>
+                <div class="h-28 w-28"><a href="products?brandId=3"><img src="https://i.ibb.co/M2kgNq6/sony-logo.jpg" /></a></div>
+                <div class="h-28 w-28"><a href="products?brandId=4"><img src="https://i.ibb.co/2g24gmL/fujifilm-logo.jpg" /></a></div>
             </div>
         </div>
-        <!-- next/prev buttons -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#promo-carousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#promo-carousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
     </div>
+    
 </div>
 
 @functions {     
