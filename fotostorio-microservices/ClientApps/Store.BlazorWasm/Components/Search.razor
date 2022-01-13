@@ -1,0 +1,33 @@
+﻿<div class="relative inline-block">
+    <input type="search" class="rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white focus:outline-none" placeholder="@Placeholder"
+           @bind-value="@SearchTerm"
+           @bind-value:event="oninput"
+           @onkeyup="SearchChanged" />
+</div>
+
+@code {
+    public string SearchTerm { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnSearchChanged { get; set; }
+
+    [Parameter]
+    public bool ClearSearch { get; set; }
+
+    [Parameter]
+    public string Placeholder { get; set; } = "Search";
+
+    protected override void OnParametersSet()
+    {
+        if (ClearSearch)
+        {
+            SearchTerm = "";
+        }
+    }
+
+    private async void SearchChanged()
+    {
+        await Task.Delay(500);
+        await OnSearchChanged.InvokeAsync(SearchTerm);
+    }
+}

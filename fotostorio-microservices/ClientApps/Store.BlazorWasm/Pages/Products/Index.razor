@@ -18,6 +18,19 @@
     }
     else
     {
+        <div class="flex flex-row justify-between">
+            <div>
+                <Search OnSearchChanged="SearchChanged"
+                        ClearSearch=@ClearSearch
+                        Placeholder="Search for a product..." 
+                />
+            </div>
+            <div>
+                <Dropdown dropdownTitle="Sort products by:"
+                          dropdownOptions=@dropdownOptions 
+                />
+            </div>
+        </div>
         <div class="mt-8 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
             @foreach (var product in products)
             {
@@ -54,17 +67,24 @@
 
 @code {
     List<Product> products;
-    private string errorMessage = "";
+    List<DropdownItem> dropdownOptions = new();
+    private bool ClearSearch = false;
 
     [CascadingParameter]
     public ErrorLogger Error { get; set; }
+    private string errorMessage = "";
 
     protected override async Task OnInitializedAsync()
     {
         await GetProducts();
     }
 
-    private async Task GetProducts() 
+    protected override void OnInitialized()
+    {
+        SetSortByDropdownOptions();
+    }
+
+    private async Task GetProducts()
     {
         try
         {
@@ -74,7 +94,20 @@
         catch (Exception ex)
         {
             Error.ProcessError(ex, "Pages/Products/Index.GetProducts()");
-            errorMessage = "Could not retrieve products";
+            errorMessage = "Could not retrieve list of products";
         }
+    }
+
+    private async Task SearchChanged(string searchTerm = "")
+    {
+        await GetProducts();
+    }
+
+    private void SetSortByDropdownOptions()
+    {
+        dropdownOptions.Add(new DropdownItem{ Id = 1, OptionName = "Name (A-Z)", OptionRef = "#" });
+        dropdownOptions.Add(new DropdownItem{ Id = 2, OptionName = "Price (Highest to Lowest)", OptionRef = "#" });
+        dropdownOptions.Add(new DropdownItem{ Id = 3, OptionName = "Price (Lowest to Highest)", OptionRef = "#" });
+        dropdownOptions.Add(new DropdownItem{ Id = 4, OptionName = "Name (Z-A)", OptionRef = "#" });
     }
 }
