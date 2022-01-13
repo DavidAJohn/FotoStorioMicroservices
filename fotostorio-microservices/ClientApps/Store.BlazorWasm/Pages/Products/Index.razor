@@ -62,21 +62,27 @@
                 </div>
             }
         </div>
+        <div>
+            <Pagination metadata="metadata" Spread="10" SelectedPage="SelectedPage" />
+        </div>
     }
 </div>
 
 @code {
-    List<Product> products;
-    List<DropdownItem> dropdownOptions = new();
-    private bool ClearSearch = false;
-
     [CascadingParameter]
     public ErrorLogger Error { get; set; }
     private string errorMessage = "";
 
+    List<Product> products;
+    List<DropdownItem> dropdownOptions = new();
+    private bool ClearSearch = false;
+
+    private PagingMetadata metadata = new();
+    private ProductParameters productParams = new();
+    
     protected override async Task OnInitializedAsync()
     {
-        await GetProducts();
+        await SelectedPage();
     }
 
     protected override void OnInitialized()
@@ -88,7 +94,9 @@
     {
         try
         {
-            products = await productService.GetProductsAsync();
+            var productsWithMetadata = await productService.GetProductsAsync(productParams);
+            products = productsWithMetadata.Items;
+            metadata = productsWithMetadata.Metadata;
             errorMessage = "";
         }
         catch (Exception ex)
@@ -98,8 +106,18 @@
         }
     }
 
+    private async Task SelectedPage(int page = 1)
+    {
+        productParams.PageIndex = page;
+
+        await GetProducts();
+    }
+
     private async Task SearchChanged(string searchTerm = "")
     {
+        productParams.PageIndex = 1;
+        productParams.Search = searchTerm;
+
         await GetProducts();
     }
 

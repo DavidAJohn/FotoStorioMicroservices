@@ -1,0 +1,121 @@
+﻿@using Store.BlazorWasm.Models
+
+<div class="bg-gray-50 mt-6 flex items-center justify-between">
+    <div class="flex-1 flex justify-between sm:hidden">
+        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+            Previous
+        </a>
+        <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+            Next
+        </a>
+    </div>
+    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div>
+            <span class="text-md text-gray-700">
+                Showing <span class="font-medium"> 
+                    @(metadata.PageIndex > 1 
+                    ? (metadata.PageIndex * metadata.PageSize) - (metadata.PageSize - 1)
+                    : metadata.PageIndex) 
+                    </span>
+                - <span class="font-medium">
+                    @((metadata.PageSize * metadata.PageIndex) <= metadata.TotalCount 
+                    ? (metadata.PageSize * metadata.PageIndex) 
+                    : metadata.TotalCount) 
+                    </span>
+                of <span class="font-medium">
+                    @metadata.TotalCount
+                    </span>
+                products
+            </span>
+        </div>
+        <div>
+            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                @foreach (var link in links)
+                {
+                    if (link.Enabled)
+                    {
+                        if (link.Active)
+                        {
+                            <div>
+                                <button type="button" disabled  
+                                    class="z-10 relative inline-flex items-center p-2 border border-gray-800 text-md font-medium 
+                                        bg-blue-900 text-gray-50 cursor-default"
+                                >
+                                    @link.Text
+                                </button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                <button type="button" @onclick="() => OnSelectedPage(link)" 
+                                    class="z-10 relative inline-flex items-center p-2 border border-gray-800 text-md font-medium 
+                                        bg-gray-50 text-gray-700 hover:bg-blue-900 hover:text-gray-50  
+                                        @($"{(link.Text == "Next" ? " rounded-tr-md rounded-br-md" : "")} {(link.Text == "Previous" ? " rounded-tl-md rounded-bl-md" : "")}")
+                                        "
+                                >
+                                    @link.Text
+                                </button>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div>
+                            <button type="button" disabled class="z-10 relative inline-flex items-center p-2 border border-gray-800 
+                                    text-md font-medium text-gray-400 cursor-default 
+                                    @($"{(link.Text == "Next" ? " rounded-tr-md rounded-br-md" : "")} {(link.Text == "Previous" ? " rounded-tl-md rounded-bl-md" : "")}")
+                                    " 
+                            >
+                                @link.Text
+                            </button>
+                        </div>
+                    }
+                }
+            </nav>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public PagingMetadata metadata { get; set; }
+
+    [Parameter]
+    public int Spread { get; set; }
+    
+    [Parameter]
+    public EventCallback<int> SelectedPage { get; set; }
+        
+    private List<PagingLink> links;
+
+    protected override void OnParametersSet()
+    {
+        CreatePaginationLinks();
+    }
+
+    private void CreatePaginationLinks()
+    {
+        links = new List<PagingLink>();
+
+        links.Add(new PagingLink(metadata.PageIndex - 1, metadata.HasPreviousPage, "Previous"));
+
+        for (int i = 1; i <= metadata.TotalPages; i++)
+        {
+            if (i >= metadata.PageIndex - Spread && i <= metadata.PageIndex + Spread)
+            {
+                links.Add(new PagingLink(i, true, i.ToString()) { Active = metadata.PageIndex == i });
+            }
+        }
+
+        links.Add(new PagingLink(metadata.PageIndex + 1, metadata.HasNextPage, "Next"));
+    }
+
+    private async Task OnSelectedPage(PagingLink link)
+    {
+        if (link.Page == metadata.PageIndex || !link.Enabled) return;
+
+        metadata.PageIndex = link.Page;
+        await SelectedPage.InvokeAsync(link.Page);
+    }
+}

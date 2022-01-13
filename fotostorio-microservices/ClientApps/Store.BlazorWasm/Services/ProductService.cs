@@ -1,6 +1,9 @@
-﻿using Store.BlazorWasm.Contracts;
+﻿using Microsoft.AspNetCore.WebUtilities;
+using Store.BlazorWasm.Contracts;
 using Store.BlazorWasm.Models;
+using System.Net;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace Store.BlazorWasm.Services;
 
@@ -15,19 +18,82 @@ public class ProductService : IProductService
         _logger = logger;
     }
 
-    public async Task<List<Product>> GetProductsAsync()
+    public async Task<PagedList<Product>> GetProductsAsync(ProductParameters productParams)
     {
         try
         {
-            var client = _httpClient.CreateClient("CatalogAPI");
-            var products = await client.GetFromJsonAsync<List<Product>>("Catalog");
+            var request = new HttpRequestMessage();
 
-            return products;
+            if (productParams != null)
+            {
+                var queryStringParams = new Dictionary<string, string>
+                {
+                    ["pageIndex"] = productParams.PageIndex < 1 ? "1" : productParams.PageIndex.ToString(),
+                };
+
+                // conditionally add a page size param (number of items to return)
+                if (productParams.PageSize != 0)
+                {
+                    queryStringParams.Add("pageSize", productParams.PageSize.ToString());
+                };
+
+                // conditionally add a search term
+                if (!String.IsNullOrEmpty(productParams.Search))
+                {
+                    queryStringParams.Add("search", productParams.Search.ToString());
+                };
+
+                // conditionally add a categoryId param
+                if (productParams.CategoryId != 0)
+                {
+                    queryStringParams.Add("categoryId", productParams.CategoryId.ToString());
+                };
+
+                // conditionally add a brandId param
+                if (productParams.BrandId != 0)
+                {
+                    queryStringParams.Add("brandId", productParams.BrandId.ToString());
+                };
+
+                // conditionally add a sort param
+                if (!String.IsNullOrEmpty(productParams.SortBy))
+                {
+                    queryStringParams.Add("sort", productParams.SortBy.ToString());
+                };
+
+                request = new HttpRequestMessage(HttpMethod.Get, QueryHelpers.AddQueryString("Catalog", queryStringParams));
+            }
+            else
+            {
+                request = new HttpRequestMessage(HttpMethod.Get, "Catalog");
+            }
+
+            var client = _httpClient.CreateClient("CatalogAPI");
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+                var pagedResponse = new PagedList<Product>
+                {
+                    Items = JsonSerializer.Deserialize<List<Product>>(
+                        content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                    ),
+                    Metadata = JsonSerializer.Deserialize<PagingMetadata>(
+                        response.Headers.GetValues("Pagination")
+                        .First(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                    )
+                };
+
+                return pagedResponse;
+            }
+
+            return null;
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex.StatusCode + " " + ex.Message);
-            throw new HttpRequestException(ex.Message);
+            throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
         }
     }
 

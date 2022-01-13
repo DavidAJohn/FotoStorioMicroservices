@@ -4,7 +4,7 @@ namespace Store.BlazorWasm.Contracts
 {
     public interface IProductService
     {
-        Task<List<Product>> GetProductsAsync();
+        Task<PagedList<Product>> GetProductsAsync(ProductParameters productParameters);
         Task<Product> GetProductByIdAsync(int id);
         Task<List<Product>> GetProductsByBrandAsync(int brandId);
         Task<List<Product>> GetProductsByCategoryAsync(int categoryId);
