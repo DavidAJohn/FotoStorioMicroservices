@@ -30,6 +30,7 @@ try
 
     await SeedData.SeedCampaignDataAsync(context);
     await SeedData.SeedProductDiscountDataAsync(context);
+    await SeedData.CreateStoredProceduresAsync(context);
 }
 catch (Exception ex)
 {

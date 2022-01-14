@@ -36,9 +36,9 @@ public static class SeedData
                 context.Campaigns.Add(campaign);
             }
 
-            context.Database.ExecuteSqlInterpolated($"SET IDENTITY_INSERT Campaigns ON;");
+            context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Campaigns ON");
             context.SaveChanges();
-            context.Database.ExecuteSqlInterpolated($"SET IDENTITY_INSERT Campaigns OFF");
+            context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Campaigns OFF");
             transaction.Commit();
         }
     }
@@ -56,5 +56,17 @@ public static class SeedData
         }
 
         await context.SaveChangesAsync();
+    }
+
+    public static async Task CreateStoredProceduresAsync(ApplicationDbContext context)
+    {
+        using (var transaction = context.Database.BeginTransaction())
+        {
+            var sqlCommand = await File.ReadAllTextAsync("./Data/SqlScripts/Discount_Sprocs.sql");
+
+            context.Database.ExecuteSqlRaw(sqlCommand);
+            context.SaveChanges();
+            transaction.Commit();
+        }
     }
 }
