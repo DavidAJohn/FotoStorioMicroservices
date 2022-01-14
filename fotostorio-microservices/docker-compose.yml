@@ -22,11 +22,11 @@ services:
       context: .
       dockerfile: Services/Basket/Basket.API/Dockerfile
 
-  discount.api:
-    image: ${DOCKER_REGISTRY-}discountapi
+  discount.grpc:
+    image: ${DOCKER_REGISTRY-}discountgrpc
     build:
       context: .
-      dockerfile: Services/Discount/Discount.API/Dockerfile
+      dockerfile: Services/Discount/Discount.Grpc/Dockerfile
 
   discount.minapi:
     image: ${DOCKER_REGISTRY-}discountminapi

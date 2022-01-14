@@ -1,4 +1,4 @@
-﻿using Discount.Api.Protos;
+﻿using Discount.Grpc.Protos;
 using System.Threading.Tasks;
 
 namespace Basket.API.GrpcServices

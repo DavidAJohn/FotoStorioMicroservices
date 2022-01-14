@@ -82,8 +82,6 @@ EXEC(N'
         SELECT p.[Id]
             ,[Sku]
             ,[SalePrice]
-            ,[CampaignId]
-            ,c.[Name] as [Campaign]
         FROM [ProductDiscounts] p
         INNER JOIN [Campaigns] c ON p.CampaignId = c.Id
         WHERE (c.StartDate < GETDATE() AND c.EndDate > DATEADD(dd,1, GETDATE()))

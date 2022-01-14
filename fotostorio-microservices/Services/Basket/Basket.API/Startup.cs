@@ -1,7 +1,7 @@
 using Basket.API.GrpcServices;
 using Basket.API.Helpers;
 using Basket.API.Repositories;
-using Discount.Api.Protos;
+using Discount.Grpc.Protos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

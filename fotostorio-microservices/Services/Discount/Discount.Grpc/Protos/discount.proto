@@ -13,8 +13,7 @@ service DiscountProtoService {
 message DiscountModel {
 	int32 id = 1;
 	string sku = 2;
-	string campaignId = 3;
-	int32 salePrice = 4;
+	double salePrice = 3;
 }
 
 message GetCurrentDiscountByIdRequest {

@@ -33,14 +33,14 @@ namespace Basket.API.Controllers
         [HttpPost]
         public async Task<ActionResult<CustomerBasket>> UpdateBasket([FromBody] CustomerBasketDTO basket)
         {
-            // for each basket item, check if there is a discounted price from the Discount.API gRPC service
+            // for each basket item, check if there is a discounted price from the Discount.Grpc service
             foreach (var item in basket.BasketItems)
             {
                 var discount = await _discountGrpcService.GetDiscount(item.Product.Sku);
 
                 // if discount.SalePrice = 0, item has no current discount
-                item.Product.Price = (discount.SalePrice < item.Product.Price && discount.SalePrice != 0) 
-                    ? discount.SalePrice : item.Product.Price;
+                item.Product.Price = ((decimal)discount.SalePrice < item.Product.Price && (decimal)discount.SalePrice != 0) 
+                    ? (decimal)discount.SalePrice : item.Product.Price;
             }
 
             var customerBasket = _mapper.Map<CustomerBasketDTO, CustomerBasket>(basket);
