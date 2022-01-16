@@ -55,7 +55,19 @@ public class SqlDiscountAccess : ISqlDiscountAccess
         var dp = new DynamicParameters();
         dp.Add("@Id", id, DbType.Int32, ParameterDirection.Input);
 
-        return await connection.QueryFirstOrDefaultAsync<ProductDiscount>(sp, dp, commandType: CommandType.StoredProcedure);
+        var discount = await connection.QueryFirstOrDefaultAsync<ProductDiscount>(sp, dp, commandType: CommandType.StoredProcedure);
+
+        if (discount == null)
+        {
+            return new ProductDiscount
+            {
+                Sku = "NODISCNT",
+                CampaignId = 0,
+                SalePrice = 0
+            };
+        }
+
+        return discount;
     }
 
     public async Task<ProductDiscount> GetCurrentDiscountBySkuAsync(string sku)
@@ -67,7 +79,19 @@ public class SqlDiscountAccess : ISqlDiscountAccess
         var dp = new DynamicParameters();
         dp.Add("@Sku", sku, DbType.String, ParameterDirection.Input);
 
-        return await connection.QueryFirstOrDefaultAsync<ProductDiscount>(sp, dp, commandType: CommandType.StoredProcedure);
+        var discount =  await connection.QueryFirstOrDefaultAsync<ProductDiscount>(sp, dp, commandType: CommandType.StoredProcedure);
+
+        if (discount == null)
+        {
+            return new ProductDiscount
+            {
+                Sku = "NODISCNT",
+                CampaignId = 0,
+                SalePrice = 0
+            };
+        }
+
+        return discount;
     }
 
     public async Task<bool> CreateDiscountAsync(ProductDiscount discount)

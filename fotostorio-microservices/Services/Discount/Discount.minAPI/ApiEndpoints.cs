@@ -7,8 +7,8 @@ public static class ApiEndpoints
         // Discount endpoints
         app.MapGet("api/Discounts/sku/{sku:maxlength(9)}", GetCurrentDiscountBySku);
         app.MapGet("api/Discounts/id/{id:int}", GetCurrentDiscountById);
-        app.MapGet("api/Discounts/current", GetCurrentDiscounts);
         app.MapGet("api/Discounts/currentfuture", GetCurrentAndFutureDiscounts);
+        app.MapGet("api/Discounts/current", GetCurrentDiscounts);
         app.MapGet("api/Discounts", GetAllDiscounts);
         app.MapPost("api/Discounts", CreateDiscount);
         app.MapPut("api/Discounts", UpdateDiscount);
