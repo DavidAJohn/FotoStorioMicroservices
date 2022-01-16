@@ -8,6 +8,7 @@ public static class ApiEndpoints
         app.MapGet("api/Discounts/sku/{sku:maxlength(9)}", GetCurrentDiscountBySku);
         app.MapGet("api/Discounts/id/{id:int}", GetCurrentDiscountById);
         app.MapGet("api/Discounts/current", GetCurrentDiscounts);
+        app.MapGet("api/Discounts/currentfuture", GetCurrentAndFutureDiscounts);
         app.MapGet("api/Discounts", GetAllDiscounts);
         app.MapPost("api/Discounts", CreateDiscount);
         app.MapPut("api/Discounts", UpdateDiscount);
@@ -39,6 +40,18 @@ public static class ApiEndpoints
         try
         {
             return Results.Ok(await data.GetCurrentDiscounts());
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(ex.Message);
+        }
+    }
+
+    private static async Task<IResult> GetCurrentAndFutureDiscounts(IDiscountData data)
+    {
+        try
+        {
+            return Results.Ok(await data.GetCurrentAndFutureDiscounts());
         }
         catch (Exception ex)
         {

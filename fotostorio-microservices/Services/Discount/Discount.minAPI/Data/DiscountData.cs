@@ -15,6 +15,9 @@ public class DiscountData : IDiscountData
     public async Task<IEnumerable<ProductDiscount>> GetCurrentDiscounts() =>
         await _sqlDiscountAccess.GetCurrentDiscountsAsync();
 
+    public async Task<IEnumerable<ProductDiscount>> GetCurrentAndFutureDiscounts() =>
+        await _sqlDiscountAccess.GetCurrentAndFutureDiscountsAsync();
+
     public async Task<ProductDiscount> GetCurrentDiscountById(int id) =>
         await _sqlDiscountAccess.GetCurrentDiscountByIdAsync(id);
 

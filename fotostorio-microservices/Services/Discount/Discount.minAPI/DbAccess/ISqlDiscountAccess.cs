@@ -11,4 +11,5 @@ public interface ISqlDiscountAccess
     Task<ProductDiscount> GetCurrentDiscountBySkuAsync(string sku);
     Task<IEnumerable<ProductDiscount>> GetCurrentDiscountsAsync();
     Task<bool> UpdateDiscountAsync(ProductDiscount discount);
+    Task<IEnumerable<ProductDiscount>> GetCurrentAndFutureDiscountsAsync();
 }
