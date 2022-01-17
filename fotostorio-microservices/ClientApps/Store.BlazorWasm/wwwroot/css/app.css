@@ -62,3 +62,37 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+/* button ripple effects */
+
+/* fotofuchsia button ripple */
+.fotofuchsia-ripple {
+    background-position: center;
+    transition: background 0.8s;
+}
+
+    .fotofuchsia-ripple:hover {
+        background: #FF0D41 radial-gradient(circle, transparent 1%, #FF0D41 1%) center/15000%;
+    }
+
+    .fotofuchsia-ripple:active {
+        background-color: #FC6888;
+        background-size: 100%;
+        transition: background 0s;
+    }
+
+/* fotoblue button ripple */
+.fotoblue-ripple {
+    background-position: center;
+    transition: background 0.8s;
+}
+
+    .fotoblue-ripple:hover {
+        background: #091052 radial-gradient(circle, transparent 1%, #091052 1%) center/15000%;
+    }
+
+    .fotoblue-ripple:active {
+        background-color: #262A4F;
+        background-size: 100%;
+        transition: background 0s;
+    }
