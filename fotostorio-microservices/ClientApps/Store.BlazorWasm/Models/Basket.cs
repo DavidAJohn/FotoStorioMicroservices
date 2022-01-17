@@ -2,6 +2,8 @@
 
 public class Basket
 {
+    public string Id { get; set; }
+
     public List<BasketItem> BasketItems { get; set; } = new();
 
     public Decimal BasketTotal {

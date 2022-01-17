@@ -1,0 +1,100 @@
+﻿@using Store.BlazorWasm.Contracts
+@using Store.BlazorWasm.Models
+@using System.Globalization
+
+@inject IBasketService basketService
+
+<div class="relative inline-block text-left h-full">
+    <div class="flex flex-row justify-between items-center bg-fotofuchsia h-full px-3 cursor-pointer" @onclick="ToggleDropdown">
+        <span class=" text-white text-sm font-medium">Your Basket:</span>
+        <span class=" text-white ml-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+        </span>
+        @if (basketItems != null)
+        {
+            <span id="cart-items" class="text-white text-sm ml-2 mr-3 md:mr-2">@appState.BasketItemCount</span>
+        }
+        else
+        {
+            <span id="cart-items" class="text-white text-sm ml-2 mr-3 md:mr-2">0</span>
+        }
+    </div>
+
+    @if (basketItems != null)
+    {
+        @if (basketItems.Count > 0)
+        {
+            <div class="origin-top-right absolute right-0 mt-0 w-96 rounded-md shadow-lg bg-white focus:outline-none z-10 @DropdownCssClass" role="menu" tabindex="-1">
+                <div class="p-4 text-right" role="none">
+                    @foreach (BasketItem item in basketItems)
+                    {
+                        <div class="font-semibold text-sm">@item.Quantity &nbsp;x&nbsp; @item.Product.Name &nbsp;=&nbsp; £@item.Total.ToString("N2")</div>
+                    }
+                </div>
+                <div class="mt-2 px-4 text-right text-sm font-semibold">
+                    Total:&nbsp; £@basketTotal.ToString("N2")
+                </div>
+                <div class="mt-2 px-4 text-right">
+                    <button class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm hover:opacity-75" @onclick="@(() => EmptyBasket(basketId))">
+                        Empty basket
+                    </button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="origin-top-right absolute right-0 mt-0 w-72 h-24 rounded-md shadow-lg bg-white focus:outline-none z-10 @DropdownCssClass" role="menu" tabindex="-1">
+                <div class="p-4 text-center" role="none">
+                    <span class="font-semibold text-sm">Your basket is currently empty</span>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    List<BasketItem> basketItems { get; set; }
+    private Decimal basketTotal = 0;
+    private string basketId = "basket1";
+
+    [CascadingParameter]
+    public AppState appState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetBasket();
+    }
+
+    private bool collapseDropdown = true;
+
+    private string DropdownCssClass => collapseDropdown ? "collapse" : null;
+
+    private async Task ToggleDropdown()
+    {
+        collapseDropdown = !collapseDropdown;
+        await GetBasket();
+    }
+
+    private async Task GetBasket()
+    {
+        var basket = await basketService.GetBasketByID(basketId);
+        basketItems = basket.BasketItems;
+        basketTotal = basket.BasketTotal;
+
+        UpdateAppState();
+    }
+
+    private async Task EmptyBasket(string basketId)
+    {
+        await basketService.DeleteBasket(basketId);
+
+        await GetBasket();
+    }
+
+    private void UpdateAppState()
+    {
+        appState.BasketItemCount = basketItems.Count;
+    }
+}

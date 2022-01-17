@@ -1,0 +1,22 @@
+﻿<CascadingValue Value="this">
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    private int basketItemCount = 0;
+    public int BasketItemCount
+    {
+        get
+        {
+            return basketItemCount;
+        }
+        set
+        {
+            basketItemCount = value;
+            StateHasChanged();
+        }
+    }
+}

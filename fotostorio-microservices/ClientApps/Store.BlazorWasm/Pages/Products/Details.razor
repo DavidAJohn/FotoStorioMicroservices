@@ -4,6 +4,7 @@
 @using Store.BlazorWasm.Contracts
 
 @inject IProductService productService
+@inject IBasketService basketService
 
 <div class="container">
     @if (errorMessage != "")
@@ -62,13 +63,13 @@
                         </svg>
                     </button>
                 </div>
-                <button class="flex flex-row justify-start items-center bg-fotofuchsia p-2 rounded-sm mt-10 mb-4 sm:w-1/2 sm:text-center xl:w-1/3 hover:opacity-75">
-                    <span class=" text-white ml-2">
+                <button class="flex flex-row justify-start items-center bg-fotofuchsia p-2 rounded-sm mt-10 mb-4 sm:w-1/2 sm:text-center xl:w-1/3 ">
+                    <span class=" text-gray-50 ml-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
                     </span>
-                    <span class="text-gray-50 text-md ml-3">Add to Basket</span>
+                    <span class="text-gray-50 text-md ml-3" @onclick="AddItemToBasket">Add to Basket</span>
                 </button>
                 <div class="text-base mb-4 text-justify">@product.Description</div>
             </div>
@@ -84,10 +85,11 @@
     public ErrorLogger Error { get; set; }
 
     private Product product;
-
     private string errorMessage = "";
-
     private int itemQuantity = 1;
+
+    [CascadingParameter]
+    public AppState appState { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -124,4 +126,16 @@
         }
     }
 
+    private async void AddItemToBasket()
+    {
+        var currentBasket = await basketService.GetBasketByID("basket1");
+
+        var newItem = new BasketItem { Product = product, Quantity = itemQuantity };
+        currentBasket.BasketItems.Add(newItem);
+
+        var updatedBasket = await basketService.UpdateBasket(currentBasket);
+
+        // also set AppState.BasketItemCount to update the item count displayed in the BasketDropdown
+        appState.BasketItemCount = updatedBasket.BasketItems.Count;
+    }
 }
