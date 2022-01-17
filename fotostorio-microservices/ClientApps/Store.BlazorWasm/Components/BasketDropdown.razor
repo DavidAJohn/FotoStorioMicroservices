@@ -27,12 +27,14 @@
     {
         @if (basketItems.Count > 0)
         {
-            <div class="origin-top-right absolute right-0 mt-0 w-96 rounded-md shadow-lg bg-white focus:outline-none z-10 @DropdownCssClass" role="menu" tabindex="-1">
+            <div class="origin-top-right absolute right-0 mt-0 w-112 rounded-md shadow-lg bg-white focus:outline-none z-10 @DropdownCssClass" role="menu" tabindex="-1">
                 <div class="p-4 text-right" role="none">
                     @foreach (BasketItem item in basketItems)
                     {
                         <div class="font-semibold text-sm flex items-center justify-end">
-                            <div class="inline-block">@item.Quantity &nbsp;x&nbsp; @item.Product.Name &nbsp;=&nbsp; £@item.Total.ToString("N2")</div>
+                            <div class="inline-block w-12 h-auto mr-2"><img src="@item.Product.ImageUrl" /></div>
+                            <div class="inline-block flex-shrink-0">@item.Quantity &nbsp;x&nbsp; @item.Product.Name &nbsp;=</div>
+                            <div class="ml-2 font-bold">£@item.Total.ToString("N2")</div>
                             <button type="button" class="inline-block ml-2 -mr-1 text-fotofuchsia" @onclick="() => DeleteItem(item)">
                                 <!-- heroicons: x-circle (solid) -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
