@@ -3,6 +3,7 @@
 @using System.Globalization
 
 @inject IBasketService basketService
+@inject NavigationManager navigationManager
 
 <div class="relative inline-block text-left h-full">
     <div class="flex flex-row justify-between items-center bg-fotofuchsia h-full px-3 cursor-pointer fotofuchsia-ripple" @onclick="ToggleDropdown">
@@ -48,6 +49,9 @@
                     Total:&nbsp; £@basketTotal.ToString("N2")
                 </div>
                 <div class="mt-2 px-4 text-right">
+                    <button type="button" class="p-2 my-3 bg-fotoblue text-white rounded-sm text-sm hover:opacity-90 fotoblue-ripple" @onclick="GoToCheckout">
+                        Checkout
+                    </button>&nbsp;
                     <button type="button" class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm hover:opacity-90 fotofuchsia-ripple" @onclick="@(() => EmptyBasket(basketId))">
                         Empty basket
                     </button>
@@ -117,6 +121,12 @@
         await GetBasket();
 
         UpdateAppState();
+    }
+
+    private async Task GoToCheckout()
+    {
+        await ToggleDropdown();
+        navigationManager.NavigateTo("/");
     }
 
     private void UpdateAppState()
