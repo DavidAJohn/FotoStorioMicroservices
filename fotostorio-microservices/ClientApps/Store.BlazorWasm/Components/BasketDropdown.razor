@@ -24,7 +24,7 @@
     {
         @if (basketItems.Count > 0)
         {
-            <div class="origin-top-right absolute right-0 mt-0 w-112 rounded-md shadow-lg bg-white focus:outline-none z-10 @DropdownTransitionClass" role="menu" tabindex="-1" id="basket_items">
+            <div class="origin-top-right absolute right-0 mt-0 w-112 rounded-md shadow-lg bg-white focus:outline-none z-10 transition ease-in-out duration-300 @DropdownTransformClass" role="menu" tabindex="-1" id="basket_items">
                 <div class="p-4 text-right" role="none">
                     @foreach (BasketItem item in basketItems)
                     {
@@ -56,7 +56,7 @@
         }
         else
         {
-            <div class="origin-top-right absolute right-0 mt-0 w-72 h-24 rounded-md shadow-lg bg-white focus:outline-none z-10 @DropdownTransitionClass" role="menu" tabindex="-1">
+            <div class="origin-top-right absolute right-0 mt-0 w-72 h-24 rounded-md shadow-lg bg-white focus:outline-none z-10 transition duration-300 transform ease-in-out @DropdownTransformClass" role="menu" tabindex="-1">
                 <div class="p-4 text-center" role="none">
                     <span class="font-semibold text-sm">Your basket is currently empty</span>
                 </div>
@@ -79,8 +79,8 @@
     }
 
     private bool collapseDropdown = true;
-    private string DropdownTransitionClass => collapseDropdown ? "collapse" : null;
     private bool dropdownFirstUse = true;
+    private string DropdownTransformClass => collapseDropdown ? "transform opacity-0 scale-90" : null;
 
     private async Task ToggleDropdown()
     {
