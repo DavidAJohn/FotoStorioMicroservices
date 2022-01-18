@@ -1,0 +1,135 @@
+﻿@page "/checkout"
+
+@using Blazored.LocalStorage
+@using Store.BlazorWasm.Contracts
+@using Store.BlazorWasm.Models
+
+@inject IBasketService basketService
+@inject ILocalStorageService localStorage
+
+<div class="h-112">
+    <div class="container max-w-7xl">
+        @if (basketItems != null)
+        {
+            @if (basketItems.Count > 0)
+            {
+                <div class="w-full p-3 rounded-md shadow-md bg-white focus:outline-none z-10">
+                    
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="col-span-2">
+                            <div class="text-lg text-center md:text-xl lg:text-2xl font-bold">
+                                Your Order Summary
+                            </div>
+                            <div class="p-4 text-right" >
+                                @foreach (BasketItem item in basketItems)
+                                {
+                                    <div class="font-semibold text-md flex items-center justify-end">
+                                        <div class="inline-block w-16 h-auto mr-2"><img src="@item.Product.ImageUrl" /></div>
+                                        <div class="inline-block flex-shrink-0">@item.Quantity &nbsp;x&nbsp; @item.Product.Name &nbsp;=</div>
+                                        <div class="ml-2 font-bold">£@item.Total.ToString("N2")</div>
+                                        <button type="button" class="inline-block ml-2 -mr-1 text-fotofuchsia" @onclick="() => DeleteItem(item)">
+                                            <!-- heroicons: x-circle (solid) -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                            <div class="mt-2 px-4 text-right text-md font-semibold">
+                                Total:&nbsp; <span class="inline font-bold">£@basketTotal.ToString("N2")</span>
+                            </div>
+                            <div class="mt-2 px-4 text-right">
+                                <button type="button" class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-md hover:opacity-90 fotofuchsia-ripple" @onclick="EmptyBasket">
+                                    Empty basket
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-span-1 bg-gray-50 rounded-sm text-center h-full px-2">
+                            <div class="text-lg text-center md:text-xl font-bold">
+                                Payment
+                            </div>
+                            <div class="text-md text-center">
+                                ...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="container p-4 w-full rounded-md shadow-sm bg-white focus:outline-none z-10 " >
+                    <div class="mb-4 text-lg text-center md:text-xl lg:text-2xl font-bold">
+                        Order Summary
+                    </div>
+                    <div class="p-4 text-center" role="none">
+                        <span class="font-semibold text-md">Your basket is currently empty</span>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    [CascadingParameter]
+    public AppState appState { get; set; }
+
+    private List<BasketItem> basketItems { get; set; }
+    private string basketId = "";
+    private Decimal basketTotal = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetBasket();
+    }
+
+    private async Task GetBasket()
+    {
+        var storedBasketId = await localStorage.GetItemAsync<string>("fs_basketId");
+
+        if (!String.IsNullOrEmpty(storedBasketId))
+        {
+            basketId = storedBasketId;
+
+            var basket = await basketService.GetBasketByID(basketId);
+
+            if (basket != null)
+            {
+                basketItems = basket.BasketItems;
+                basketTotal = basket.BasketTotal;
+            }
+            else
+            {
+                basketItems = null;
+            }
+        }
+        else
+        {
+            basketItems = null;
+        }
+    }
+
+    private async Task EmptyBasket()
+    {
+        await basketService.DeleteBasket(basketId);
+        await localStorage.RemoveItemAsync("fs_basketId");
+
+        await GetBasket();
+        appState.BasketItemCount = 0;
+    }
+
+    private async Task DeleteItem(BasketItem item)
+    {
+        var basket = await basketService.GetBasketByID(basketId);
+
+        basket.BasketItems.Remove(basket.BasketItems.FirstOrDefault(
+                i => i.Product.Name == item.Product.Name &&
+                i.Quantity == item.Quantity
+            ));
+
+        await basketService.UpdateBasket(basket);
+        await GetBasket();
+    }
+}
+
