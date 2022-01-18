@@ -2,9 +2,11 @@
 
 @using Store.BlazorWasm.Models
 @using Store.BlazorWasm.Contracts
+@using Blazored.LocalStorage
 
 @inject IProductService productService
 @inject IBasketService basketService
+@inject ILocalStorageService localStorage
 
 <div class="container">
     @if (errorMessage != "")
@@ -128,7 +130,23 @@
 
     private async void AddItemToBasket()
     {
-        var currentBasket = await basketService.GetBasketByID("basket1");
+        var storedBasketId = await localStorage.GetItemAsync<string>("fs_basketId");
+
+        if (String.IsNullOrEmpty(storedBasketId))
+        {
+            var newBasket = new Basket
+            {
+                Id = Guid.NewGuid().ToString(),
+                BasketItems = { }
+            };
+
+            var storedBasket = await basketService.UpdateBasket(newBasket);
+            storedBasketId = storedBasket.Id;
+
+            await localStorage.SetItemAsync("fs_basketId", storedBasketId);
+        }
+
+        var currentBasket = await basketService.GetBasketByID(storedBasketId);
 
         var newItem = new BasketItem { Product = product, Quantity = itemQuantity };
         currentBasket.BasketItems.Add(newItem);
