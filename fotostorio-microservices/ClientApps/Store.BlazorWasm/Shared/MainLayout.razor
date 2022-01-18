@@ -1,9 +1,18 @@
 ﻿@inherits LayoutComponentBase
 
+@using Blazored.Toast.Configuration
 @using Store.BlazorWasm.Contracts
 @using Store.BlazorWasm.Models
 
 @inject IProductService productService
+
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                Timeout="4"
+                IconType="IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fas fa-check-circle"
+                InfoIcon="fas fa-info-circle"
+                ErrorIcon="fas fa-exclamation-circle" />
 
 <!-- navbar top layer -->
 <nav class="bg-fotoblue" id="navbar-top">

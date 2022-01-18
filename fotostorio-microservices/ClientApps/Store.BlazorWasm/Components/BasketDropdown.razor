@@ -6,6 +6,7 @@
 @inject IBasketService basketService
 @inject NavigationManager navigationManager
 @inject ILocalStorageService localStorage
+@inject IToastService toastService
 
 <div class="relative inline-block text-left h-full" id="basket_dropdown">
     <div class="flex flex-row justify-between items-center bg-fotofuchsia h-full px-3 cursor-pointer fotofuchsia-ripple" @onclick="ToggleDropdown">
@@ -115,6 +116,8 @@
 
         await GetBasket();
         appState.BasketItemCount = 0;
+
+        toastService.ShowSuccess("Your basket has been emptied", "Empty basket");
     }
 
     private async Task DeleteItem(BasketItem item)
@@ -128,6 +131,8 @@
 
         await basketService.UpdateBasket(basket);
         await GetBasket();
+
+        toastService.ShowSuccess("The item has been removed from your basket", "Item deleted");
     }
 
     private async Task GoToCheckout()

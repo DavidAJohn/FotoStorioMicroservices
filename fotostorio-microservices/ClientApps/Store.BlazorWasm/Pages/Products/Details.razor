@@ -7,6 +7,7 @@
 @inject IProductService productService
 @inject IBasketService basketService
 @inject ILocalStorageService localStorage
+@inject IToastService toastService
 
 <div class="container">
     @if (errorMessage != "")
@@ -152,6 +153,8 @@
         currentBasket.BasketItems.Add(newItem);
 
         var updatedBasket = await basketService.UpdateBasket(currentBasket);
+
+        toastService.ShowSuccess("A new item has been added to your basket", "Basket Updated");
 
         // also set AppState.BasketItemCount to update the item count displayed in the BasketDropdown
         appState.BasketItemCount = updatedBasket.BasketItems.Count;

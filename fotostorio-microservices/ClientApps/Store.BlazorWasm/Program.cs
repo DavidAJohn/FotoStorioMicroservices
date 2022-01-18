@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Store.BlazorWasm.Contracts;
 using Store.BlazorWasm.Services;
 using Blazored.LocalStorage;
+using Blazored.Toast;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -19,5 +20,6 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IBasketService, BasketService>();
 
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddBlazoredToast();
 
 await builder.Build().RunAsync();
