@@ -1,0 +1,66 @@
+﻿@page "/login"
+
+@using Store.BlazorWasm.Models
+
+<div class="mx-2 md:container">
+    <div class="p-3 lg:p-4 flex justify-center">
+        <div class="text-center shadow-md bg-white rounded-md overflow-hidden relative lg:w-112">
+            <div class="hidden md:block h-16 w-auto bg-blue-900 py-2">
+                <span class="flex items-center justify-center">
+                    <i class="bi-camera" style="font-size: 2.5rem; color: white; margin-top: -7px; margin-left: 3px;"></i>
+                    <div class="text-gray-50 text-xl font-semibold ml-4 pb-2">Foto Storio</div>
+                </span>
+            </div>
+            <div class="p-4 lg:w-112">
+                <div class="mb-4 text-lg md:text-xl lg:text-2xl font-bold">
+                    Sign in to your account
+                </div>
+                <div class="mb-4 font-semibold text-sm lg:text-md text-gray-400">
+                    <a href="/register" class="hover:text-blue-800">Don't have an account yet? Click here to register</a>
+                </div>
+                <div class="px-2 md:px-4 py-2">
+                    <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+                        <DataAnnotationsValidator />
+                        <div class="mb-3 w-full text-left">
+                            <label class="text-md font-semibold mb-1 ml-0">Email Address</label>
+                            <InputText Id="email" Class="px-2 py-1 rounded-sm focus:border-blue-700 border-3 outline-none w-full" @bind-Value="loginModel.Email" />
+                            <ValidationMessage For="@(() => loginModel.Email)" />
+                        </div>
+                        <div class="mb-4 w-full text-left">
+                            <label class="text-md font-semibold mb-1 ml-0">Password</label>
+                            <InputText Id="password" type="password" Class="px-2 py-1 rounded-sm focus:border-blue-700 border-3 outline-none w-full" @bind-Value="loginModel.Password" />
+                            <ValidationMessage For="@(() => loginModel.Password)" />
+                        </div>
+                        <div class="my-4 w-full">
+                            <button type="submit" class="bg-fotofuchsia text-gray-50 w-full p-2 mt-3 rounded-sm font-semibold fotofuchsia-ripple disabled:opacity-30 disabled:cursor-default" disabled>
+                                Sign In
+                            </button>
+                        </div>
+                    </EditForm>
+                </div>
+                <div class="mb-4 font-semibold text-sm lg:text-md text-gray-400">
+                    <a href="#" class="hover:text-blue-800">Forgotten your password?</a>
+                </div>
+                @if (ShowErrors)
+                {
+                    <div class="my-4 alert alert-danger w-full" role="alert">
+                        @Error
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private LoginModel loginModel = new LoginModel();
+    private bool ShowErrors;
+    private string Error = "";
+
+    private async Task HandleLogin()
+    {
+        ShowErrors = false;
+
+        // TODO: handle logins
+    }
+}
