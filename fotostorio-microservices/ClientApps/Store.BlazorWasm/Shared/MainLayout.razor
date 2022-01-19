@@ -183,7 +183,7 @@
 
         foreach (Category category in categories)
         {
-            NavMenuItems.Add(new NavMenuItem { DisplayName = category.Name, Url = $"products?category={category.Id}" });
+            NavMenuItems.Add(new NavMenuItem { DisplayName = category.Name, Url = $"products/categories/{category.Id}" });
         }
     }
 

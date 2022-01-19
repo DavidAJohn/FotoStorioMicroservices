@@ -1,4 +1,6 @@
 ﻿@page "/products/"
+@page "/products/brands/{brandId:int}"
+@page "/products/categories/{categoryId:int}"
 
 @using Store.BlazorWasm.Contracts
 @using Store.BlazorWasm.Models
@@ -111,6 +113,12 @@
     [CascadingParameter]
     public ErrorLogger Error { get; set; }
 
+    [Parameter]
+    public int brandId { get; set; } = 0;
+
+    [Parameter]
+    public int categoryId { get; set; } = 0;
+
     List<Product> products;
 
     List<DropdownItem> dropdownOptions = new();
@@ -132,6 +140,12 @@
     private string errorMessage = "";
 
     private bool ClearSearch = false;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (brandId != 0) await AddBrandFilter();
+        if (categoryId != 0) await AddCategoryFilter();
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -179,6 +193,18 @@
         productParams.SortBy = SortBy;
         SortBySelected = SortByName;
         ToggleDropdown();
+        await GetProducts();
+    }
+
+    private async Task AddBrandFilter() 
+    {
+        productParams.BrandId = brandId;
+        await GetProducts();
+    }
+
+    private async Task AddCategoryFilter() 
+    {
+        productParams.CategoryId = categoryId;
         await GetProducts();
     }
 
