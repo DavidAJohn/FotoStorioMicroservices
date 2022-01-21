@@ -130,5 +130,29 @@ namespace Products.Aggregator.Services
                 throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
             }
         }
+
+        public async Task<ProductResponse> GetProductBySkuAsync(string sku)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"/api/products/sku/{sku}");
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var product = JsonSerializer.Deserialize<ProductResponse>
+                        (content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                    return product;
+                }
+
+                return null;
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError($"Error in Products Service -> GetProductBySkuAsync, Sku = {sku}");
+                throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
+            }
+        }
     }
 }

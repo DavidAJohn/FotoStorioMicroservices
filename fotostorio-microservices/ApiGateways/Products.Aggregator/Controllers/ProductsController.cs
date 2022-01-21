@@ -99,5 +99,79 @@ namespace Products.Aggregator.Controllers
             return Ok(aggregatedProduct);
         }
 
+        [HttpGet("offers")]
+        public async Task<ActionResult<IEnumerable<AggregatedProduct>>> GetSpecialOffers([FromQuery] ProductParameters productParams)
+        {
+            var discounts = await _discountService.GetCurrentDiscounts();
+            var aggregatedProducts = new List<AggregatedProduct>();
+
+            if (discounts != null)
+            {
+                // get product details for each discounted item
+                foreach (var discount in discounts)
+                {
+                    var product = await _productsService.GetProductBySkuAsync(discount.Sku);
+
+                    if (product != null)
+                    {
+                        var aggregatedProduct = _mapper.Map<AggregatedProduct>(product);
+                        aggregatedProduct.SalePrice = discount.SalePrice;
+
+                        aggregatedProducts.Add(aggregatedProduct);
+                    }
+                }
+
+                // sort the results if required - if the 'sort=' querystring is present
+                if (!string.IsNullOrEmpty(productParams.Sort))
+                {
+                    var sortedList = new List<AggregatedProduct>();
+
+                    switch (productParams.Sort)
+                    {
+                        case "nameAsc":
+                            sortedList = aggregatedProducts.OrderBy(p => p.Name).ToList();
+                            break;
+                        case "nameDesc":
+                            sortedList = aggregatedProducts.OrderByDescending(p => p.Name).ToList();
+                            break;
+                        case "brandAsc":
+                            sortedList = aggregatedProducts.OrderBy(p => p.Brand).ToList();
+                            break;
+                        case "brandDesc":
+                            sortedList = aggregatedProducts.OrderByDescending(p => p.Brand).ToList();
+                            break;
+                        case "savingAsc":
+                            sortedList = aggregatedProducts.OrderBy(p => (p.Price - p.SalePrice)).ToList();
+                            break;
+                        case "savingDesc":
+                            sortedList = aggregatedProducts.OrderByDescending(p => (p.Price - p.SalePrice)).ToList();
+                            break;
+                        case "priceAsc":
+                            sortedList = aggregatedProducts.OrderBy(p => p.Price).ToList();
+                            break;
+                        case "priceDesc":
+                            sortedList = aggregatedProducts.OrderByDescending(p => p.Price).ToList();
+                            break;
+                        case "idAsc":
+                            sortedList = aggregatedProducts.OrderBy(p => p.Id).ToList();
+                            break;
+                        case "idDesc":
+                            sortedList = aggregatedProducts.OrderByDescending(p => p.Id).ToList();
+                            break;
+                        default:
+                            sortedList = aggregatedProducts.OrderByDescending(p => p.Price).ToList();
+                            break;
+                    }
+
+                    return Ok(sortedList);
+                }
+                else
+                {
+                    return Ok(aggregatedProducts);
+                }
+            }
+
+            return NotFound();
+        }
     }
 }
