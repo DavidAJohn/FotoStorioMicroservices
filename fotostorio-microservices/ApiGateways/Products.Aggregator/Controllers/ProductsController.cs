@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Products.Aggregator.Models;
 using Products.Aggregator.Services;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -34,19 +35,32 @@ namespace Products.Aggregator.Controllers
 
             if (products == null) return NotFound();
 
+            var discounts = await _discountService.GetCurrentDiscounts();
+
             var aggregatedProducts = new List<AggregatedProduct>();
 
-            // check if there is a reduced sale price for each item via a request to the discount api
+            // check if there is a reduced sale price for each item
             foreach (var product in products.Items)
             {
                 var aggregatedProduct = _mapper.Map<AggregatedProduct>(product);
-                var discount = await _discountService.GetDiscountBySku(product.Sku);
+                aggregatedProduct.SalePrice = product.Price; // by default, sale price = existing (full) price
 
-                // if there is a discounted price then use it,
-                // otherwise set the sale price to the same as the existing price
-                aggregatedProduct.SalePrice = discount.SalePrice != 0 && discount.SalePrice < product.Price 
-                    ? discount.SalePrice : product.Price;
+                if (discounts != null)
+                {
+                    // if sku is in the list of current discounts
+                    var discountedSku = discounts.FirstOrDefault(d => d.Sku == aggregatedProduct.Sku);
 
+                    if (discountedSku != null)
+                    {
+                        // if there is a discounted price then use it,
+                        // otherwise the sale price remains the same as the existing price
+                        if (discountedSku.SalePrice != 0 && discountedSku.SalePrice < product.Price)
+                        {
+                            aggregatedProduct.SalePrice = discountedSku.SalePrice;
+                        }
+                    }
+                }
+                
                 aggregatedProducts.Add(aggregatedProduct);
             }
 
@@ -84,5 +98,6 @@ namespace Products.Aggregator.Controllers
 
             return Ok(aggregatedProduct);
         }
+
     }
 }
