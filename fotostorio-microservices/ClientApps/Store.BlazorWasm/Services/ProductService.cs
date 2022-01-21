@@ -208,4 +208,20 @@ public class ProductService : IProductService
             throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
         }
     }
+
+    public async Task<List<Product>> GetProductsOnSpecialOfferAsync()
+    {
+        try
+        {
+            var client = _httpClient.CreateClient("CatalogAPI");
+            var products = await client.GetFromJsonAsync<List<Product>>("Catalog/SpecialOffers?sort=priceDesc");
+
+            return products;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError(ex.StatusCode + " " + ex.Message);
+            throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
+        }
+    }
 }
