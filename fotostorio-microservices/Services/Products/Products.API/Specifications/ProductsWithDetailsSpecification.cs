@@ -68,5 +68,12 @@ namespace Products.API.Specifications
             AddInclude(p => p.Category);
             AddInclude(p => p.Mount);
         }
+
+        public ProductsWithDetailsSpecification(string sku) : base(p => p.Sku == sku)
+        {
+            AddInclude(p => p.Brand);
+            AddInclude(p => p.Category);
+            AddInclude(p => p.Mount);
+        }
     }
 }

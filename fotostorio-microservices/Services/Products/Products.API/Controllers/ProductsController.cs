@@ -92,6 +92,40 @@ namespace Products.API.Controllers
             }
         }
 
+        // GET api/products/sku/{sku}
+        /// <summary>
+        /// Get a product by Sku
+        /// </summary>
+        /// <param name="sku"></param>
+        /// <returns>ProductDTO</returns>
+        [HttpGet("sku/{sku}", Name = "GetProductBySku")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<ProductDTO>> GetProductBySku(string sku)
+        {
+            try
+            {
+                var spec = new ProductsWithDetailsSpecification(sku);
+                var product = await _productRepository.GetEntityWithSpecification(spec);
+
+                if (product == null)
+                {
+                    _logger.LogError($"Product with sku: {sku}, not found");
+                    return NotFound();
+                }
+                else
+                {
+                    return _mapper.Map<Product, ProductDTO>(product);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in GetProductBySku, from sku {sku} : {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
         // POST api/products
         /// <summary>
         /// Creates a new product
