@@ -31,7 +31,7 @@
                 </div>
                 <div class="carousel-item carousel-image-3" >
                     <NavLink href="/products/categories/3">
-                        <img class="d-block" src="https://i.ibb.co/ZBNS2r4/promo-black.jpg" alt="">
+                        <img class="d-block" src="https://i.ibb.co/GtmLGTv/lenses-promo.jpg" alt="">
                         <div class="carousel-caption d-none d-md-block text-light">
                             <button class="my-3 btn btn-outline-light">View our range of lenses</button>
                         </div>
@@ -130,10 +130,12 @@
 
     protected async override Task OnAfterRenderAsync(bool firstRender)     
     {         
-        if (firstRender)         
-        {             
-            await JsRuntime.InvokeAsync<object>("initialiseCarousel");             
-            firstRender = false;         
+        // initialises the Bootstrap 5 carousel via JSInterop
+        if (firstRender)
+        {
+            // to configure the carousel, go to 'wwwroot/js/initialiseCarousel.js'
+            await JsRuntime.InvokeAsync<object>("initialiseCarousel");
+            firstRender = false;
         }
     }     
 }
