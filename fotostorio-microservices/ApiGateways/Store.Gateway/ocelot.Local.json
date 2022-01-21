@@ -22,6 +22,46 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/aggr/products/offers",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": "8015"
+        }
+      ],
+      "UpstreamPathTemplate": "/Catalog/SpecialOffers",
+      "UpstreamHttpMethod": [ "GET" ],
+      "FileCacheOptions": { "TtlSeconds": 300 },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 10
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/aggr/products/offers?{querystring}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": "8015"
+        }
+      ],
+      "UpstreamPathTemplate": "/Catalog/SpecialOffers?{querystring}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "FileCacheOptions": { "TtlSeconds": 300 },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 10
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/aggr/Products",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
