@@ -12,6 +12,6 @@ namespace Store.BlazorWasm.Contracts
         Task<List<Brand>> GetProductBrandsAsync();
         Task<List<Category>> GetProductCategoriesAsync();
         Task<List<Mount>> GetProductMountsAsync();
-        Task<List<Product>> GetProductsOnSpecialOfferAsync();
+        Task<List<Product>> GetProductsOnSpecialOfferAsync(string sortBy);
     }
 }

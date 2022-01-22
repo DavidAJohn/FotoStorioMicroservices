@@ -1,0 +1,254 @@
+﻿@page "/specialoffers"
+
+@using Blazored.LocalStorage
+@using Store.BlazorWasm.Contracts
+@using Store.BlazorWasm.Models
+
+@inject IProductService productService
+@inject NavigationManager navigationManager
+@inject IBasketService basketService
+@inject ILocalStorageService localStorage
+@inject IToastService toastService
+
+<div class="container">
+    @if (errorMessage != "")
+    {
+        <div class="alert alert-danger" role="alert">
+            <h4>@errorMessage</h4>
+        </div>
+    }
+    else if (products == null)
+    {
+        <text>Loading products...</text>
+    }
+    else
+    {
+        @if (products.Count() > 0)
+        {
+            <div class="flex flex-row justify-between items-center mb-16">
+                <div class="relative inline-block">
+                    <!-- Sort By dropdown -->
+                    <div class="text-left">
+                        <div class="text-gray-700 mr-2 py-2 text-md font-medium inline">Sort Products By:</div>
+                        <div class="inline-block">
+                            <button type="button" class="inline-flex justify-center w-72 rounded-sm border border-gray-700 shadow-sm px-4 py-2 bg-white text-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" 
+                                id="menu-button"
+                                @onclick="ToggleDropdown"
+                            >
+                                @SortBySelected
+                                <!-- Heroicon name: solid/chevron-down -->
+                                <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                            @if (dropdownOptions != null)
+                            {
+                                <div class="origin-top-right absolute right-0 mt-2 w-72 rounded-md shadow-md bg-white focus:outline-none z-10 @DropdownCssClass" role="menu" tabindex="-1">
+                                    <div class="py-1 hover:cursor-pointer">
+                                        @foreach (DropdownItem item in dropdownOptions)
+                                        {
+                                            <NavLink  
+                                                class="block px-4 py-1 text-md text-center font-semibold text-gray-700 hover:bg-gray-200 hover:text-gray-700 " 
+                                                role="menuitem" 
+                                                tabindex="-1" 
+                                                id=@($"menu-item-{item.Id}")
+                                                @onclick='async () => await AddSort(item.OptionRef, item.OptionName)'
+                                            >
+                                                <span class="text-center cursor-pointer">@item.OptionName</span>
+                                            </NavLink>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                    </div>
+                </div>
+            </div>
+            <div class="text-4xl font-bold text-center">
+                Special Offers
+            </div>
+
+            @foreach (var product in products)
+            {
+                <div class="container md:px-16 mt-12 grid sm:grid-cols-1 lg:grid-cols-2 gap-2 shadow-md rounded-sm bg-white py-12">
+                    <div class="mr-24 justify-self-end">
+                        <img src="@product.ImageUrl" class="w-72 h-auto" />
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold mb-3">@product.Name</div>
+                        <div class="mb-2">
+                            <span class="block text-gray-500 text-md mb-1">Brand: @product.Brand</span>
+                            <span class="block text-gray-500 text-md">Category: @product.Category</span>
+                        </div>
+                        @if (product.SalePrice != 0 && product.SalePrice < product.Price)
+                        {
+                            <div class="mb-2">
+                                <span class="text-gray-500 text-md line-through mr-4">Was: £@product.Price</span>
+                                <span class="inline text-gray-500 text-lg font-semibold mr-3">Now: £@product.SalePrice</span>
+                                <span class="inline text-fotoblue text-lg font-bold">(Save £@(@product.Price - product.SalePrice))</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="mb-2">
+                                <span class="block text-gray-500 text-lg font-semibold">£@product.Price</span>
+                            </div>
+                        }
+                        <button class="flex flex-row justify-start items-center bg-fotofuchsia p-2 rounded-sm mt-4 mb-4 sm:w-1/2 sm:text-center xl:w-1/3 hover:opacity-90 fotofuchsia-ripple">
+                            <span class=" text-gray-50 ml-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            </span>
+                            <span class="text-gray-50 text-md ml-3" @onclick="() => AddProductToBasket(product.Id)">Add to Basket</span>
+                        </button>
+                        <div class="text-base mb-2 text-justify">@product.Description</div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="pt-8 text-center font-semibold text-xl">
+                <p>We are not currently offering any discounted products</p>
+            </div>
+            <div class="pt-8 text-center mb-64">
+                <button class="p-2 bg-fotofuchsia text-white rounded-sm text-md font-semibold hover:opacity-90 fotofuchsia-ripple" 
+                    @onclick="GoToHomePage"
+                >
+                    Go to Home page
+                </button>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    [CascadingParameter]
+    public ErrorLogger Error { get; set; }
+
+    [CascadingParameter]
+    public AppState appState { get; set; }
+
+    List<Product> products;
+
+    List<DropdownItem> dropdownOptions = new();
+
+    private bool collapseDropdown = true;
+
+    private string DropdownCssClass => collapseDropdown ? "collapse" : null;
+
+    private void ToggleDropdown()
+    {
+        collapseDropdown = !collapseDropdown;
+    }
+
+    private string SortBySelected = "Price (Highest to Lowest)";
+
+    private ProductParameters productParams = new();
+
+    private string errorMessage = "";
+
+    private int itemQuantity = 1;
+
+    protected override void OnInitialized()
+    {
+        SetSortByDropdownOptions();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetProducts(); 
+    }
+
+    private async Task GetProducts()
+    {
+        try
+        {
+            string sortBy = string.IsNullOrEmpty(productParams.SortBy) ? "priceDesc" : productParams.SortBy;
+
+            products = await productService.GetProductsOnSpecialOfferAsync(sortBy);
+
+            errorMessage = "";
+        }
+        catch (Exception ex)
+        {
+            Error.ProcessError(ex, "Pages/Products/SpecialOffers.GetProducts()");
+            errorMessage = "Could not retrieve list of products";
+        }
+    }
+
+    private async Task AddSort(string SortBy, string SortByName) 
+    {
+        productParams.SortBy = SortBy;
+        SortBySelected = SortByName;
+        ToggleDropdown();
+        await GetProducts();
+    }
+
+    private void SetSortByDropdownOptions()
+    {
+        dropdownOptions.Add(new DropdownItem{ Id = 1, OptionName = "Name (A-Z)", OptionRef = "nameAsc" });
+        dropdownOptions.Add(new DropdownItem{ Id = 2, OptionName = "Amount Saved (Highest First)", OptionRef = "savingDesc" });
+        dropdownOptions.Add(new DropdownItem{ Id = 3, OptionName = "Price (Highest to Lowest)", OptionRef = "priceDesc" });
+        dropdownOptions.Add(new DropdownItem{ Id = 4, OptionName = "Price (Lowest to Highest)", OptionRef = "priceAsc" });
+        dropdownOptions.Add(new DropdownItem{ Id = 5, OptionName = "Brand (A-Z)", OptionRef = "brandAsc" });
+        dropdownOptions.Add(new DropdownItem{ Id = 6, OptionName = "Name (Z-A)", OptionRef = "nameDesc" });
+    }
+
+    private void GoToHomePage()
+    {
+        navigationManager.NavigateTo("/");
+    }
+
+    private async Task AddProductToBasket(int productId)
+    {
+        var product = new Product();
+
+        try
+        {
+            product = await productService.GetProductByIdAsync(productId);
+            errorMessage = "";
+        }
+        catch (Exception ex)
+        {
+            Error.ProcessError(ex, "Pages/Products/SpecialOffers.AddItemToBasket()");
+            errorMessage = "Could not add this product to your basket";
+        }
+
+        if (product != null)
+        {
+            var storedBasketId = await localStorage.GetItemAsync<string>("fs_basketId");
+
+            if (String.IsNullOrEmpty(storedBasketId))
+            {
+                var newBasket = new Basket
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    BasketItems = { }
+                };
+
+                var storedBasket = await basketService.UpdateBasket(newBasket);
+                storedBasketId = storedBasket.Id;
+
+                await localStorage.SetItemAsync("fs_basketId", storedBasketId);
+            }
+
+            var currentBasket = await basketService.GetBasketByID(storedBasketId);
+
+            var newItem = new BasketItem { Product = product, Quantity = itemQuantity };
+            currentBasket.BasketItems.Add(newItem);
+
+            var updatedBasket = await basketService.UpdateBasket(currentBasket);
+
+            toastService.ShowSuccess("A new item has been added to your basket", "Basket Updated");
+
+            // also set AppState.BasketItemCount to update the item count displayed in the BasketDropdown
+            appState.BasketItemCount = updatedBasket.BasketItems.Count;
+        }
+        else 
+        {
+            errorMessage = "Could not add this product to your basket";
+        }
+    }
+}

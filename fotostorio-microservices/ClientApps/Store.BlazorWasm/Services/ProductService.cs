@@ -209,12 +209,12 @@ public class ProductService : IProductService
         }
     }
 
-    public async Task<List<Product>> GetProductsOnSpecialOfferAsync()
+    public async Task<List<Product>> GetProductsOnSpecialOfferAsync(string sortBy = "priceDesc")
     {
         try
         {
             var client = _httpClient.CreateClient("CatalogAPI");
-            var products = await client.GetFromJsonAsync<List<Product>>("Catalog/SpecialOffers?sort=priceDesc");
+            var products = await client.GetFromJsonAsync<List<Product>>($"Catalog/SpecialOffers?sort={sortBy}");
 
             return products;
         }
