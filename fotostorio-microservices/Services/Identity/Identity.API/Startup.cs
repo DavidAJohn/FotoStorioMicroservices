@@ -1,5 +1,7 @@
+using Identity.API.Contracts;
 using Identity.API.Data;
 using Identity.API.Extensions;
+using Identity.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,7 +34,9 @@ namespace Identity.API
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"));
             });
 
-            services.AddIdentityServices(Configuration);
+            services.AddIdentityServices(Configuration); // extension method: ./Extensions/IdentityServicesExtensions.cs
+
+            services.AddScoped<ITokenService, TokenService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
