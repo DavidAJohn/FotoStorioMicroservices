@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Store.BlazorWasm.Contracts;
 using Store.BlazorWasm.Services;
 using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Components.Authorization;
 using Store.BlazorWasm.Providers;
@@ -29,6 +30,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStatePr
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddBlazoredSessionStorage();
 builder.Services.AddBlazoredToast();
 
 await builder.Build().RunAsync();

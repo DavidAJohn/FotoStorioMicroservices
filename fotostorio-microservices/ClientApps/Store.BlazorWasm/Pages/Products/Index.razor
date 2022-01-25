@@ -3,11 +3,13 @@
 @page "/products/categories/{categoryId:int}"
 @page "/products/{searchTerm}"
 
+@using Blazored.SessionStorage
 @using Store.BlazorWasm.Contracts
 @using Store.BlazorWasm.Models
 
 @inject IProductService productService
 @inject NavigationManager navigationManager
+@inject ISessionStorageService sessionStorage
 
 <div class="md:container mt-4">
     @if (errorMessage != "")
@@ -228,11 +230,22 @@
         if (categoryId != 0) await AddCategoryFilter();
 
         if (!string.IsNullOrWhiteSpace(searchTerm)) await SearchChanged(searchTerm);
+
+        if (string.IsNullOrEmpty(productParams.Search) && productParams.CategoryId == 0 && productParams.BrandId == 0)
+        {
+            var storedParams = await GetProductParamsFromSessionStorage();
+
+            if (storedParams != null)
+            {
+                productParams = storedParams;
+            }
+        }
+
+        await SelectedPage(productParams.PageIndex);
     }
 
     protected override async Task OnInitializedAsync()
     {
-        await SelectedPage();
         await GetCategories();
         await GetBrands();
     }
@@ -261,7 +274,7 @@
     private async Task SelectedPage(int page = 1)
     {
         productParams.PageIndex = page;
-
+        await SaveProductParamsToSessionStorage(productParams);
         await GetProducts();
     }
 
@@ -269,7 +282,7 @@
     {
         productParams.PageIndex = 1;
         productParams.Search = searchTerm;
-
+        await SaveProductParamsToSessionStorage(productParams);
         await GetProducts();
     }
 
@@ -277,6 +290,7 @@
     {
         productParams.SortBy = SortBy;
         SortBySelected = SortByName;
+        await SaveProductParamsToSessionStorage(productParams);
         ToggleDropdown();
         await GetProducts();
     }
@@ -284,12 +298,16 @@
     private async Task AddBrandFilter() 
     {
         productParams.BrandId = brandId;
+        productParams.PageIndex = 1;
+        await SaveProductParamsToSessionStorage(productParams);
         await GetProducts();
     }
 
     private async Task AddCategoryFilter() 
     {
         productParams.CategoryId = categoryId;
+        productParams.PageIndex = 1;
+        await SaveProductParamsToSessionStorage(productParams);
         await GetProducts();
     }
 
@@ -298,6 +316,8 @@
         if ((string)displayParam == productParams.Search)
         {
             productParams.Search = "";
+            productParams.PageIndex = 1;
+            await SaveProductParamsToSessionStorage(productParams);
             await GetProducts();
         }
     }
@@ -307,14 +327,18 @@
         if ((int)displayParam == productParams.CategoryId)
         {
             productParams.CategoryId = 0;
+            productParams.PageIndex = 1;
             await GetProducts();
         }
 
         if ((int)displayParam == productParams.BrandId)
         {
             productParams.BrandId = 0;
+            productParams.PageIndex = 1;
             await GetProducts();
         }
+
+        await SaveProductParamsToSessionStorage(productParams);
     }
 
     private async Task ResetSearch()
@@ -358,5 +382,17 @@
         var brand = Brands.FirstOrDefault(b => b.Id == brandId);
 
         return brand.Name;
+    }
+
+    private async Task SaveProductParamsToSessionStorage(ProductParameters productParameters)
+    {
+        await sessionStorage.SetItemAsync("productParams", productParameters);
+    }
+
+    private async Task<ProductParameters> GetProductParamsFromSessionStorage()
+    {
+        var storedParams = await sessionStorage.GetItemAsync<ProductParameters>("productParams");
+
+        return storedParams;
     }
 }
