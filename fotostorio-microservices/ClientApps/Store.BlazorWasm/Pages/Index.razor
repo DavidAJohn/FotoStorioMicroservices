@@ -53,12 +53,10 @@
     <!-- category grid -->
     <div class="md:container max-w-7xl mt-8 md:mt-16">
         <div class="md:hidden mb-12 w-full md:px-8 flex justify-center items-center">
-            <input type="search" class="rounded-sm w-3/4 border border-gray-700 shadow-sm px-4 py-2 bg-white focus:outline-none" placeholder="Search the store" />
-            <span class="ml-1">
-                <button class="p-2 bg-fotoblue text-white rounded-sm text-md font-semibold hover:opacity-90 fotoblue-ripple">
-                    Search
-                </button>
-            </span>
+            <ClickSearch 
+                Placeholder="Search the store..." 
+                ButtonType="standard"
+            />
         </div>
         <div class="grid grid-cols-1 grid-rows-4 md:grid-cols-3 md:grid-rows-2 gap-2 items-stretch">
             <div class="hidden md:block md:row-span-2 md:cols-span-1 bg-gray-900 text-gray-50 h-full w-full hover:opacity-80 relative overflow-hidden">

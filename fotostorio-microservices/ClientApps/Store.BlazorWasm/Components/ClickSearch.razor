@@ -1,0 +1,51 @@
+﻿@inject NavigationManager navigationManager
+
+<div>
+    <input type="text" class="rounded-sm w-3/4 border border-gray-700 shadow-sm px-4 py-1 bg-white focus:outline-none" 
+        placeholder="@Placeholder"
+        @bind-value="@SearchTerm" 
+        @bind-value:event="oninput"
+        @onkeydown:preventDefault
+    />
+    <span class="ml-1">
+        @if (ButtonType.ToLower() == "outlined")
+        {
+            <button type="button"
+                class="px-2 py-1 text-gray-300 hover:bg-blue-900 hover:text-white rounded-md text-sm font-medium fotoblue-ripple"
+                @onclick="SearchSubmitted"
+            >
+                Search
+            </button>
+        }
+        else
+        {
+            <button type="button"
+                class="px-2 py-1 bg-fotoblue text-white rounded-sm text-md font-semibold hover:opacity-90 fotoblue-ripple"
+                @onclick="SearchSubmitted"
+            >
+                Search
+            </button>
+        }
+        
+    </span>
+</div>
+
+@code {
+    [Parameter]
+    public string SearchTerm { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnSearchSubmitted { get; set; }
+
+    [Parameter]
+    public string ButtonType { get; set; } = "standard";
+
+    [Parameter]
+    public string Placeholder { get; set; } = "Search";
+
+    private async Task SearchSubmitted()
+    {
+        await OnSearchSubmitted.InvokeAsync(SearchTerm);
+        navigationManager.NavigateTo("/products/" + SearchTerm);
+    }
+}
