@@ -1,6 +1,10 @@
 ﻿@page "/register"
 
+@using Store.BlazorWasm.Contracts
 @using Store.BlazorWasm.Models
+
+@inject NavigationManager navigationManager
+@inject IAuthenticationService authenticationService
 
 <div class="mx-2 md:container">
     <div class="p-3 lg:p-4 flex justify-center">
@@ -48,8 +52,8 @@
                 </div>
                 @if (ShowErrors)
                 {
-                    <div class="my-4 alert alert-danger w-full" role="alert">
-                        @Errors
+                    <div class="bg-red-100 border-solid border-1 border-red-700 text-red-700 font-semibold my-4 px-3 py-2 rounded-sm relative w-full" role="alert">
+                        <span class="block sm:inline">@Errors</span>
                     </div>
                 }
             </div>
@@ -66,5 +70,16 @@
     {
         ShowErrors = false;
 
+        var result = await authenticationService.Register(RegisterModel);
+
+        if (result.Successful)
+        {
+            navigationManager.NavigateTo("/login?register=true");
+        }
+        else
+        {
+            Errors = result.Errors;
+            ShowErrors = true;
+        }
     }
 }
