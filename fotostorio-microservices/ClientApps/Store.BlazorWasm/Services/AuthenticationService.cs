@@ -24,7 +24,7 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<RegisterResult> Register(RegisterModel registerModel)
     {
-        var client = _httpClient.CreateClient("FotoStorioAPI");
+        var client = _httpClient.CreateClient("IdentityAPI");
         var response = await client.PostAsJsonAsync("accounts/register", registerModel);
 
         if (response.IsSuccessStatusCode)
@@ -44,7 +44,7 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<LoginResult> Login(LoginModel loginModel)
     {
-        var client = _httpClient.CreateClient("FotoStorioAPI");
+        var client = _httpClient.CreateClient("IdentityAPI");
         var response = await client.PostAsJsonAsync("accounts/login", loginModel);
 
         var loginResult = JsonSerializer.Deserialize<LoginResult>(
@@ -77,7 +77,7 @@ public class AuthenticationService : IAuthenticationService
 
         ((ApiAuthenticationStateProvider)_authStateProvider).MarkUserAsLoggedOut();
 
-        var client = _httpClient.CreateClient("FotoStorioAPI");
+        var client = _httpClient.CreateClient("IdentityAPI");
         client.DefaultRequestHeaders.Authorization = null;
     }
 }
