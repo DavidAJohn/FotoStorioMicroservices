@@ -1,6 +1,7 @@
 ﻿@page "/products/"
 @page "/products/brands/{brandId:int}"
 @page "/products/categories/{categoryId:int}"
+@page "/products/{searchTerm}"
 
 @using Store.BlazorWasm.Contracts
 @using Store.BlazorWasm.Models
@@ -8,7 +9,7 @@
 @inject IProductService productService
 @inject NavigationManager navigationManager
 
-<div class="md:container mt-8">
+<div class="md:container mt-4">
     @if (errorMessage != "")
     {
         <div class="mx-2 animate-pulse">
@@ -78,7 +79,61 @@
                 </div>
             </div>
 
-            <div class="mt-12 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+            <!-- show a 'currently displaying' section to indicate how the products are being filtered -->
+            <div class="flex flex-col sm:flex-row justify-center items-center mt-4">
+                <div class="text-md font-semibold mr-2 mt-1">Currently displaying:</div>
+
+                @if (string.IsNullOrEmpty(productParams.Search) && productParams.CategoryId == 0 && productParams.BrandId == 0)
+                {
+                    <div class="bg-yellow-300 text-gray-900 text-xs uppercase rounded-md p-2 ml-3 mt-2">
+                        <span class="text-xs font-semibold">All Products</span>
+                    </div>
+                }
+                else 
+                {
+                    @if (!string.IsNullOrEmpty(productParams.Search))
+                    {
+                        <div class="bg-yellow-300 text-gray-900 text-xs uppercase rounded-md p-2 ml-2 mt-2 mr-2">
+                            <span class="text-xs font-semibold mr-2">Search: @productParams.Search</span>
+                            <button type="button" @onclick="() => DeleteDisplayParam(productParams.Search)">
+                                <!-- heroicons: x (outline) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline -mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    }
+                    
+                    @if (productParams.CategoryId != 0)
+                    {
+                        <div class="bg-yellow-300 text-gray-900 text-xs uppercase rounded-md p-2 ml-2 mt-2 mr-2">
+                            <span class="text-xs font-semibold mr-2">Category: @(ReturnCategoryNameFromId(@productParams.CategoryId))</span>
+                            <button type="button" @onclick="() => DeleteDisplayParam(productParams.CategoryId)">
+                                <!-- heroicons: x (outline) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline -mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    }
+                    
+                    @if (productParams.BrandId != 0)
+                    {
+                        <div class="bg-yellow-300 text-gray-800 text-xs uppercase rounded-md p-2 ml-2 mt-2 mr-2">
+                            <span class="text-xs font-semibold mr-2">Brand: @(ReturnBrandNameFromId(@productParams.BrandId))</span>
+                            <button type="button" @onclick="() => DeleteDisplayParam(productParams.BrandId)">
+                                <!-- heroicons: x (outline) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline -mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    }
+                }
+                
+            </div>
+
+            <div class="mt-10 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
                 @foreach (var product in products)
                 {
                     <div class="product-card hover:shadow-xl hover:opacity-70">
@@ -139,6 +194,9 @@
     [Parameter]
     public int categoryId { get; set; } = 0;
 
+    [Parameter]
+    public string searchTerm { get; set; }
+
     List<Product> products;
 
     List<DropdownItem> dropdownOptions = new();
@@ -161,15 +219,22 @@
 
     private bool ClearSearch = false;
 
+    public List<Category> Categories = new ();
+    public List<Brand> Brands = new ();
+
     protected override async Task OnParametersSetAsync()
     {
         if (brandId != 0) await AddBrandFilter();
         if (categoryId != 0) await AddCategoryFilter();
+
+        if (!string.IsNullOrWhiteSpace(searchTerm)) await SearchChanged(searchTerm);
     }
 
     protected override async Task OnInitializedAsync()
     {
         await SelectedPage();
+        await GetCategories();
+        await GetBrands();
     }
 
     protected override void OnInitialized()
@@ -228,6 +293,30 @@
         await GetProducts();
     }
 
+    private async Task DeleteDisplayParam(string displayParam)
+    {
+        if ((string)displayParam == productParams.Search)
+        {
+            productParams.Search = "";
+            await GetProducts();
+        }
+    }
+
+    private async Task DeleteDisplayParam(int displayParam)
+    {
+        if ((int)displayParam == productParams.CategoryId)
+        {
+            productParams.CategoryId = 0;
+            await GetProducts();
+        }
+
+        if ((int)displayParam == productParams.BrandId)
+        {
+            productParams.BrandId = 0;
+            await GetProducts();
+        }
+    }
+
     private async Task ResetSearch()
     {
         ClearSearch = true;
@@ -245,5 +334,29 @@
     private void GoToHomePage()
     {
         navigationManager.NavigateTo("/");
+    }
+
+    private async Task GetCategories()
+    {
+        Categories = await productService.GetProductCategoriesAsync();
+    }
+
+    private async Task GetBrands()
+    {
+        Brands = await productService.GetProductBrandsAsync();
+    }
+
+    private string ReturnCategoryNameFromId(int categoryId)
+    {
+        var category = Categories.FirstOrDefault(c => c.Id == categoryId);
+
+        return category.Name;
+    }
+
+    private string ReturnBrandNameFromId(int brandId)
+    {
+        var brand = Brands.FirstOrDefault(b => b.Id == brandId);
+
+        return brand.Name;
     }
 }
