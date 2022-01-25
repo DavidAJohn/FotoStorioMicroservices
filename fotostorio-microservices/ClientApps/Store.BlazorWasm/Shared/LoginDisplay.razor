@@ -1,0 +1,52 @@
+﻿@using Store.BlazorWasm.Extensions
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<AuthorizeView>
+    <Authorized>
+        <div class="md:mr-4">
+            @if (displayName != "")
+            {
+                <span class="hidden sm:inline text-gray-50 text-sm font-medium md:mr-6">Hi, @displayName</span>
+            }
+            @if (role == "Administrator")
+            {
+                <span class="text-gray-300 text-sm font-medium md:mr-2">Admin Page</span> 
+            }
+            else
+            {
+                <span class="text-gray-300 text-sm font-medium md:mr-2">Your Orders</span>
+            }
+            <a href="logout" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log out</a>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="md:mr-4">
+            <a href="login" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log In</a>
+            <a href="register" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Register</a>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private string displayName = "";
+    private string role;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetClaimsPrincipalData();
+    }
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            displayName = user?.GetDisplayNameFromPrincipal();
+            role = user?.GetRoleFromPrincipal();
+        }
+
+    }
+}
