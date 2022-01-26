@@ -73,7 +73,7 @@
         if (result.Successful)
         {
             toastService.ShowSuccess("You have successfully logged in to your account", "Logged In");
-            navigationManager.NavigateTo("/");
+            navigationManager.NavigateTo("/", true); // force reload to ensure LoginDisplay is correct
         }
         else
         {

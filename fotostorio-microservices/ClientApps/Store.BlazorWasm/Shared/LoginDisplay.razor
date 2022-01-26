@@ -13,17 +13,21 @@
             {
                 <span class="text-gray-300 text-sm font-medium md:mr-2">Admin Page</span> 
             }
-            else
+            @if (role == "Marketing")
+            {
+                <span class="text-gray-300 text-sm font-medium md:mr-2">Marketing Page</span> 
+            }
+            @if (role == "User")
             {
                 <span class="text-gray-300 text-sm font-medium md:mr-2">Your Orders</span>
             }
-            <a href="logout" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log out</a>
+            <NavLink href="logout" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log out</NavLink>
         </div>
     </Authorized>
     <NotAuthorized>
         <div class="md:mr-4">
-            <a href="login" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log In</a>
-            <a href="register" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Register</a>
+            <NavLink href="login" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log In</NavLink>
+            <NavLink href="register" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Register</NavLink>
         </div>
     </NotAuthorized>
 </AuthorizeView>
@@ -39,6 +43,9 @@
 
     private async Task GetClaimsPrincipalData()
     {
+        displayName = "";
+        role = "";
+
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
@@ -47,6 +54,6 @@
             displayName = user?.GetDisplayNameFromPrincipal();
             role = user?.GetRoleFromPrincipal();
         }
-
     }
+
 }
