@@ -10,6 +10,9 @@ services:
   discountdb:
     image: mcr.microsoft.com/mssql/server:2017-latest
 
+  identitydb:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+
   products.api:
     image: ${DOCKER_REGISTRY-}productsapi
     build:
@@ -58,6 +61,13 @@ services:
       context: .
       dockerfile: ApiGateways/Admin.Gateway/Dockerfile
 
+  identity.api:
+    image: ${DOCKER_REGISTRY-}identityapi
+    build:
+      context: .
+      dockerfile: Services/Identity/Identity.API/Dockerfile
+
 volumes:
   products_mssqldata:
   discount_mssqldata:
+  identity_mssqldata:

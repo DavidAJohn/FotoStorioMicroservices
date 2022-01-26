@@ -29,6 +29,17 @@ services:
     ports:
       - "6379:6379"
 
+  identitydb:
+    container_name: identitydb
+    environment:
+      SA_PASSWORD: "aDmin1234!"
+      ACCEPT_EULA: "Y"
+    restart: always
+    ports:
+      - "1436:1433"
+    volumes: 
+      - identity_mssqldata:/var/opt/mssql
+
   products.api:
     container_name: products.api
     environment:
@@ -114,3 +125,15 @@ services:
       - products.aggregator
     ports:
       - "8012:80"
+
+  identity.api:
+    container_name: identity.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:IdentityConnection=Server=identitydb;Database=IdentityDb;User Id=sa;Password=aDmin1234!;"
+      - "JwtIssuer=http://identity.api"
+      - "JwtAudience=http://identity.api"
+    depends_on:
+      - identitydb
+    ports:
+      - "8005:80"
