@@ -5,6 +5,7 @@
 
 @inject NavigationManager navigationManager
 @inject IAuthenticationService authenticationService
+@inject IToastService toastService
 
 <div class="mx-2 mt-8 md:container">
     <div class="p-3 lg:p-4 flex justify-center">
@@ -71,6 +72,7 @@
 
         if (result.Successful)
         {
+            toastService.ShowSuccess("You have successfully logged in to your account", "Logged In");
             navigationManager.NavigateTo("/");
         }
         else

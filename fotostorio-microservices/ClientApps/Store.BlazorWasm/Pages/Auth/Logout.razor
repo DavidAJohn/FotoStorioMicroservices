@@ -4,6 +4,7 @@
 
 @inject NavigationManager navigationManager
 @inject IAuthenticationService authenticationService
+@inject IToastService toastService
 
 @code {
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -12,6 +13,7 @@
         {
             await authenticationService.Logout();
 
+            toastService.ShowError("Your have now logged out of your account ", "Logged Out");
             navigationManager.NavigateTo("/");
         }
     }

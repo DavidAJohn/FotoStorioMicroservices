@@ -5,6 +5,7 @@
 
 @inject NavigationManager navigationManager
 @inject IAuthenticationService authenticationService
+@inject IToastService toastService
 
 <div class="mx-2 md:container">
     <div class="p-3 lg:p-4 flex justify-center">
@@ -46,7 +47,7 @@
                             <ValidationMessage For="@(() => RegisterModel.ConfirmPassword)" />
                         </div>
                         <div class="my-4 w-full">
-                            <button type="submit" class="bg-fotofuchsia text-gray-50 w-full p-2 mt-3 rounded-sm font-semibold fotofuchsia-ripple disabled:opacity-30 disabled:cursor-default" disabled>Register</button>
+                            <button type="submit" class="bg-fotofuchsia text-gray-50 w-full p-2 mt-3 rounded-sm font-semibold fotofuchsia-ripple disabled:opacity-30 disabled:cursor-default" >Register</button>
                         </div>
                     </EditForm>
                 </div>
@@ -74,6 +75,7 @@
 
         if (result.Successful)
         {
+            toastService.ShowSuccess("Your account registration was successful", "Welcome");
             navigationManager.NavigateTo("/login?register=true");
         }
         else
