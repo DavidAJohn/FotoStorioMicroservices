@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Ordering.API.Contracts;
 using Ordering.API.Data;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,8 @@ namespace Ordering.API
             services.AddDbContext<OrderDbContext>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString("OrdersConnectionString"));
             });
+
+            services.AddScoped<IOrderRepository, OrderRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
