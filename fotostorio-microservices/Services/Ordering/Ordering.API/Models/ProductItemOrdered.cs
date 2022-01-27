@@ -2,6 +2,10 @@
 {
     public class ProductItemOrdered
     {
+        public ProductItemOrdered()
+        {
+        }
+
         public ProductItemOrdered(int productItemId, string productSku, string productName, string imageUrl)
         {
             ProductItemId = productItemId;
