@@ -93,9 +93,12 @@ namespace Products.Aggregator.Controllers
 
             // if there is a discounted price then use it,
             // otherwise set the sale price to the same as the existing price
-            aggregatedProduct.SalePrice = discount.SalePrice != 0 && discount.SalePrice < product.Price
-                ? discount.SalePrice : product.Price;
-
+            if (discount != null)
+            {
+                aggregatedProduct.SalePrice = discount.SalePrice != 0 && discount.SalePrice < product.Price
+                    ? discount.SalePrice : product.Price;
+            }
+            
             return Ok(aggregatedProduct);
         }
 
