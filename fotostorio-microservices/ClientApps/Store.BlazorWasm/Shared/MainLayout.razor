@@ -36,28 +36,7 @@
                 </div>
 
                 <!-- Site name and logo -->
-                <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-                    <div class="block md:hidden w-auto ml-4">
-                        <span class="flex items-center justify-center sm:ml-12 text-gray-50">
-                            <!-- https://icons.getbootstrap.com/icons/camera/ -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-camera" viewBox="0 0 16 16">
-                                <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z"/>
-                                <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
-                            </svg>
-                        </span>
-                    </div>
-                    <!-- Only show large icon and name on md(768px) screens and above -->
-                    <div class="hidden md:block w-auto items-center">
-                        <span class="flex items-center justify-center text-gray-50">
-                            <!-- https://icons.getbootstrap.com/icons/camera/ -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-camera" viewBox="0 0 16 16">
-                                <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z"/>
-                                <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
-                            </svg>
-                            <a class="text-white text-xl ml-4" href="/">Foto Storio</a>
-                        </span>
-                    </div>
-                </div>
+                <SiteBranding />
 
                 <!-- Search box -->
                 <div class="hidden lg:flex xl:flex-1 lg:flex-row items-center">
@@ -75,7 +54,9 @@
 
             </div>
         </div>
-    </div> <!-- end container -->
+    </div> 
+    <!-- end container -->
+
     <!-- Mobile menu -->
     <div class="md:hidden @NavMenuCssClass" id="mobile-menu">
         <MobileMenu navMenuItems=@NavMenuItems />
@@ -96,81 +77,7 @@
 </main>
 
 <!-- footer -->
-<footer id="footer" class="text-white bg-fotoblue">
-    <div class="container p-8 max-w-7xl">
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
-
-            <div class="md:pl-16 sm:col-span-2 pt-0 mt-0">
-                <div class="pb-3 pt-0 flex items-center">
-                    <!-- https://icons.getbootstrap.com/icons/camera/ -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-camera" viewBox="0 0 16 16">
-                        <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z"/>
-                        <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
-                    </svg>
-                    <span class="inline ml-3 text-xl text-bold text-white">Foto Storio</span>
-                </div>
-                <div class="pt-0">
-                    This is not a real camera store. (Hard to believe, I know).
-                    It was created by <a href="https://github.com/DavidAJohn" class="text-gray-400 hover:text-gray-400">David John</a> as a way of exploring Microsoft's Blazor web development framework within a microservices architecture.
-                    You can also view the project's source code on <a href="https://github.com/DavidAJohn/FotoStorioMicroservices" class="text-gray-400 hover:text-gray-400">GitHub</a>.
-                </div>
-                <div class="pt-4">
-                    The home page contains a photo taken by 
-                    <a href="https://unsplash.com/@@baileymahon?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" class="text-gray-400 hover:text-gray-400">Bailey Mahon</a>
-                    via <a href="https://unsplash.com/photos/2b6K4uy0Hbc" target="_blank" class="text-gray-400 hover:text-gray-400">Unsplash</a>.
-                </div>
-            </div>
-
-            <div class="col-span-1 md:ml-16 xl:ml-32">
-                <h5 class="mb-4 uppercase text-gray-400 font-bold">Links</h5>
-                <div>
-                    <div>
-                        <i class="mr-2 bi bi-github"></i>
-                        <a href="https://github.com/DavidAJohn/FotoStorioMicroservices" class="text-gray-100 hover:text-gray-400">GitHub source</a>
-                    </div>
-                    <div>
-                        <i class="mr-2 bi bi-border-all"></i>
-                        <a href="https://blazor.net" class="text-gray-100 hover:text-gray-400">Blazor.net</a>
-                    </div>
-                    <div>
-                        <i class="mr-2 bi bi-globe"></i>
-                        <a href="/about" class="text-gray-100 hover:text-gray-400">About the Site</a>
-                    </div>
-                    <div>
-                        <i class="mr-2 bi bi-globe"></i>
-                        <a href="/contact" class="text-gray-100 hover:text-gray-400">Contact Me</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-span-1 md:ml-4 lg:ml-16">
-                <h5 class="mb-4 uppercase text-gray-400 font-bold">Social</h5>
-                <ul class="list-none">
-                    <li>
-                        <i class="mr-2 bi bi-facebook"></i>
-                        <a href="https://facebook.com" class="text-gray-100 hover:text-gray-400">Facebook</a>
-                    </li>
-                    <li>
-                        <i class="mr-2 bi bi-twitter"></i>
-                        <a href="https://twitter.com" class="text-gray-100 hover:text-gray-400">Twitter</a>
-                    </li>
-                    <li>
-                        <i class="mr-2 bi bi-instagram"></i>
-                        <a href="https://instagram.com" class="text-gray-100 hover:text-gray-400">Instagram</a>
-                    </li>
-                    <li>
-                        <i class="mr-2 bi bi-twitch"></i>
-                        <a href="https://twitch.com" class="text-gray-100 hover:text-gray-400">Twitch</a>
-                    </li>
-                </ul>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="p-3 text-center" style="background-color: rgba(0, 0, 0, 0.2);">
-        &copy; Copyright @currentYear - Foto Storio
-    </div>
-</footer>
+<Footer />
 
 @code {
     private bool collapseNavMenu = true;
@@ -180,13 +87,6 @@
     private string currentYear;
 
     public List<NavMenuItem> NavMenuItems = new List<NavMenuItem>();
-
-    protected override void OnInitialized()
-    {
-        // set footer copyright year
-        DateTime currentDateTime = DateTime.Now;
-        currentYear = currentDateTime.Year.ToString();
-    }
 
     protected override async Task OnInitializedAsync()
     {
