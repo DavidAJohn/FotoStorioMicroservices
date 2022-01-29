@@ -10,7 +10,7 @@ using Ordering.API.Data;
 namespace Ordering.API.Data.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    [Migration("20220127160018_InitialOrdersCreation")]
+    [Migration("20220129232723_InitialOrdersCreation")]
     partial class InitialOrdersCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,7 +29,6 @@ namespace Ordering.API.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("BuyerEmail")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("OrderDate")
@@ -42,7 +41,7 @@ namespace Ordering.API.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Subtotal")
+                    b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -118,7 +117,7 @@ namespace Ordering.API.Data.Migrations
             modelBuilder.Entity("Ordering.API.Models.OrderItem", b =>
                 {
                     b.HasOne("Ordering.API.Models.Order", null)
-                        .WithMany("OrderItems")
+                        .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -154,7 +153,7 @@ namespace Ordering.API.Data.Migrations
 
             modelBuilder.Entity("Ordering.API.Models.Order", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }
