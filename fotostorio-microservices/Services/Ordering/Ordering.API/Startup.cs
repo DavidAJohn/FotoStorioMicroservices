@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Ordering.API.Contracts;
 using Ordering.API.Data;
+using Ordering.API.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,10 +35,22 @@ namespace Ordering.API
 
             services.AddScoped<IOrderRepository, OrderRepository>();
 
+            services.AddAutoMapper(typeof(AutoMapperProfiles));
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Ordering.API", Version = "v1" });
+            });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder
+                    .SetIsOriginAllowed((host) => true)
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
             });
         }
 
@@ -53,6 +66,9 @@ namespace Ordering.API
 
             app.UseRouting();
 
+            app.UseCors("CorsPolicy");
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
