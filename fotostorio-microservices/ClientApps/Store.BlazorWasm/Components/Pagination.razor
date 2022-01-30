@@ -3,7 +3,7 @@
 <div class="bg-gray-50 mt-6 flex items-center justify-center md:justify-between">
     <div class="sm:flex-1 sm:flex sm:items-center sm:justify-between mt-8 sm:mt-0">
         <div class="hidden sm:inline-flex">
-            <span class="text-md text-gray-700">
+            <span class="text-base text-gray-700">
                 Showing <span class="font-medium"> 
                     @(metadata.PageIndex > 1 
                     ? (metadata.PageIndex * metadata.PageSize) - (metadata.PageSize - 1)
@@ -30,7 +30,7 @@
                         {
                             <div>
                                 <button type="button" disabled  
-                                    class="z-10 relative inline-flex items-center p-2 border border-gray-800 text-md font-medium 
+                                    class="z-10 relative inline-flex items-center p-2 border border-gray-800 text-base font-medium 
                                         bg-blue-900 text-gray-50 cursor-default"
                                 >
                                     @link.Text
@@ -41,7 +41,7 @@
                         {
                             <div>
                                 <button type="button" @onclick="() => OnSelectedPage(link)" 
-                                    class="z-10 relative inline-flex items-center p-2 border border-gray-800 text-md font-medium 
+                                    class="z-10 relative inline-flex items-center p-2 border border-gray-800 text-base font-medium 
                                         bg-gray-50 text-gray-700 hover:bg-blue-900 hover:text-gray-50  
                                         @($"{(link.Text == "Next" ? " rounded-tr-md rounded-br-md" : "")} {(link.Text == "Previous" ? " rounded-tl-md rounded-bl-md" : "")}")
                                         "
@@ -55,7 +55,7 @@
                     {
                         <div>
                             <button type="button" disabled class="z-10 relative inline-flex items-center p-2 border border-gray-800 
-                                    text-md font-medium text-gray-400 cursor-default 
+                                    text-base font-medium text-gray-400 cursor-default 
                                     @($"{(link.Text == "Next" ? " rounded-tr-md rounded-br-md" : "")} {(link.Text == "Previous" ? " rounded-tl-md rounded-bl-md" : "")}")
                                     " 
                             >
