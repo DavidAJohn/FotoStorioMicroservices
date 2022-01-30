@@ -2,6 +2,7 @@
 using Ordering.API.Entities;
 using Ordering.API.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Ordering.API.Data
@@ -15,33 +16,21 @@ namespace Ordering.API.Data
             _orderDbContext = orderDbContext;
         }
 
-        public async Task<Order> CreateOrderAsync(string buyerEmail, Basket basket, Address sendToAddress)
+        public async Task<Order> CreateOrderAsync(Order order)
         {
-            var orderItems = new List<OrderItem>();
+            // verify the prices are accurate?
+            // - get basket for redis again?
+            // - get prices via store gateway/product aggregator?
 
-            foreach (var basketItem in basket.BasketItems)
-            {
-                var productItemOrdered = new ProductItemOrdered
-                {
-                    ProductItemId = basketItem.Product.Id,
-                    ProductSku = basketItem.Product.Sku,
-                    ProductName = basketItem.Product.Name
-                };
-                
-                orderItems.Add(new OrderItem
-                {
-                    ItemOrdered = productItemOrdered,
-                    Price = basketItem.Product.Price,
-                    Quantity = basketItem.Quantity
-                });
-            }
+            // calculate the total
+            var orderTotal = order.Items.Sum(item => item.Price * item.Quantity);
 
-            var order = new Order(orderItems, buyerEmail, sendToAddress, basket.BasketTotal, "");
+            var orderToCreate = new Order(order.Items, order.BuyerEmail, order.SendToAddress, orderTotal, "");
 
-            await _orderDbContext.Orders.AddAsync(order);
+            await _orderDbContext.Orders.AddAsync(orderToCreate);
             var saved = await _orderDbContext.SaveChangesAsync();
 
-            if (saved > 0) return order;
+            if (saved > 0) return orderToCreate;
 
             return null;
         }
