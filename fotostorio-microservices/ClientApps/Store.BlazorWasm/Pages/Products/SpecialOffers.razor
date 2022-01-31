@@ -2,6 +2,7 @@
 
 @using Blazored.LocalStorage
 @using Store.BlazorWasm.Contracts
+@using Store.BlazorWasm.DTOs
 @using Store.BlazorWasm.Models
 
 @inject IProductService productService
@@ -236,7 +237,19 @@
 
             var currentBasket = await basketService.GetBasketByID(storedBasketId);
 
-            var newItem = new BasketItem { Product = product, Quantity = itemQuantity };
+            var newProduct = new ProductDTO
+            {
+                Id = product.Id,
+                Sku = product.Sku,
+                Name = product.Name,
+                ImageUrl = product.ImageUrl,
+                Price = product.Price,
+                Brand = product.Brand,
+                Category = product.Category,
+                Mount = product.Mount
+            };
+
+            var newItem = new BasketItem { Product = newProduct, Quantity = itemQuantity };
             currentBasket.BasketItems.Add(newItem);
 
             var updatedBasket = await basketService.UpdateBasket(currentBasket);
