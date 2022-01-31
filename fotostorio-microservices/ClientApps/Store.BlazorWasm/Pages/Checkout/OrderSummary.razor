@@ -1,5 +1,7 @@
 ﻿@page "/checkout"
 
+@attribute [Authorize]
+
 @using Blazored.LocalStorage
 @using Blazored.Toast
 @using Store.BlazorWasm.Contracts
@@ -93,11 +95,22 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-2 text-center">
-                        <button type="button" class="py-2 px-3 my-3 bg-fotofuchsia text-white text-md font-semibold rounded-sm hover:opacity-90 fotofuchsia-ripple" @onclick="() => PlaceOrder()">
-                            Place Order
-                        </button>
-                    </div>
+                    @if (basketItems != null)
+                    {
+                        <div class="mt-2 text-center">
+                            <button type="button" class="py-2 px-3 my-3 bg-fotofuchsia text-white text-md font-semibold rounded-sm hover:opacity-90 fotofuchsia-ripple" @onclick="() => PlaceOrder()">
+                                Place Order
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mt-2 text-center">
+                            <button type="button" class="py-2 px-3 my-3 bg-fotofuchsia text-white text-md font-semibold rounded-sm disabled:opacity-30 disabled:cursor-default" disabled>
+                                Sorry, your order can not be submitted
+                            </button>
+                        </div>
+                    }
                 </div>
             }
             else
