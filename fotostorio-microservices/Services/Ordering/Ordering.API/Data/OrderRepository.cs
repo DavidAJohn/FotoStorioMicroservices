@@ -1,4 +1,5 @@
-﻿using Ordering.API.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using Ordering.API.Contracts;
 using Ordering.API.Entities;
 using Ordering.API.Models;
 using System.Collections.Generic;
@@ -35,14 +36,27 @@ namespace Ordering.API.Data
             return null;
         }
 
-        public Task<Order> GetOrderByIdAsync(int id, string buyerEmail)
+        public async Task<Order> GetOrderByIdAsync(int id, string buyerEmail)
         {
-            throw new System.NotImplementedException();
+            var order = await _orderDbContext.Orders
+                .Include(o => o.Items)
+                .FirstOrDefaultAsync(o => o.Id == id && o.BuyerEmail == buyerEmail);
+
+            if (order == null) return null;
+
+            return order;
         }
 
-        public Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
+        public async Task<IEnumerable<Order>> GetOrdersForUserAsync(string buyerEmail)
         {
-            throw new System.NotImplementedException();
+            var orders = await _orderDbContext.Orders
+                .Where(o => o.BuyerEmail == buyerEmail)
+                .Include(o => o.Items)
+                .ToListAsync();
+
+            if (orders == null) return null;
+
+            return orders;
         }
     }
 }

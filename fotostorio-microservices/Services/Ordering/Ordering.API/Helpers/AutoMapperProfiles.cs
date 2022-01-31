@@ -8,6 +8,7 @@ namespace Ordering.API.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<OrderCreateDTO, Order>();
+            CreateMap<Order, OrderDetailsDTO>();
         }
     }
 }

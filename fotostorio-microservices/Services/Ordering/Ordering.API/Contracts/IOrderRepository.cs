@@ -8,7 +8,7 @@ namespace Ordering.API.Contracts
     public interface IOrderRepository
     {
         Task<Order> CreateOrderAsync(Order order);
-        Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail);
+        Task<IEnumerable<Order>> GetOrdersForUserAsync(string buyerEmail);
         Task<Order> GetOrderByIdAsync(int id, string buyerEmail);
     }
 }
