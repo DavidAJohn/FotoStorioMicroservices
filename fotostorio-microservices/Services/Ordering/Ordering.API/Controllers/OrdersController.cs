@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Ordering.API.Contracts;
@@ -9,17 +11,20 @@ using System.Threading.Tasks;
 
 namespace Ordering.API.Controllers
 {
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class OrdersController : ControllerBase
     {
         private readonly ILogger<OrdersController> _logger;
         private readonly IOrderRepository _orderRepository;
+        private readonly IMapper _mapper;
 
-        public OrdersController(ILogger<OrdersController> logger, IOrderRepository orderRepository)
+        public OrdersController(ILogger<OrdersController> logger, IOrderRepository orderRepository, IMapper mapper)
         {
             _logger = logger;
             _orderRepository = orderRepository;
+            _mapper = mapper;
         }
 
         /// POST api/orders
@@ -31,21 +36,26 @@ namespace Ordering.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<Order>> CreateOrder(Order order)
+        public async Task<ActionResult<Order>> CreateOrder(OrderCreateDTO orderToCreate)
         {
-            if (order == null)
+            if (orderToCreate == null)
             {
                 return BadRequest();
             }
 
+            var order = _mapper.Map<Order>(orderToCreate);
+
             try
             {
-                //var email = _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                var email = "";
-                var basket = new Basket { };
-                var address = new Address { };
+                // 1 - use an http client to check jwt validity with identity api
 
-                var createdOrder = await _orderRepository.CreateOrderAsync(email, basket, address);
+                // 2 - if token is valid, continue and create the order, otherwise return a 401 Not Authorised response
+
+                //var email = _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                var email = "dave@test.com";
+                order.BuyerEmail = email;
+
+                var createdOrder = await _orderRepository.CreateOrderAsync(order);
 
                 if (createdOrder == null) return BadRequest();
 

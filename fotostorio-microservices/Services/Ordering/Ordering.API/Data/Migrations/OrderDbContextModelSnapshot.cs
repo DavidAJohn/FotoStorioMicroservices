@@ -57,11 +57,11 @@ namespace Ordering.API.Data.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -119,23 +119,26 @@ namespace Ordering.API.Data.Migrations
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.OwnsOne("Ordering.API.Models.ProductItemOrdered", "ItemOrdered", b1 =>
+                    b.OwnsOne("Ordering.API.Models.ProductItemOrdered", "Product", b1 =>
                         {
                             b1.Property<int>("OrderItemId")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("int")
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                            b1.Property<int>("Id")
+                                .HasColumnType("int");
+
                             b1.Property<string>("ImageUrl")
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<int>("ProductItemId")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("ProductName")
+                            b1.Property<string>("Name")
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<string>("ProductSku")
+                            b1.Property<decimal>("Price")
+                                .HasColumnType("decimal(18,2)");
+
+                            b1.Property<string>("Sku")
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("OrderItemId");
@@ -146,7 +149,7 @@ namespace Ordering.API.Data.Migrations
                                 .HasForeignKey("OrderItemId");
                         });
 
-                    b.Navigation("ItemOrdered");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Ordering.API.Models.Order", b =>

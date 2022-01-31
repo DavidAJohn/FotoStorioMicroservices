@@ -1,27 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace Ordering.API.Models
 {
-    public class Order : BaseEntity
+    public class OrderCreateDTO
     {
-        public Order()
+        public OrderCreateDTO()
         {
         }
 
-        public Order(List<OrderItem> items, string buyerEmail, Address sendToAddress, decimal total, string paymentIntentId)
+        public OrderCreateDTO(List<OrderItem> items, Address sendToAddress)
         {
             Items = items;
-            BuyerEmail = buyerEmail;
             SendToAddress = sendToAddress;
-            Total = total;
-            PaymentIntentId = paymentIntentId;
         }
-
-        public string BuyerEmail { get; set; }
 
         public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
 
@@ -31,13 +25,8 @@ namespace Ordering.API.Models
         [Required]
         public List<OrderItem> Items { get; set; }
 
-        [Required]
-        public decimal Total { get; set; }
-
         [JsonConverter(typeof(JsonStringEnumConverter))]
         [Required]
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
-
-        public string PaymentIntentId { get; set; }
     }
 }

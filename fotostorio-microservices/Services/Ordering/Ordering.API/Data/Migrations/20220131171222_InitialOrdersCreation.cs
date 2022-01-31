@@ -37,11 +37,12 @@ namespace Ordering.API.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ItemOrdered_ProductItemId = table.Column<int>(type: "int", nullable: true),
-                    ItemOrdered_ProductSku = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ItemOrdered_ProductName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ItemOrdered_ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Product_Id = table.Column<int>(type: "int", nullable: true),
+                    Product_Sku = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Product_Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Product_Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Product_ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: true)
                 },

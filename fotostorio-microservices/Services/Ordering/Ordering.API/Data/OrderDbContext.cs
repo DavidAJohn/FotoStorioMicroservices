@@ -16,11 +16,11 @@ namespace Ordering.API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OrderItem>()
-                .Property(oi => oi.Price)
+                .Property(oi => oi.Total)
                 .HasColumnType("decimal(18,2)");
 
             modelBuilder.Entity<Order>()
-                .Property(o => o.Subtotal)
+                .Property(o => o.Total)
                 .HasColumnType("decimal(18,2)");
 
             // defines the Address as being owned by an Order
@@ -31,13 +31,13 @@ namespace Ordering.API.Data
 
             // establishes that OrderItems are deleted if an Order is deleted
             modelBuilder.Entity<Order>()
-                .HasMany(o => o.OrderItems)
+                .HasMany(o => o.Items)
                 .WithOne()
                 .OnDelete(DeleteBehavior.Cascade);
 
             // defines the ItemOrdered as being owned by an OrderItem
             modelBuilder.Entity<OrderItem>()
-                .OwnsOne(oi => oi.ItemOrdered, i => {
+                .OwnsOne(oi => oi.Product, i => {
                     i.WithOwner();
                 });
 

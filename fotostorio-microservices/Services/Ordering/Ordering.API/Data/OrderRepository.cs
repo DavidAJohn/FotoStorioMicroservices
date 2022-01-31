@@ -23,7 +23,7 @@ namespace Ordering.API.Data
             // - get prices via store gateway/product aggregator?
 
             // calculate the total
-            var orderTotal = order.Items.Sum(item => item.Price * item.Quantity);
+            var orderTotal = order.Items.Sum(item => item.Total);
 
             var orderToCreate = new Order(order.Items, order.BuyerEmail, order.SendToAddress, orderTotal, "");
 
