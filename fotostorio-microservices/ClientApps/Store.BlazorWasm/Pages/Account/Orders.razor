@@ -1,0 +1,74 @@
+﻿@page "/account"
+@page "/account/orders"
+
+@using Store.BlazorWasm.Contracts
+@using Store.BlazorWasm.DTOs
+@using Store.BlazorWasm.Extensions
+
+@inject IOrderService orderService
+
+@attribute [Authorize]
+
+<div class="h-screen">
+    <div class="container max-w-7xl md:mt-8">
+        <div class="w-full p-4 rounded-md shadow-md bg-white focus:outline-none z-10">
+            <div class="text-lg text-center md:text-xl lg:text-2xl font-bold">
+                Your Orders
+            </div>
+            @if (errorMessage != "")
+            {
+                <div class="mx-2 animate-pulse">
+                    <div class="alert-box text-center" role="alert">
+                        <span class="block sm:inline">@errorMessage</span>
+                    </div>
+                </div>
+            }
+            else if (orders != null)
+            {
+                <div class="p-4 text-center w-auto">
+                    @foreach (OrderDetailsDTO order in orders)
+                    {
+                        <div class="font-semibold text-md">
+                            <div class="inline-block mr-2">Order #@order.Id</div>
+                            <div class="inline-block mr-2">@order.OrderDate.ToUKStandardDate()</div>
+                            <div class="inline-block mr-2">£@order.Total</div>
+                            <div class="inline-block mr-2">@order.Status</div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="p-4 text-center">
+                    No previous orders
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter]
+    public ErrorLogger Error { get; set; }
+    private string errorMessage = "";
+    private List<OrderDetailsDTO> orders;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await GetOrders();
+    }
+    
+    private async Task GetOrders()
+    {
+        try
+        {
+            orders = await orderService.GetOrdersForUserAsync();
+            errorMessage = "";
+        }
+        catch (Exception ex)
+        {
+            Error.ProcessError(ex, "Pages/Account/Order.GetOrders()");
+            errorMessage = "Could not retrieve list of orders";
+        }
+    }
+}
