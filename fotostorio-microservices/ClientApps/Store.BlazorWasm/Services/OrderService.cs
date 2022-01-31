@@ -4,6 +4,7 @@ using Store.BlazorWasm.DTOs;
 using Store.BlazorWasm.Models;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace Store.BlazorWasm.Services;
@@ -62,6 +63,30 @@ public class OrderService : IOrderService
             }
 
             return null;
+        }
+        catch (HttpRequestException ex)
+        {
+            throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
+        }
+    }
+
+    public async Task<List<OrderDetailsDTO>> GetOrdersForUserAsync()
+    {
+        //var storedToken = await _localStorage.GetItemAsync<string>("authToken");
+
+        //if (string.IsNullOrWhiteSpace(storedToken))
+        //{
+        //    return null;
+        //}
+
+        try
+        {
+            var client = _httpClient.CreateClient("OrderAPI");
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
+
+            var orders = await client.GetFromJsonAsync<List<OrderDetailsDTO>>("orders");
+
+            return orders;
         }
         catch (HttpRequestException ex)
         {
