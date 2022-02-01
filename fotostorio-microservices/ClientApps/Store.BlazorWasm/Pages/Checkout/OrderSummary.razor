@@ -12,8 +12,10 @@
 @inject IOrderService orderService
 @inject ILocalStorageService localStorage
 @inject IToastService toastService
+@inject IConfiguration config
+@inject IJSRuntime JsRuntime
 
-<div class="h-screen">
+<div class="h-auto">
     <div class="container max-w-7xl md:mt-8">
         @if (basketItems != null)
         {
@@ -95,10 +97,26 @@
                             </div>
                         </div>
                     </div>
-                    @if (basketItems != null)
+
+                    @if (ShowPaymentOptions)
                     {
-                        <div class="mt-2 text-center">
-                            <button type="button" class="py-2 px-3 my-3 bg-fotofuchsia text-white text-md font-semibold rounded-sm hover:opacity-90 fotofuchsia-ripple" @onclick="() => PlaceOrder()">
+                        <div class="text-lg text-center md:text-xl lg:text-2xl font-bold my-8">
+                            Payment Details
+                        </div>
+                        <div class="flex justify-center">
+                            <div>
+                                <form id="payment-form" class="justify-items-center">
+                                    <div id="card-element" class="w-112 p-4 rounded-md shadow-md border-gray-300">
+                                        <!--Stripe.js injects the Card Element-->
+                                    </div>
+                                    <div id="card-error" class="mt-3 flex justify-center font-semibold text-red-500 animate-pulse">
+                                        <!--Stripe.js card errors-->
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="mt-4 w-full flex justify-center">
+                            <button type="button" id="btnPlaceOrder" class="py-2 px-3 my-3 bg-fotofuchsia text-white text-md font-semibold rounded-sm hover:opacity-90 fotofuchsia-ripple" @onclick="() => PlaceOrder()">
                                 Place Order
                             </button>
                         </div>
@@ -148,9 +166,23 @@
     private bool ShowErrors;
     private string ErrorMessage;
 
+    private bool ShowPaymentOptions = false;
+
     protected override async Task OnInitializedAsync()
     {
         await GetBasket();
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)     
+    {        
+        if (firstRender)         
+        {
+            // initialise the stripe js file 
+            ShowPaymentOptions = true;
+            await JsRuntime.InvokeVoidAsync("setupStripe", config["Stripe_PublishableKey"]); // wwwroot/js/stripe.js     
+            firstRender = false;
+            if (basketItems == null) ShowPaymentOptions = false;
+        }
     }
 
     private async Task GetBasket()
@@ -167,6 +199,7 @@
             {
                 basketItems = basket.BasketItems;
                 basketTotal = basket.BasketTotal;
+                ShowPaymentOptions = true;
             }
             else
             {
