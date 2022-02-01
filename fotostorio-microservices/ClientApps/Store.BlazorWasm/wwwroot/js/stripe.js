@@ -21,7 +21,7 @@
         }
     };
 
-    let card = elements.create('card', { style: style });
+    let card = elements.create('card', { style: style, hidePostalCode: true });
 
     mountCard(card);
 
