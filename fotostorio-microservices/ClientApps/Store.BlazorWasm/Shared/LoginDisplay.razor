@@ -1,23 +1,25 @@
 ﻿@using Store.BlazorWasm.Extensions
+@using Microsoft.AspNetCore.Authorization
 
+@inject IAuthorizationService AuthorizationService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 <AuthorizeView>
     <Authorized>
         <div class="md:mr-4">
-            @if (displayName != "")
+            @if (!string.IsNullOrEmpty(displayName))
             {
                 <span class="hidden sm:inline text-gray-50 text-sm font-medium md:mr-6">Hi, @displayName</span>
             }
-            @if (role == "Administrator")
+            @if (isAdminByPolicy)
             {
                 <span class="text-gray-300 text-sm font-medium md:mr-2">Admin Page</span> 
             }
-            @if (role == "Marketing")
+            @if (isMarketingByPolicy)
             {
                 <span class="text-gray-300 text-sm font-medium md:mr-2">Marketing Page</span> 
             }
-            @if (role == "User")
+            @if (isUserByPolicy || isAdminByPolicy)
             {
                 <span class="md:mr-2">
                     <NavLink href="/account/orders" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
@@ -25,11 +27,6 @@
                     </NavLink>
                 </span>
             }
-                <span class="md:mr-2">
-                    <NavLink href="/account/orders" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                        Your Orders
-                    </NavLink>
-                </span>
             <NavLink href="logout" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log out</NavLink>
         </div>
     </Authorized>
@@ -42,27 +39,40 @@
 </AuthorizeView>
 
 @code {
-    private string displayName = "";
-    private string role;
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+    private string displayName;
+    bool isAdminByPolicy = false;
+    bool isMarketingByPolicy = false;
+    bool isUserByPolicy = false;
 
     protected override async Task OnInitializedAsync()
     {
-        await GetClaimsPrincipalData();
+        await GetAuthorisationData();
     }
 
-    private async Task GetClaimsPrincipalData()
+    private async Task GetAuthorisationData()
     {
-        displayName = "";
-        role = "";
-
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
+        var user = (await authenticationStateTask).User;
 
         if (user.Identity.IsAuthenticated)
         {
-            displayName = user?.GetDisplayNameFromPrincipal();
-            role = user?.GetRoleFromPrincipal();
+            displayName = user?.Claims?.FirstOrDefault(c => c.Type == "given_name").Value;
+        }
+
+        if ((await AuthorizationService.AuthorizeAsync(user, "IsAdmin")).Succeeded)
+        {
+            isAdminByPolicy = true;
+        }
+
+        if ((await AuthorizationService.AuthorizeAsync(user, "IsMarketing")).Succeeded)
+        {
+            isMarketingByPolicy = true;
+        }
+
+        if ((await AuthorizationService.AuthorizeAsync(user, "IsUser")).Succeeded)
+        {
+            isUserByPolicy = true;
         }
     }
-
 }

@@ -1,0 +1,77 @@
+﻿@page "/claims"
+
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="content px-3">
+    <AuthorizeView>
+        <Authorized>
+            <span>Your Claims:</span>
+            <br />
+            @if (_claims.Count() > 0)
+            {
+                @foreach (var claim in _claims)
+                {
+                    <ul>
+                        <li>@claim.Type: @claim.Value</li>
+                    </ul>
+                }
+            }
+        </Authorized>
+        <NotAuthorized>
+            
+        </NotAuthorized>
+    </AuthorizeView>
+
+    @if (showAdminMessage)
+    {
+        <p>You can only see this if you have the Administrator role</p>
+    }
+
+    @if (showMarketingMessage)
+    {
+        <p>You can only see this if you have the Marketing role</p>
+    }
+    
+</div>
+
+@code {
+    private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
+
+    private bool showAdminMessage = false;
+    private bool showMarketingMessage = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetClaimsPrincipalData();
+        StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await GetClaimsPrincipalData();
+            StateHasChanged();
+        }
+    }
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        _claims = user.Claims;
+
+        if (user.IsInRole("Administration"))
+        {
+            showAdminMessage = true;
+        }
+
+        if (user.IsInRole("Marketing"))
+        {
+            showMarketingMessage = true;
+        }
+    }
+}

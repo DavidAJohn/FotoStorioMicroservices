@@ -36,7 +36,9 @@ namespace Identity.API.Extensions
                 });
 
             services.AddAuthorization(opt => {
-                opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Administrator"));
+                opt.AddPolicy(Policies.IsAdmin, Policies.IsAdminPolicy());
+                opt.AddPolicy(Policies.IsMarketing, Policies.IsMarketingPolicy());
+                opt.AddPolicy(Policies.IsUser, Policies.IsUserPolicy());
             });
 
             return services;

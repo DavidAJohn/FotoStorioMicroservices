@@ -29,7 +29,28 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IBasketService, BasketService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
-builder.Services.AddAuthorizationCore();
+builder.Services.AddApiAuthorization(opt => opt.UserOptions.RoleClaim = "role");
+builder.Services.AddAuthorizationCore(config =>
+{
+    config.AddPolicy("IsAdmin", policyBuilder =>
+    {
+        policyBuilder.RequireClaim("role", "Administrator");
+
+    });
+
+    config.AddPolicy("IsMarketing", policyBuilder =>
+    {
+        policyBuilder.RequireClaim("role", "Marketing");
+
+    });
+
+    config.AddPolicy("IsUser", policyBuilder =>
+    {
+        policyBuilder.RequireClaim("role", "User");
+
+    });
+});
+
 builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
