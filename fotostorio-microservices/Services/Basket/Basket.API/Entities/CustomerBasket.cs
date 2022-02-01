@@ -31,5 +31,9 @@ namespace Basket.API.Entities
                 return total;
             }
         }
+
+        public string ClientSecret { get; set; }
+
+        public string PaymentIntentId { get; set; }
     }
 }

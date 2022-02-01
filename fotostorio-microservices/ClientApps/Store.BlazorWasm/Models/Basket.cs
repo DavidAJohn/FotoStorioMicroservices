@@ -18,4 +18,8 @@ public class Basket
             return total;
         }
     }
+
+    public string ClientSecret { get; set; }
+
+    public string PaymentIntentId { get; set; }
 }

@@ -8,5 +8,7 @@ namespace Basket.API.Entities
         [Required]
         public string Id { get; set; }
         public List<BasketItem> BasketItems { get; set; } = new List<BasketItem>();
+        public string ClientSecret { get; set; }
+        public string PaymentIntentId { get; set; }
     }
 }
