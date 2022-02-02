@@ -34,6 +34,7 @@ namespace Ordering.API
             });
 
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
             services.AddAutoMapper(typeof(AutoMapperProfiles));
 
