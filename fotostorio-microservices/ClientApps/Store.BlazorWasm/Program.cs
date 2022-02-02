@@ -25,6 +25,7 @@ builder.Services.AddHttpClient("OrderAPI", c => c.BaseAddress =
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IBasketService, BasketService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddApiAuthorization(opt => opt.UserOptions.RoleClaim = "role");
 builder.Services.AddAuthorizationCore(config =>

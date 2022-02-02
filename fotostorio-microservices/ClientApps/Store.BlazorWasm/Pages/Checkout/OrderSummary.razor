@@ -14,6 +14,7 @@
 @inject IToastService toastService
 @inject IConfiguration config
 @inject IJSRuntime JsRuntime
+@inject IPaymentService paymentService
 
 <div class="h-auto">
     <div class="container max-w-7xl md:mt-8">
@@ -171,6 +172,11 @@
     protected override async Task OnInitializedAsync()
     {
         await GetBasket();
+
+        if (!string.IsNullOrEmpty(basketId))
+        {
+            await GetPaymentIntentResultAsync(basketId);
+        }
     }
 
     protected async override Task OnAfterRenderAsync(bool firstRender)     
@@ -179,9 +185,29 @@
         {
             // initialise the stripe js file 
             ShowPaymentOptions = true;
+
             await JsRuntime.InvokeVoidAsync("setupStripe", config["Stripe_PublishableKey"]); // wwwroot/js/stripe.js     
             firstRender = false;
-            if (basketItems == null) ShowPaymentOptions = false;
+
+            if (basketItems == null)
+            {
+                ShowPaymentOptions = false;
+            }
+        }
+    }
+
+    public async Task GetPaymentIntentResultAsync(string basketId)
+    {
+        var basket = await basketService.GetBasketByID(basketId);
+        var result = await paymentService.CreateOrUpdatePaymentIntent(basket);
+
+        if (result != null)
+        {
+            // add created payment intent details to the basket
+            basket.PaymentIntentId = result.PaymentIntentId;
+            basket.ClientSecret = result.ClientSecret;
+
+            await basketService.UpdateBasket(basket);
         }
     }
 
