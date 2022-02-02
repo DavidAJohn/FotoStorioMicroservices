@@ -203,7 +203,6 @@
             var clientSecret = "";
 
             var storedBasketId = await localStorage.GetItemAsync<string>("fs_basketId");
-
             var basket = await basketService.GetBasketByID(storedBasketId);
 
             if (basket != null)
@@ -300,9 +299,13 @@
             PostCode = addressDTO.PostCode
         };
 
+        var storedBasketId = await localStorage.GetItemAsync<string>("fs_basketId");
+        var basket = await basketService.GetBasketByID(storedBasketId);
+
         var orderToCreate = new OrderCreateDTO {
              Items = basketItems,
-             SendToAddress = address
+             SendToAddress = address,
+             PaymentIntentId = basket.PaymentIntentId
         };
 
         var newOrder = await orderService.CreateOrderAsync(orderToCreate);
@@ -318,12 +321,13 @@
             {
                 ShowErrors = true;
                 ErrorMessage = paymentResult;
+                toastService.ShowError(paymentResult, "Payment Failed");
             }
             else 
             {
                 ShowErrors = false;
 
-                // empty the basket
+                // empty the basket of items
                 await EmptyBasket();
 
                 // toast message
