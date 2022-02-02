@@ -13,11 +13,8 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddHttpClient("CatalogAPI", c => c.BaseAddress = 
+builder.Services.AddHttpClient("StoreGateway", c => c.BaseAddress = 
     new Uri(builder.Configuration["ApiSettings:StoreGatewayUri"]));
-
-builder.Services.AddHttpClient("BasketAPI", c => c.BaseAddress =
-    new Uri(builder.Configuration["ApiSettings:BasketUri"] + "/api/"));
 
 builder.Services.AddHttpClient("IdentityAPI", c => c.BaseAddress =
     new Uri(builder.Configuration["ApiSettings:IdentityUri"] + "/api/"));

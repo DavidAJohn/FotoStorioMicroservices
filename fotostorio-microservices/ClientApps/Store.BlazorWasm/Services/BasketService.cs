@@ -19,7 +19,7 @@ public class BasketService : IBasketService
     {
         try
         {
-            var client = _httpClient.CreateClient("BasketAPI");
+            var client = _httpClient.CreateClient("StoreGateway");
             var basket = await client.GetFromJsonAsync<Basket>($"Basket?id={id}");
 
             if (basket == null)
@@ -40,7 +40,7 @@ public class BasketService : IBasketService
     {
         try
         {
-            var client = _httpClient.CreateClient("BasketAPI");
+            var client = _httpClient.CreateClient("StoreGateway");
             var response = await client.PostAsJsonAsync($"Basket", basket);
 
             if (!response.IsSuccessStatusCode)
@@ -62,7 +62,7 @@ public class BasketService : IBasketService
     {
         try
         {
-            var client = _httpClient.CreateClient("BasketAPI");
+            var client = _httpClient.CreateClient("StoreGateway");
             await client.DeleteAsync($"Basket?id={id}");
         }
         catch (HttpRequestException ex)

@@ -68,7 +68,7 @@ public class ProductService : IProductService
                 request = new HttpRequestMessage(HttpMethod.Get, "Catalog");
             }
 
-            var client = _httpClient.CreateClient("CatalogAPI");
+            var client = _httpClient.CreateClient("StoreGateway");
             HttpResponseMessage response = await client.SendAsync(request);
 
             if (response.StatusCode == HttpStatusCode.OK)
@@ -101,7 +101,7 @@ public class ProductService : IProductService
     {
         try
         {
-            var client = _httpClient.CreateClient("CatalogAPI");
+            var client = _httpClient.CreateClient("StoreGateway");
             var product = await client.GetFromJsonAsync<Product>($"Catalog/{id}");
 
             return product;
@@ -117,7 +117,7 @@ public class ProductService : IProductService
     {
         try
         {
-            var client = _httpClient.CreateClient("CatalogAPI");
+            var client = _httpClient.CreateClient("StoreGateway");
             var products = await client.GetFromJsonAsync<List<Product>>($"Catalog?brandId={brandId}");
 
             return products;
@@ -133,7 +133,7 @@ public class ProductService : IProductService
     {
         try
         {
-            var client = _httpClient.CreateClient("CatalogAPI");
+            var client = _httpClient.CreateClient("StoreGateway");
             var products = await client.GetFromJsonAsync<List<Product>>($"Catalog?categoryId={categoryId}");
 
             return products;
@@ -149,7 +149,7 @@ public class ProductService : IProductService
     {
         try
         {
-            var client = _httpClient.CreateClient("CatalogAPI");
+            var client = _httpClient.CreateClient("StoreGateway");
             var products = await client.GetFromJsonAsync<List<Product>>($"Catalog?mountId={mountId}");
 
             return products;
@@ -165,7 +165,7 @@ public class ProductService : IProductService
     {
         try
         {
-            var client = _httpClient.CreateClient("CatalogAPI");
+            var client = _httpClient.CreateClient("StoreGateway");
             var brands = await client.GetFromJsonAsync<List<Brand>>("Brands");
 
             return brands;
@@ -181,7 +181,7 @@ public class ProductService : IProductService
     {
         try
         {
-            var client = _httpClient.CreateClient("CatalogAPI");
+            var client = _httpClient.CreateClient("StoreGateway");
             var categories = await client.GetFromJsonAsync<List<Category>>("Categories");
 
             return categories;
@@ -197,7 +197,7 @@ public class ProductService : IProductService
     {
         try
         {
-            var client = _httpClient.CreateClient("CatalogAPI");
+            var client = _httpClient.CreateClient("StoreGateway");
             var mounts = await client.GetFromJsonAsync<List<Mount>>("Mounts");
 
             return mounts;
@@ -213,7 +213,7 @@ public class ProductService : IProductService
     {
         try
         {
-            var client = _httpClient.CreateClient("CatalogAPI");
+            var client = _httpClient.CreateClient("StoreGateway");
             var products = await client.GetFromJsonAsync<List<Product>>($"Catalog/SpecialOffers?sort={sortBy}");
 
             return products;
