@@ -44,6 +44,17 @@ namespace Ordering.API.Controllers
                 return BadRequest();
             }
 
+            if (string.IsNullOrWhiteSpace(orderToCreate.SendToAddress.PostCode) ||
+                string.IsNullOrWhiteSpace(orderToCreate.SendToAddress.City) ||
+                string.IsNullOrWhiteSpace(orderToCreate.SendToAddress.County) ||
+                string.IsNullOrWhiteSpace(orderToCreate.SendToAddress.Street) ||
+                string.IsNullOrWhiteSpace(orderToCreate.SendToAddress.FirstName) ||
+                string.IsNullOrWhiteSpace(orderToCreate.SendToAddress.LastName)
+                )
+            {
+                return BadRequest();
+            }
+
             var order = _mapper.Map<Order>(orderToCreate);
 
             try
