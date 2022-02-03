@@ -106,11 +106,30 @@ namespace Ordering.API.Data
             return order;
         }
 
+        public async Task<bool> UpdateOrderAsync(Order order)
+        {
+            _orderDbContext.Orders.Update(order);
+            var saved = await _orderDbContext.SaveChangesAsync();
+
+            return saved > 0;
+        }
+
         public async Task DeleteOrderAsync(Order order)
         {
             _orderDbContext.Orders.Remove(order);
 
             await _orderDbContext.SaveChangesAsync();
+        }
+
+        public async Task<Order> UpdateOrderPaymentStatus(string paymentIntentId, OrderStatus status)
+        {
+            var order = await GetOrderByPaymentIntentIdAsync(paymentIntentId);
+            if (order == null) return null;
+
+            order.Status = status;
+            await UpdateOrderAsync(order);
+
+            return order;
         }
     }
 }
