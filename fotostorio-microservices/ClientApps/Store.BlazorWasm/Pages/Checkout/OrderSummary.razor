@@ -171,6 +171,9 @@
 
 @code {
     [CascadingParameter]
+    public ErrorLogger Error { get; set; }
+
+    [CascadingParameter]
     public AppState appState { get; set; }
 
     private List<BasketItem> basketItems { get; set; }
@@ -188,18 +191,12 @@
     protected override async Task OnInitializedAsync()
     {
         await GetBasket();
-
-        if (!string.IsNullOrEmpty(basketId))
-        {
-            await GetPaymentIntentResultAsync(basketId);
-        }
     }
 
     protected async override Task OnAfterRenderAsync(bool firstRender)     
     {        
         if (firstRender)         
         {
-            // initialise the stripe js file 
             ShowPaymentOptions = true;
             var clientSecret = "";
 
@@ -209,9 +206,22 @@
             if (basket != null)
             {
                 clientSecret = basket.ClientSecret;
+
+                try
+                {
+                    // initialise our custom stripe js file, so the card entry form is displayed 
+                    await JsRuntime.InvokeVoidAsync("setupStripe", config["Stripe_PublishableKey"], clientSecret); // wwwroot/js/stripe.js
+
+                    // get a payment intent from Stripe
+                    await GetPaymentIntentResultAsync(basket.Id);
+                }
+                catch (JSException ex)
+                {
+                    Error.ProcessError(ex, "Pages/Checkout/OrderSummary.OnAfterRenderAsync()");
+                    ErrorMessage = "Could not set up payment options. Try reloading the page and/or logging in again";
+                }
             }
 
-            await JsRuntime.InvokeVoidAsync("setupStripe", config["Stripe_PublishableKey"], clientSecret); // wwwroot/js/stripe.js     
             firstRender = false;
 
             if (basketItems == null)
@@ -313,10 +323,19 @@
 
         if (newOrder != null)
         {
-            // invoke js method to submit payment
-            string paymentResult = await JsRuntime.InvokeAsync<string>("payWithCard");
-
+            string paymentResult = "";
             SubmitSpinnerHidden = "hidden";
+
+            try
+            {
+                // invoke js method to submit payment
+                paymentResult = await JsRuntime.InvokeAsync<string>("payWithCard");
+            }
+            catch (JSException ex)
+            {
+                Error.ProcessError(ex, "Pages/Checkout/OrderSummary.PlaceOrder()");
+                paymentResult = "There was a problem sending your payment details";
+            }
 
             if (paymentResult != "success")
             {
