@@ -2,9 +2,9 @@
 let cardRef;
 let clientSecret;
 
-function setupStripe(publishable_key, client_secret) {
-    setupCard(publishable_key);
-    clientSecret = client_secret;
+function setupStripe(obj) {
+    setupCard(obj.key);
+    clientSecret = obj.secret;
 }
 
 const setupCard = (publishable_key) => {

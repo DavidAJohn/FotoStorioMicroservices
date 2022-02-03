@@ -209,8 +209,14 @@
 
                 try
                 {
+                    var jsParams = new
+                    {
+                        Key = config["Stripe_PublishableKey"],
+                        Secret = clientSecret
+                    };
+
                     // initialise our custom stripe js file, so the card entry form is displayed 
-                    await JsRuntime.InvokeVoidAsync("setupStripe", config["Stripe_PublishableKey"], clientSecret); // wwwroot/js/stripe.js
+                    await JsRuntime.InvokeVoidAsync("setupStripe", jsParams); // wwwroot/js/stripe.js
 
                     // get a payment intent from Stripe
                     await GetPaymentIntentResultAsync(basket.Id);
