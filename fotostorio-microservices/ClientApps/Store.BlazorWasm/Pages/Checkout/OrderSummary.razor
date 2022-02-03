@@ -199,12 +199,15 @@
         {
             ShowPaymentOptions = true;
             var clientSecret = "";
-
             var storedBasketId = await localStorage.GetItemAsync<string>("fs_basketId");
-            var basket = await basketService.GetBasketByID(storedBasketId);
-
-            if (basket != null)
+            
+            if (storedBasketId != null)
             {
+                // get a payment intent from Stripe and update the basket
+                await GetPaymentIntentResultAsync(storedBasketId);
+
+                // get the client secret from the basket
+                var basket = await basketService.GetBasketByID(storedBasketId);
                 clientSecret = basket.ClientSecret;
 
                 try
@@ -217,9 +220,6 @@
 
                     // initialise our custom stripe js file, so the card entry form is displayed 
                     await JsRuntime.InvokeVoidAsync("setupStripe", jsParams); // wwwroot/js/stripe.js
-
-                    // get a payment intent from Stripe
-                    await GetPaymentIntentResultAsync(basket.Id);
                 }
                 catch (JSException ex)
                 {

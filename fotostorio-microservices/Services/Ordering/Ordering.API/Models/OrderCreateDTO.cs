@@ -28,5 +28,7 @@ namespace Ordering.API.Models
         [JsonConverter(typeof(JsonStringEnumConverter))]
         [Required]
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
+
+        public string PaymentIntentId { get; set; }
     }
 }
