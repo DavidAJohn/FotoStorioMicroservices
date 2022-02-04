@@ -6,13 +6,14 @@
 @using Store.BlazorWasm.Extensions
 
 @inject IOrderService orderService
+@inject NavigationManager navigationManager
 
 @attribute [Authorize]
 
 <div class="h-screen">
-    <div class="container max-w-7xl md:mt-8">
+    <div class="px-0 md:container md:max-w-7xl md:mt-8">
         <div class="w-full p-4 rounded-md shadow-md bg-white focus:outline-none z-10">
-            <div class="text-lg text-center md:text-xl lg:text-2xl font-bold">
+            <div class="text-lg text-center md:text-xl lg:text-2xl font-bold mb-4">
                 Your Orders
             </div>
             @if (errorMessage != "")
@@ -23,26 +24,53 @@
                     </div>
                 </div>
             }
-            else if (orders != null)
+            else if (orders == null)
             {
-                <div class="p-4 text-center w-auto">
-                    @foreach (OrderDetailsDTO order in orders)
-                    {
-                        <div class="font-semibold text-md">
-                            <div class="inline-block mr-2">Order #@order.Id</div>
-                            <div class="inline-block mr-2">@order.OrderDate.ToUKStandardDate()</div>
-                            <div class="inline-block mr-2">£@order.Total</div>
-                            <div class="inline-block mr-2">@order.Status</div>
-                        </div>
-                    }
-                </div>
+                <text>Loading orders...</text>
             }
             else
             {
-                <div class="p-4 text-center">
-                    No previous orders
-                </div>
+                @if (orders.Count() > 0)
+                {
+                    <div class="p-2 md:p-4 text-center w-auto text-sm lg:text-base">
+                        <div class="flex flex-row mb-2 font-bold uppercase">
+                            <div class="px-1 w-0 hidden md:block md:w-1/5 md:px-2">Order #</div>
+                            <div class="px-1 w-1/3 md:w-1/5 md:px-2">Date</div>
+                            <div class="px-1 w-1/3 text-right md:w-1/5 md:px-2 sm:text-center">Total</div>
+                            <div class="px-1 w-0 hidden md:block md:w-1/5 md:px-2">Status</div>
+                            <div class="px-1 w-1/3 md:w-1/5 md:px-2">&nbsp;</div>
+                        </div>
+                        <div class="font-normal">
+                            @foreach (OrderDetailsDTO order in orders)
+                            {
+                                <div class="flex flex-row items-center -mb-3">
+                                    <div class="px-1 w-0 hidden md:block md:w-1/5 md:px-2">@order.Id</div>
+                                    <div class="px-1 w-1/3 md:w-1/5 md:px-2">@order.OrderDate.ToUKStandardDate()</div>
+                                    <div class="px-1 w-1/3 text-right md:w-1/5 md:px-2 sm:text-center">£@order.Total</div>
+                                    <div class="px-1 w-0 hidden md:block md:w-1/5 md:px-2">@order.Status</div>
+                                    <div class="px-1 w-1/3 md:w-1/5 md:px-2">
+                                        <button type="button" class="hidden lg:block btn-fotofuchsia fotofuchsia-ripple" @onclick="() => ViewOrderDetails(order.Id)">View Order</button>
+                                        <button type="button" class="lg:hidden btn-fotofuchsia fotofuchsia-ripple" @onclick="() => ViewOrderDetails(order.Id)">View</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="p-4 text-center">
+                        No previous orders found
+                    </div>
+                    <div class="mt-4 text-center">
+                        <NavButton
+                            Href="/"
+                            ButtonText="Back to Home page"
+                        />
+                    </div>
+                }
             }
+            
         </div>
     </div>
 </div>
@@ -70,5 +98,10 @@
             Error.ProcessError(ex, "Pages/Account/Order.GetOrders()");
             errorMessage = "Could not retrieve list of orders";
         }
+    }
+
+    private void ViewOrderDetails(int orderId)
+    {
+        navigationManager.NavigateTo($"/account/orders/{orderId}");
     }
 }
