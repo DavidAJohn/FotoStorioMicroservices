@@ -1,9 +1,95 @@
 ﻿@page "/checkout/success"
+@page "/checkout/success/{id:int}"
+
+@using Store.BlazorWasm.Contracts
+@using Store.BlazorWasm.DTOs
+
+@inject IOrderService orderService
 
 @attribute [Authorize]
 
-<h3>Payment Succeeded</h3>
-
-<div>
-    <NavLink href="/account/orders">View Your Orders</NavLink>
+<div class="min-h-full">
+    <div class="mt-4 md:container md:max-w-7xl md:mt-8 mb-24">
+        <div class="w-full px-4 md:px-12 py-12 rounded-md shadow-md bg-white focus:outline-none z-10">
+            @if (errorMessage != "")
+            {
+                <div class="mx-2 animate-pulse">
+                    <div class="alert-box text-center" role="alert">
+                        <span class="block sm:inline">@errorMessage</span>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <NavButton
+                        Href="/"
+                        ButtonText="Back to Home page"
+                    />
+                </div>
+            }
+            else if (orderDetails != null)
+            {
+                <div class="mb-4 flex flex-row justify-center items-center">
+                    <div class="text-green-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-16 md:w-16" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-2 text-lg md:text-xl lg:text-2xl font-bold relative">Thanks for your order!</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-lg font-bold mb-4">We have received your order (ref: #@orderDetails.Id) and will arrange for delivery pending successful payment</div>
+                    <div class="text-lg font-bold mb-8">An email confirmation has been sent to: @orderDetails.BuyerEmail</div>
+                    <div class="text-md font-bold">
+                        <NavButton
+                            Href="@($"/account/orders/{@orderDetails.Id}")"
+                            ButtonText="@($"View the details of order #{@Id}")"
+                        />
+                    </div>
+                    <div class="text-md font-bold -mt-2">
+                        <NavButton
+                            Href="/account/orders/"
+                            ButtonText="View all of your orders"
+                        />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [CascadingParameter]
+    public ErrorLogger Error { get; set; }
+
+    private OrderDetailsDTO orderDetails;
+    private string errorMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetOrder();
+    }
+    
+    private async Task GetOrder()
+    {
+        try
+        {
+            orderDetails = await orderService.GetOrderByIdAsync(Id);
+
+            if (orderDetails != null)
+            {
+                errorMessage = "";
+            }
+            else
+            {
+                errorMessage = "Could not retrieve details of this order";
+            }
+        }
+        catch (Exception ex)
+        {
+            Error.ProcessError(ex, "Pages/Checkout/PaymentSuccess.GetOrder()");
+            errorMessage = "Could not retrieve details of this order";
+        }
+    }
+}
