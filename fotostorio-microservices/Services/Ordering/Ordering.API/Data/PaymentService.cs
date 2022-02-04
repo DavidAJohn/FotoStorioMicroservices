@@ -29,7 +29,7 @@ namespace Ordering.API.Data
 
             foreach (var item in basket)
             {
-                basketTotal += (long)item.Total;
+                basketTotal += (long)(item.Total * 100); // supplies amount to Stripe as smallest currency unit (pence)
             }
 
             // create PaymentIntentService instance
@@ -44,7 +44,7 @@ namespace Ordering.API.Data
             {
                 var options = new PaymentIntentCreateOptions
                 {
-                    Amount = basketTotal,
+                    Amount = basketTotal, 
                     Currency = "gbp",
                     PaymentMethodTypes = new List<string> { "card" }
                 };
