@@ -360,7 +360,7 @@
                 toastService.ShowSuccess("Thanks, your order has been placed!", "Order Placed");
 
                 // navigate away to confirmation page
-                navigationManager.NavigateTo("/checkout/success");
+                navigationManager.NavigateTo($"/checkout/success/{newOrder.OrderId}");
             }
         }
         else
