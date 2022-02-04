@@ -5,9 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Ordering.API.Contracts;
 using Ordering.API.Entities;
+using Ordering.API.Extensions;
+using Ordering.API.Helpers;
 using Ordering.API.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Ordering.API.Controllers
@@ -20,12 +24,14 @@ namespace Ordering.API.Controllers
         private readonly ILogger<OrdersController> _logger;
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public OrdersController(ILogger<OrdersController> logger, IOrderRepository orderRepository, IMapper mapper)
+        public OrdersController(ILogger<OrdersController> logger, IOrderRepository orderRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _orderRepository = orderRepository;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// POST api/orders
@@ -63,8 +69,7 @@ namespace Ordering.API.Controllers
 
                 // 2 - if token is valid, continue and create the order, otherwise return a 401 Not Authorised response
 
-                //var email = _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                var email = "dave@test.com";
+                var email = _httpContextAccessor.HttpContext.GetClaimValueByType("email");
                 order.BuyerEmail = email;
 
                 var createdOrder = await _orderRepository.CreateOrderAsync(order);
@@ -95,8 +100,8 @@ namespace Ordering.API.Controllers
         {
             try
             {
-                //var email = _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                var email = "dave@test.com";
+                var email = _httpContextAccessor.HttpContext.GetClaimValueByType("email");
+
                 var order = await _orderRepository.GetOrderByIdAsync(id, email);
 
                 if (order == null)
@@ -132,8 +137,7 @@ namespace Ordering.API.Controllers
         {
             try
             {
-                //var email = _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                var email = "dave@test.com";
+                var email = _httpContextAccessor.HttpContext.GetClaimValueByType("email");
 
                 var orders = await _orderRepository.GetOrdersForUserAsync(email);
 

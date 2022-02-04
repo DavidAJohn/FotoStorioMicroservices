@@ -27,17 +27,17 @@ public class OrderService : IOrderService
             return null;
         }
 
-        //var storedToken = await _localStorage.GetItemAsync<string>("authToken");
+        var storedToken = await _localStorage.GetItemAsync<string>("authToken");
 
-        //if (string.IsNullOrWhiteSpace(storedToken))
-        //{
-        //    return null;
-        //}
+        if (string.IsNullOrWhiteSpace(storedToken))
+        {
+            return null;
+        }
 
         try
         {
             var client = _httpClient.CreateClient("OrderAPI");
-            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
 
             HttpContent serializedContent = new StringContent(JsonSerializer.Serialize(order));
             serializedContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
@@ -96,17 +96,17 @@ public class OrderService : IOrderService
 
     public async Task<List<OrderDetailsDTO>> GetOrdersForUserAsync()
     {
-        //var storedToken = await _localStorage.GetItemAsync<string>("authToken");
+        var storedToken = await _localStorage.GetItemAsync<string>("authToken");
 
-        //if (string.IsNullOrWhiteSpace(storedToken))
-        //{
-        //    return null;
-        //}
+        if (string.IsNullOrWhiteSpace(storedToken))
+        {
+            return null;
+        }
 
         try
         {
             var client = _httpClient.CreateClient("OrderAPI");
-            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
 
             var orders = await client.GetFromJsonAsync<List<OrderDetailsDTO>>("orders");
 
