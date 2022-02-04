@@ -66,6 +66,7 @@ namespace Ordering.API.Controllers
             try
             {
                 // 1 - use an http client to check jwt validity with identity api
+                var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
 
                 // 2 - if token is valid, continue and create the order, otherwise return a 401 Not Authorised response
 
