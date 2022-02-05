@@ -98,12 +98,18 @@
                                     </div>
                                 </EditForm>
                             </div>
-                            <div class="place-content-center">
-                                <button type="button" class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm font-semibold hover:opacity-90 fotofuchsia-ripple" 
-                                    @onclick="ClearAddress">
-                                    Clear Address
-                                </button>
-                            </div>
+                            @if (ShowAddressExplanationText == true)
+                            {
+                                <div class="place-content-center text-sm font-semibold text-gray-700 my-2 px-12 animate-pulse">
+                                    Your address has been populated from your most recent order
+                                </div>
+                                <div class="place-content-center">
+                                    <button type="button" class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm font-semibold hover:opacity-90 fotofuchsia-ripple" 
+                                        @onclick="ClearAddress">
+                                        Clear Address
+                                    </button>
+                                </div>
+                            }
                         </div>
                     </div>
 
@@ -194,6 +200,7 @@
     private bool ShowPaymentOptions = false;
     private string SubmitSpinnerHidden = "hidden";
     private string AddressFormID = "address-form";
+    private bool ShowAddressExplanationText = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -201,6 +208,11 @@
 
         // populate the address form with the user's default address (if they have one)
         addressDTO = await accountService.GetUserAddressAsync();
+
+        if (!string.IsNullOrWhiteSpace(addressDTO.Street))
+        {
+            ShowAddressExplanationText = true;
+        }
     }
 
     protected async override Task OnAfterRenderAsync(bool firstRender)     
