@@ -24,19 +24,19 @@
                 <div class="mb-4 text-lg md:text-xl lg:text-2xl font-bold">
                     Sign in to your account
                 </div>
-                <div class="mb-4 font-semibold text-sm lg:text-md text-gray-400">
+                <div class="mb-4 font-semibold text-sm lg:text-base text-gray-400">
                     <a href="/register" class="hover:text-blue-800">Don't have an account yet? Click here to register</a>
                 </div>
                 <div class="px-2 md:px-4 py-2">
                     <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
                         <DataAnnotationsValidator />
                         <div class="mb-3 w-full text-left">
-                            <label class="text-md font-semibold mb-1 ml-0">Email Address</label>
+                            <label class="text-base font-semibold mb-1 ml-0">Email Address</label>
                             <InputText Id="email" Class="px-2 py-1 rounded-sm focus:border-blue-700 border-3 outline-none w-full" @bind-Value="loginModel.Email" />
                             <ValidationMessage For="@(() => loginModel.Email)" />
                         </div>
                         <div class="mb-4 w-full text-left">
-                            <label class="text-md font-semibold mb-1 ml-0">Password</label>
+                            <label class="text-base font-semibold mb-1 ml-0">Password</label>
                             <InputText Id="password" type="password" Class="px-2 py-1 rounded-sm focus:border-blue-700 border-3 outline-none w-full" @bind-Value="loginModel.Password" />
                             <ValidationMessage For="@(() => loginModel.Password)" />
                         </div>
@@ -47,7 +47,7 @@
                         </div>
                     </EditForm>
                 </div>
-                <div class="mb-4 font-semibold text-sm lg:text-md text-gray-400">
+                <div class="mb-4 font-semibold text-sm lg:text-base text-gray-400">
                     <a href="#" class="hover:text-blue-800">Forgotten your password?</a>
                 </div>
                 @if (ShowErrors)

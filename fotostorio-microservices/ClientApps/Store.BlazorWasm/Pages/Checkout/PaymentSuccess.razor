@@ -38,13 +38,13 @@
                 <div class="text-center">
                     <div class="text-lg font-bold mb-4">We have received your order (ref: #@orderDetails.Id) and will arrange for delivery pending successful payment</div>
                     <div class="text-lg font-bold mb-8">An email confirmation has been sent to: @orderDetails.BuyerEmail</div>
-                    <div class="text-md font-bold">
+                    <div class="text-base font-bold">
                         <NavButton
                             Href="@($"/account/orders/{@orderDetails.Id}")"
                             ButtonText="@($"View the details of order #{@Id}")"
                         />
                     </div>
-                    <div class="text-md font-bold -mt-2">
+                    <div class="text-base font-bold -mt-2">
                         <NavButton
                             Href="/account/orders/"
                             ButtonText="View all of your orders"

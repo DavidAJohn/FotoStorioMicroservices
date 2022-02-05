@@ -30,9 +30,9 @@
                 <div class="relative inline-block">
                     <!-- Sort By dropdown -->
                     <div class="text-left">
-                        <div class="text-gray-700 mr-2 py-2 text-md font-medium inline">Sort Products By:</div>
+                        <div class="text-gray-700 mr-2 py-2 text-base font-medium inline">Sort Products By:</div>
                         <div class="inline-block">
-                            <button type="button" class="inline-flex justify-center w-72 rounded-sm border border-gray-700 shadow-sm px-4 py-2 bg-white text-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" 
+                            <button type="button" class="inline-flex justify-center w-72 rounded-sm border border-gray-700 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" 
                                 id="menu-button"
                                 @onclick="ToggleDropdown"
                             >
@@ -50,7 +50,7 @@
                                         @foreach (DropdownItem item in dropdownOptions)
                                         {
                                             <NavLink  
-                                                class="block px-4 py-1 text-md text-center font-semibold text-gray-700 hover:bg-gray-200 hover:text-gray-700 " 
+                                                class="block px-4 py-1 text-base text-center font-semibold text-gray-700 hover:bg-gray-200 hover:text-gray-700 " 
                                                 role="menuitem" 
                                                 tabindex="-1" 
                                                 id=@($"menu-item-{item.Id}")
@@ -78,13 +78,13 @@
                     <div>
                         <div class="text-2xl font-bold mb-3">@product.Name</div>
                         <div class="mb-2">
-                            <span class="block text-gray-500 text-md mb-1">Brand: @product.Brand</span>
-                            <span class="block text-gray-500 text-md">Category: @product.Category</span>
+                            <span class="block text-gray-500 text-base mb-1">Brand: @product.Brand</span>
+                            <span class="block text-gray-500 text-base">Category: @product.Category</span>
                         </div>
                         @if (product.SalePrice != 0 && product.SalePrice < product.Price)
                         {
                             <div class="mb-2">
-                                <span class="text-gray-500 text-md line-through mr-4">Was: £@product.Price</span>
+                                <span class="text-gray-500 text-base line-through mr-4">Was: £@product.Price</span>
                                 <span class="inline text-gray-500 text-lg font-semibold mr-3">Now: £@product.SalePrice</span>
                                 <span class="inline text-fotoblue text-lg font-bold">(Save £@(@product.Price - product.SalePrice))</span>
                             </div>
@@ -101,7 +101,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
                             </span>
-                            <span class="text-gray-50 text-md ml-3" @onclick="() => AddProductToBasket(product.Id)">Add to Basket</span>
+                            <span class="text-gray-50 text-base ml-3" @onclick="() => AddProductToBasket(product.Id)">Add to Basket</span>
                         </button>
                         <div class="text-base mb-2 text-justify">@product.Description</div>
                     </div>
@@ -114,7 +114,7 @@
                 <p>We are not currently offering any discounted products</p>
             </div>
             <div class="pt-8 text-center mb-64">
-                <button class="p-2 bg-fotofuchsia text-white rounded-sm text-md font-semibold hover:opacity-90 fotofuchsia-ripple" 
+                <button class="p-2 bg-fotofuchsia text-white rounded-sm text-base font-semibold hover:opacity-90 fotofuchsia-ripple" 
                     @onclick="GoToHomePage"
                 >
                     Go to Home page

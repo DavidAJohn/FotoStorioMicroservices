@@ -24,29 +24,29 @@
                 <div class="mb-4 text-lg md:text-xl lg:text-2xl font-bold">
                     Register a new account
                 </div>
-                <div class="mb-4 font-semibold text-sm lg:text-md text-gray-400">
+                <div class="mb-4 font-semibold text-sm lg:text-base text-gray-400">
                     <a href="/login" class="hover:text-blue-800">Already have an account? Click here to log in</a>
                 </div>
                 <div class="px-2 md:px-4 py-2">
                     <EditForm Model="RegisterModel" OnValidSubmit="HandleRegistration">
                         <DataAnnotationsValidator />
                         <div class="mb-3 w-full text-left">
-                            <label class="text-md font-semibold mb-1 ml-0">Your Name</label>
+                            <label class="text-base font-semibold mb-1 ml-0">Your Name</label>
                             <InputText Id="displayName" class="px-2 py-1 rounded-sm focus:border-blue-700 border-3 outline-none w-full" @bind-Value="RegisterModel.DisplayName" />
                             <ValidationMessage For="@(() => RegisterModel.DisplayName)" />
                         </div>
                         <div class="mb-4 w-full text-left">
-                            <label class="text-md font-semibold mb-1 ml-0">Email Address</label>
+                            <label class="text-base font-semibold mb-1 ml-0">Email Address</label>
                             <InputText Id="email" class="px-2 py-1 rounded-sm focus:border-blue-700 border-3 outline-none w-full" @bind-Value="RegisterModel.Email" />
                             <ValidationMessage For="@(() => RegisterModel.Email)" />
                         </div>
                         <div class="mb-4 w-full text-left">
-                            <label class="text-md font-semibold mb-1 ml-0">Password</label>
+                            <label class="text-base font-semibold mb-1 ml-0">Password</label>
                             <InputText Id="password" type="password" class="px-2 py-1 rounded-sm focus:border-blue-700 border-3 outline-none w-full" @bind-Value="RegisterModel.Password" />
                             <ValidationMessage For="@(() => RegisterModel.Password)" />
                         </div>
                         <div class="mb-4 w-full text-left">
-                            <label class="text-md font-semibold mb-1 ml-0">Confirm Password</label>
+                            <label class="text-base font-semibold mb-1 ml-0">Confirm Password</label>
                             <InputText Id="confirmPassword" type="password" class="px-2 py-1 rounded-sm focus:border-blue-700 border-3 outline-none w-full" @bind-Value="RegisterModel.ConfirmPassword"/>
                             <ValidationMessage For="@(() => RegisterModel.ConfirmPassword)" />
                         </div>

@@ -37,7 +37,7 @@
                         />
                     </div>
                     <div class="ml-1">
-                        <button class="p-2 bg-blue-900 text-white rounded-sm text-md font-semibold hover:opacity-90 fotoblue-ripple" @onclick="async () => await ResetSearch()">
+                        <button class="p-2 bg-blue-900 text-white rounded-sm text-base font-semibold hover:opacity-90 fotoblue-ripple" @onclick="async () => await ResetSearch()">
                             Clear
                         </button>
                     </div>
@@ -45,9 +45,9 @@
                 <div class="relative inline-block">
                     <!-- Sort By dropdown -->
                     <div class="text-center mt-8 lg:mt-0 lg:text-left">
-                        <div class="text-gray-700 mr-2 py-2 text-md font-medium inline">Sort Products By:</div>
+                        <div class="text-gray-700 mr-2 py-2 text-base font-medium inline">Sort Products By:</div>
                         <div class="inline-block">
-                            <button type="button" class="inline-flex md:flex-grow justify-center w-72 rounded-sm border border-gray-700 shadow-sm px-4 py-2 bg-white text-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" 
+                            <button type="button" class="inline-flex md:flex-grow justify-center w-72 rounded-sm border border-gray-700 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" 
                                 id="menu-button"
                                 @onclick="ToggleDropdown"
                             >
@@ -65,7 +65,7 @@
                                         @foreach (DropdownItem item in dropdownOptions)
                                         {
                                             <NavLink  
-                                                class="block px-4 py-1 text-md text-center font-semibold text-gray-700 hover:bg-gray-200 hover:text-gray-700 " 
+                                                class="block px-4 py-1 text-base text-center font-semibold text-gray-700 hover:bg-gray-200 hover:text-gray-700 " 
                                                 role="menuitem" 
                                                 tabindex="-1" 
                                                 id=@($"menu-item-{item.Id}")
@@ -83,7 +83,7 @@
 
             <!-- show a 'currently displaying' section to indicate how the products are being filtered -->
             <div class="flex flex-col sm:flex-row justify-center items-center mt-4">
-                <div class="text-md font-semibold mr-2 mt-1">Currently displaying:</div>
+                <div class="text-base font-semibold mr-2 mt-1">Currently displaying:</div>
 
                 @if (string.IsNullOrEmpty(productParams.Search) && productParams.CategoryId == 0 && productParams.BrandId == 0)
                 {
@@ -176,7 +176,7 @@
                 <p>No products found...</p>
             </div>
             <div class="pt-8 text-center mb-64">
-                <button class="p-2 bg-fotofuchsia text-white rounded-sm text-md font-semibold hover:opacity-90 fotofuchsia-ripple" 
+                <button class="p-2 bg-fotofuchsia text-white rounded-sm text-base font-semibold hover:opacity-90 fotofuchsia-ripple" 
                     @onclick="GoToHomePage"
                 >
                     Go to Home page
