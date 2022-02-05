@@ -19,14 +19,14 @@
 @inject NavigationManager navigationManager
 
 <div class="h-auto">
-    <div class="container max-w-7xl md:mt-8">
+    <div class="px-2 lg:container lg:max-w-7xl md:mt-8">
         @if (basketItems != null)
         {
             @if (basketItems.Count > 0)
             {
                 <div class="w-full p-4 rounded-md shadow-md bg-white focus:outline-none z-10">
                     
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <div class="col-span-1">
                             <div class="text-lg text-center md:text-xl lg:text-2xl font-bold">
                                 Order Summary
@@ -34,7 +34,7 @@
                             <div class="p-4 text-right" >
                                 @foreach (BasketItem item in basketItems)
                                 {
-                                    <div class="font-semibold text-base flex items-center justify-end">
+                                    <div class="font-semibold text-sm md:text-base flex items-center justify-end">
                                         <div class="inline-block w-16 h-auto mr-2"><img src="@item.Product.ImageUrl" /></div>
                                         <div class="inline-block flex-shrink-0">@item.Quantity &nbsp;x&nbsp; @item.Product.Name &nbsp;=</div>
                                         <div class="ml-2 font-bold">£@item.Total</div>
@@ -47,16 +47,16 @@
                                     </div>
                                 }
                             </div>
-                            <div class="mt-2 px-4 text-right text-base font-semibold">
+                            <div class="my-2 px-4 text-right text-sm md:text-base font-semibold">
                                 Total:&nbsp; <span class="inline font-bold">£@basketTotal.ToString("N2")</span>
                             </div>
                             
                         </div>
-                        <div class="col-span-1 bg-gray-50 rounded-sm text-center h-full px-16">
+                        <div class="col-span-1 bg-gray-50 rounded-sm text-center h-full px-2.5 lg:px-8">
                             <div class="text-lg text-center md:text-xl lg:text-2xl font-bold mb-4">
                                 Delivery Address
                             </div>
-                            <div class="flex justify-center px-4 md:px-8 py-2">
+                            <div class="flex justify-center px-2.5 lg:px-8 py-2">
                                 <EditForm id="@AddressFormID" name="@AddressFormID" Model="@addressDTO" OnValidSubmit="PlaceOrder">
                                     <DataAnnotationsValidator />
                                     <div class="w-full inline-flex">
@@ -100,7 +100,7 @@
                             </div>
                             @if (ShowAddressExplanationText == true)
                             {
-                                <div class="place-content-center text-sm font-semibold text-gray-700 my-2 px-12 animate-pulse">
+                                <div class="place-content-center text-sm font-semibold text-gray-700 my-2 px-4 lg:px-12 animate-pulse">
                                     Your address has been populated from your most recent order
                                 </div>
                                 <div class="place-content-center">
@@ -121,8 +121,8 @@
                         <div class="flex justify-center">
                             <div>
                                 <form id="payment-form" class="justify-items-center">
-                                    <input id="name-on-card" class="w-112 p-3 rounded-md shadow-sm border border-gray-300 text-base text-gray-900 mb-1" placeholder="Name on Card" />
-                                    <div id="card-element" class="w-112 p-3 rounded-md shadow-sm border border-gray-300">
+                                    <input id="name-on-card" class="w-96 text-base md:w-112 p-3 rounded-md shadow-sm border border-gray-300 text-gray-900 mb-1" placeholder="Name on Card" />
+                                    <div id="card-element" class="w-96 md:w-112 p-3 rounded-md shadow-sm border border-gray-300">
                                         <!-- Stripe injects the Card Element here -->
                                     </div>
                                     <div id="card-error" class="mt-3 flex justify-center font-semibold text-red-500 animate-pulse">
