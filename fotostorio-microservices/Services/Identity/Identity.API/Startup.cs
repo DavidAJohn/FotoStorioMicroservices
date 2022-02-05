@@ -1,11 +1,13 @@
 using Identity.API.Contracts;
 using Identity.API.Data;
 using Identity.API.Extensions;
+using Identity.API.Helpers;
 using Identity.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +40,8 @@ namespace Identity.API
 
             services.AddScoped<ITokenService, TokenService>();
 
+            services.AddHttpContextAccessor();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -52,6 +56,17 @@ namespace Identity.API
                     .WithMethods("POST", "GET", "PUT")
                     .AllowAnyHeader()
                     .AllowCredentials());
+            });
+
+            services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+            services.AddMvc(options =>
+            {
+                var noContentFormatter = options.OutputFormatters.OfType<HttpNoContentOutputFormatter>().FirstOrDefault();
+                if (noContentFormatter != null)
+                {
+                    noContentFormatter.TreatNullValueAsNoContent = false;
+                }
             });
         }
 

@@ -126,14 +126,14 @@ services:
     ports:
       - "8012:80"
 
-  identity.api:
-    container_name: identity.api
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:IdentityConnection=Server=identitydb;Database=IdentityDb;User Id=sa;Password=aDmin1234!;"
-      - "JwtIssuer=http://identity.api"
-      - "JwtAudience=http://identity.api"
-    depends_on:
-      - identitydb
-    ports:
-      - "8005:80"
+  #identity.api:
+  #  container_name: identity.api
+  #  environment:
+  #    - ASPNETCORE_ENVIRONMENT=Development
+  #    - "ConnectionStrings:IdentityConnection=Server=identitydb;Database=IdentityDb;User Id=sa;Password=aDmin1234!;"
+  #    - "JwtIssuer=http://identity.api"
+  #    - "JwtAudience=http://identity.api"
+  #  depends_on:
+  #    - identitydb
+  #  ports:
+  #    - "8005:80"

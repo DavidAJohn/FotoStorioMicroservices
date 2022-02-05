@@ -1,8 +1,15 @@
-﻿using Identity.API.Contracts;
+﻿using AutoMapper;
+using Identity.API.Contracts;
+using Identity.API.Extensions;
 using Identity.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Identity.API.Controllers
@@ -14,15 +21,21 @@ namespace Identity.API.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
+        private readonly ILogger _logger;
+        private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountsController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService)
+        public AccountsController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService, ILogger<AccountsController> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _tokenService = tokenService;
+            _logger = logger;
+            _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
             _signInManager = signInManager;
             _userManager = userManager;
         }
 
-        /// GET api/login
+        /// GET api/accounts/login
         /// <summary>
         /// Authenticates a user
         /// </summary>
@@ -56,7 +69,7 @@ namespace Identity.API.Controllers
             );
         }
 
-        /// GET api/register
+        /// GET api/accounts/register
         /// <summary>
         /// Creates a new user account
         /// </summary>
@@ -110,6 +123,69 @@ namespace Identity.API.Controllers
         public async Task<ActionResult<bool>> CheckEmailExistsAsync([FromQuery] string email)
         {
             return await _userManager.FindByEmailAsync(email) != null;
+        }
+
+        /// GET api/accounts/address
+        /// <summary>
+        /// Returns the authenticated user's default address
+        /// </summary>
+        /// <returns>AddressDTO object</returns>
+        //[Authorize]
+        [HttpGet("address")]
+        public async Task<ActionResult<AddressDTO>> GetUserAddress()
+        {
+            try
+            {
+                var userEmail = _httpContextAccessor.HttpContext.GetClaimValueByType("email");
+                var user = await _userManager.FindUserByEmailWithAddressAsync(userEmail);
+
+                if (user == null)
+                {
+                    return new AddressDTO { };
+                }
+
+                return Ok(_mapper.Map<Address, AddressDTO>(user.Address));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in AccountsController.GetUserAddress: {ex.Message}");
+
+                return new AddressDTO { };
+            }
+        }
+
+        /// PUT api/accounts/address
+        /// <summary>
+        /// Updates the authenticated user's default address
+        /// </summary>
+        /// <returns>AddressDTO object</returns>
+        //[Authorize]
+        [HttpPut("address")]
+        public async Task<ActionResult<AddressDTO>> UpdateUserAddress(AddressDTO addressDTO)
+        {
+            AppUser user = null;
+
+            try
+            {
+                var userEmail = _httpContextAccessor.HttpContext.GetClaimValueByType("email");
+                user = await _userManager.FindUserByEmailWithAddressAsync(userEmail);
+                user.Address = _mapper.Map<AddressDTO, Address>(addressDTO);
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return Ok(_mapper.Map<Address, AddressDTO>(user.Address));
+                }
+
+                return new AddressDTO { };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in AccountsController.UpdateUserAddress for user '{user.Id}': {ex.Message}");
+
+                return new AddressDTO { };
+            }
         }
     }
 }

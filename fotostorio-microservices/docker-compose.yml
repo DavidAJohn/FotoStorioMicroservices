@@ -61,11 +61,11 @@ services:
       context: .
       dockerfile: ApiGateways/Admin.Gateway/Dockerfile
 
-  identity.api:
-    image: ${DOCKER_REGISTRY-}identityapi
-    build:
-      context: .
-      dockerfile: Services/Identity/Identity.API/Dockerfile
+  #identity.api:
+  #  image: ${DOCKER_REGISTRY-}identityapi
+  #  build:
+  #    context: .
+  #    dockerfile: Services/Identity/Identity.API/Dockerfile
 
 volumes:
   products_mssqldata:

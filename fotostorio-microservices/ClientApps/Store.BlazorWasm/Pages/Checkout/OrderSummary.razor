@@ -15,6 +15,7 @@
 @inject IConfiguration config
 @inject IJSRuntime JsRuntime
 @inject IPaymentService paymentService
+@inject IAccountService accountService
 @inject NavigationManager navigationManager
 
 <div class="h-auto">
@@ -96,6 +97,12 @@
                                         <ValidationMessage For="@(() => addressDTO.PostCode)" />
                                     </div>
                                 </EditForm>
+                            </div>
+                            <div class="place-content-center">
+                                <button type="button" class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm font-semibold hover:opacity-90 fotofuchsia-ripple" 
+                                    @onclick="ClearAddress">
+                                    Clear Address
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -191,6 +198,9 @@
     protected override async Task OnInitializedAsync()
     {
         await GetBasket();
+
+        // populate the address form with the user's default address (if they have one)
+        addressDTO = await accountService.GetUserAddressAsync();
     }
 
     protected async override Task OnAfterRenderAsync(bool firstRender)     
@@ -306,7 +316,7 @@
         ShowErrors = false;
         SubmitSpinnerHidden = "";
 
-        var address = new Address {
+        var orderAddress = new Address {
             FirstName = addressDTO.FirstName,
             LastName = addressDTO.LastName,
             Street = addressDTO.Street,
@@ -321,7 +331,7 @@
 
         var orderToCreate = new OrderCreateDTO {
              Items = basketItems,
-             SendToAddress = address,
+             SendToAddress = orderAddress,
              PaymentIntentId = basket.PaymentIntentId
         };
 
@@ -359,6 +369,9 @@
                 // toast message
                 toastService.ShowSuccess("Thanks, your order has been placed!", "Order Placed");
 
+                // save the address to the user's account
+                await accountService.SaveUserAddressAsync(addressDTO);
+
                 // navigate away to confirmation page
                 navigationManager.NavigateTo($"/checkout/success/{newOrder.OrderId}");
             }
@@ -369,5 +382,10 @@
             ErrorMessage = "Sorry, there was a problem creating your order";
             SubmitSpinnerHidden = "hidden";
         }
+    }
+
+    private void ClearAddress()
+    {
+        addressDTO = new AddressDTO {};
     }
 }
