@@ -187,5 +187,26 @@ namespace Identity.API.Controllers
                 return new AddressDTO { };
             }
         }
+
+        /// GET api/accounts/token
+        /// <summary>
+        /// Checks if a token is valid
+        /// </summary>
+        /// <returns>bool</returns>
+        [HttpPost("token")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<bool>> ValidateToken([FromBody] string token)
+        {
+            var valid = await _tokenService.ValidateJwtToken(token);
+
+            if (!valid)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(valid);
+        }
     }
 }
