@@ -50,6 +50,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Admin.BlazorServer", "Clien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.UnitTests", "Services\Basket\Basket.UnitTests\Basket.UnitTests.csproj", "{6E91E44A-2626-46C9-BCA0-30306714FDC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.UnitTests", "Services\Ordering\Ordering.UnitTests\Ordering.UnitTests.csproj", "{CDB31DC8-43BA-40AE-94B7-DB0F0FCE9237}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,6 +114,10 @@ Global
 		{6E91E44A-2626-46C9-BCA0-30306714FDC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E91E44A-2626-46C9-BCA0-30306714FDC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E91E44A-2626-46C9-BCA0-30306714FDC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDB31DC8-43BA-40AE-94B7-DB0F0FCE9237}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDB31DC8-43BA-40AE-94B7-DB0F0FCE9237}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDB31DC8-43BA-40AE-94B7-DB0F0FCE9237}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDB31DC8-43BA-40AE-94B7-DB0F0FCE9237}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -135,6 +141,7 @@ Global
 		{7ADD1FCF-1A70-4E68-8AF8-A14A9FD8D03F} = {33B80F47-2743-4AFD-B123-04A2A3C0BA17}
 		{75CEFB96-F248-48BA-8DA1-5DC7ED447A1D} = {C3EC1547-AA18-478B-81F1-312054F9F6AC}
 		{6E91E44A-2626-46C9-BCA0-30306714FDC4} = {6835D953-62E6-488D-A6E6-054D30A89030}
+		{CDB31DC8-43BA-40AE-94B7-DB0F0FCE9237} = {33B80F47-2743-4AFD-B123-04A2A3C0BA17}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {89395D95-86FD-4BC3-B2AC-DC0D1F22C656}
