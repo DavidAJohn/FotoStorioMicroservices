@@ -138,9 +138,10 @@ namespace Ordering.API.Controllers
         {
             try
             {
+                var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
                 var email = _httpContextAccessor.HttpContext.GetClaimValueByType("email");
 
-                var orders = await _orderRepository.GetOrdersForUserAsync(email);
+                var orders = await _orderRepository.GetOrdersForUserAsync(token, email);
 
                 if (orders == null)
                 {

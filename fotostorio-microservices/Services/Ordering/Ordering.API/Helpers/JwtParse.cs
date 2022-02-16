@@ -10,6 +10,8 @@ namespace Ordering.API.Helpers
     {
         public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
         {
+            if (string.IsNullOrEmpty(jwt)) return null;
+
             var claims = new List<Claim>();
             var payload = jwt.Split('.')[1];
             var jsonBytes = ParseBase64WithoutPadding(payload);

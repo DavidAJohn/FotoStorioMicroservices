@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Ordering.API.Contracts;
 using Ordering.API.Entities;
 using Ordering.API.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace Ordering.API.Data
@@ -12,11 +15,15 @@ namespace Ordering.API.Data
     {
         private readonly OrderDbContext _orderDbContext;
         private readonly IPaymentService _paymentService;
+        private readonly IConfiguration _config;
+        private readonly IHttpClientFactory _client;
 
-        public OrderRepository(OrderDbContext orderDbContext, IPaymentService paymentService)
+        public OrderRepository(OrderDbContext orderDbContext, IPaymentService paymentService, IConfiguration config, IHttpClientFactory client)
         {
             _orderDbContext = orderDbContext;
             _paymentService = paymentService;
+            _config = config;
+            _client = client;
         }
 
         public async Task<Order> CreateOrderAsync(Order order)
@@ -83,8 +90,11 @@ namespace Ordering.API.Data
             return order;
         }
 
-        public async Task<IEnumerable<Order>> GetOrdersForUserAsync(string buyerEmail)
+        public async Task<IEnumerable<Order>> GetOrdersForUserAsync(string token, string buyerEmail)
         {
+            var validToken = await IsTokenValid(token);
+            if (!validToken) return null;
+            
             var orders = await _orderDbContext.Orders
                 .Where(o => o.BuyerEmail == buyerEmail)
                 .Include(o => o.Items)
@@ -130,6 +140,17 @@ namespace Ordering.API.Data
             await UpdateOrderAsync(order);
 
             return order;
+        }
+
+        private async Task<bool> IsTokenValid(string token)
+        {
+            var identityUri = _config["ApiSettings:IdentityUri"] + "/api/accounts/token";
+            var client = _client.CreateClient();
+            var tokenResponse = await client.PostAsJsonAsync(identityUri, token);
+
+            if (!tokenResponse.IsSuccessStatusCode) return false;
+
+            return true;
         }
     }
 }

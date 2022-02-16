@@ -39,6 +39,7 @@ namespace Ordering.API
             services.AddAutoMapper(typeof(AutoMapperProfiles));
 
             services.AddHttpContextAccessor();
+            services.AddHttpClient();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

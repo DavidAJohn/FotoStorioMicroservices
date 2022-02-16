@@ -9,7 +9,7 @@ namespace Ordering.API.Contracts
     {
         Task<Order> CreateOrderAsync(Order order);
         Task<Order> GetOrderByIdAsync(int id, string buyerEmail);
-        Task<IEnumerable<Order>> GetOrdersForUserAsync(string buyerEmail);
+        Task<IEnumerable<Order>> GetOrdersForUserAsync(string token, string buyerEmail);
         Task<Order> GetOrderByPaymentIntentIdAsync(string paymentIntentId);
         Task<bool> UpdateOrderAsync(Order order);
         Task DeleteOrderAsync(Order order);
