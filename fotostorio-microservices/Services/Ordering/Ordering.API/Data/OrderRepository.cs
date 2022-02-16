@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Ordering.API.Contracts;
-using Ordering.API.Entities;
 using Ordering.API.Models;
 using System.Collections.Generic;
 using System.Linq;

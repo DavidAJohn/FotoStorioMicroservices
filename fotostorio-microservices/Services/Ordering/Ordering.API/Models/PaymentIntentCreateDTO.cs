@@ -1,5 +1,4 @@
-﻿using Ordering.API.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Ordering.API.Models
 {

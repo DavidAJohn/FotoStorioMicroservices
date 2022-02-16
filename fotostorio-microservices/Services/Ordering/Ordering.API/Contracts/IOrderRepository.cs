@@ -1,5 +1,4 @@
-﻿using Ordering.API.Entities;
-using Ordering.API.Models;
+﻿using Ordering.API.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

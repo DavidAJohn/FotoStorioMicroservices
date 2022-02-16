@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Ordering.API.Contracts;
-using Ordering.API.Entities;
 using Ordering.API.Extensions;
 using Ordering.API.Helpers;
 using Ordering.API.Models;

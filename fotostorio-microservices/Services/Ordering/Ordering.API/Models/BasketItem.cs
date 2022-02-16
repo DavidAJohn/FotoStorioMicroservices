@@ -1,6 +1,6 @@
 ﻿using Ordering.API.Models;
 
-namespace Ordering.API.Entities
+namespace Ordering.API.Models
 {
     public class BasketItem
     {

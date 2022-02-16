@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Ordering.API.Entities
+namespace Ordering.API.Models
 {
     public class Basket
     {
