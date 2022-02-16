@@ -25,11 +25,11 @@ namespace Ordering.API.Data
             _client = client;
         }
 
-        public async Task<Order> CreateOrderAsync(Order order)
+        public async Task<Order> CreateOrderAsync(Order order, string token)
         {
-            // verify the prices are accurate?
-            // - get basket for redis again?
-            // - get prices via store gateway/product aggregator?
+            // check that jwt is valid
+            var validToken = await IsTokenValid(token);
+            if (!validToken) return null;
 
             // calculate the total
             var orderTotal = order.Items.Sum(item => item.Total);
@@ -78,8 +78,12 @@ namespace Ordering.API.Data
             return null;
         }
 
-        public async Task<Order> GetOrderByIdAsync(int id, string buyerEmail)
+        public async Task<Order> GetOrderByIdAsync(int id, string buyerEmail, string token)
         {
+            // check that jwt is valid
+            var validToken = await IsTokenValid(token);
+            if (!validToken) return null;
+
             var order = await _orderDbContext.Orders
                 .Include(o => o.Items)
                 .FirstOrDefaultAsync(o => o.Id == id && o.BuyerEmail == buyerEmail);
@@ -91,6 +95,7 @@ namespace Ordering.API.Data
 
         public async Task<IEnumerable<Order>> GetOrdersForUserAsync(string token, string buyerEmail)
         {
+            // check that jwt is valid
             var validToken = await IsTokenValid(token);
             if (!validToken) return null;
             

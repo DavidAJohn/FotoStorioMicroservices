@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 
 namespace Ordering.API.Controllers
 {
-    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class OrdersController : ControllerBase
@@ -64,15 +63,11 @@ namespace Ordering.API.Controllers
 
             try
             {
-                // 1 - use an http client to check jwt validity with identity api
                 var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-
-                // 2 - if token is valid, continue and create the order, otherwise return a 401 Not Authorised response
-
                 var email = _httpContextAccessor.HttpContext.GetClaimValueByType("email");
                 order.BuyerEmail = email;
 
-                var createdOrder = await _orderRepository.CreateOrderAsync(order);
+                var createdOrder = await _orderRepository.CreateOrderAsync(order, token);
 
                 if (createdOrder == null) return BadRequest();
 
@@ -100,9 +95,10 @@ namespace Ordering.API.Controllers
         {
             try
             {
+                var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
                 var email = _httpContextAccessor.HttpContext.GetClaimValueByType("email");
 
-                var order = await _orderRepository.GetOrderByIdAsync(id, email);
+                var order = await _orderRepository.GetOrderByIdAsync(id, email, token);
 
                 if (order == null)
                 {

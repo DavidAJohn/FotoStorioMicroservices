@@ -6,8 +6,8 @@ namespace Ordering.API.Contracts
 {
     public interface IOrderRepository
     {
-        Task<Order> CreateOrderAsync(Order order);
-        Task<Order> GetOrderByIdAsync(int id, string buyerEmail);
+        Task<Order> CreateOrderAsync(Order order, string token);
+        Task<Order> GetOrderByIdAsync(int id, string buyerEmail, string token);
         Task<IEnumerable<Order>> GetOrdersForUserAsync(string token, string buyerEmail);
         Task<Order> GetOrderByPaymentIntentIdAsync(string paymentIntentId);
         Task<bool> UpdateOrderAsync(Order order);

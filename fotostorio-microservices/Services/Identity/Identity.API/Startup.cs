@@ -52,10 +52,12 @@ namespace Identity.API
             {
                 options.AddPolicy("CorsPolicy",
                     builder => builder
-                    .SetIsOriginAllowed((host) => true)
-                    .WithMethods("POST", "GET", "PUT")
                     .AllowAnyHeader()
-                    .AllowCredentials());
+                    //.WithMethods("POST", "GET", "PUT", "OPTIONS")
+                    .AllowAnyMethod()
+                    //.WithOrigins("https://localhost:5080")
+                    .AllowAnyOrigin()
+                    );
             });
 
             services.AddAutoMapper(typeof(AutoMapperProfiles));
