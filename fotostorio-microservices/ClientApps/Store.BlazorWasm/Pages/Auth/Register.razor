@@ -29,7 +29,7 @@
                 </div>
                 <div class="px-2 md:px-4 py-2">
                     <EditForm Model="RegisterModel" OnValidSubmit="HandleRegistration">
-                        <DataAnnotationsValidator />
+                        <FluentValidationValidator />
                         <div class="mb-3 w-full text-left">
                             <label class="text-base font-semibold mb-1 ml-0">Your Name</label>
                             <InputText Id="displayName" class="px-2 py-1 rounded-sm focus:border-blue-700 border-3 outline-none w-full" @bind-Value="RegisterModel.DisplayName" />
