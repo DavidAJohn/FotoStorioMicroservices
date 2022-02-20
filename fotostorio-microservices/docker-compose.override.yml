@@ -40,6 +40,18 @@ services:
     volumes: 
       - identity_mssqldata:/var/opt/mssql
 
+  inventorydb:
+    container_name: inventorydb
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin1234
+      - POSTGRES_DB=InventoryDb
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes: 
+      - postgres_data:/var/lib/postgresql/data/
+
   products.api:
     container_name: products.api
     environment:

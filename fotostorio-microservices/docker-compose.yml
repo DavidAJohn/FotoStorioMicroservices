@@ -13,6 +13,9 @@ services:
   identitydb:
     image: mcr.microsoft.com/mssql/server:2017-latest
 
+  inventorydb:
+    image: postgres:14-alpine
+
   products.api:
     image: ${DOCKER_REGISTRY-}productsapi
     build:
@@ -71,3 +74,4 @@ volumes:
   products_mssqldata:
   discount_mssqldata:
   identity_mssqldata:
+  postgres_data:
