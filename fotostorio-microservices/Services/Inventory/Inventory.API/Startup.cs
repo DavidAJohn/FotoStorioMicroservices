@@ -1,3 +1,4 @@
+using Inventory.API.Contracts;
 using Inventory.API.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +30,9 @@ namespace Inventory.API
             services.AddDbContext<InventoryDbContext>(options => {
                 options.UseNpgsql(Configuration.GetConnectionString("InventoryConnectionString"));
             });
+
+            services.AddScoped<IStockRepository, StockRepository>();
+            services.AddScoped<IUpdateRepository, UpdateRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
