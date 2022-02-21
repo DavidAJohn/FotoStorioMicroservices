@@ -1,5 +1,9 @@
+using EventBus.Messages.Common;
 using Inventory.API.Contracts;
 using Inventory.API.Data;
+using Inventory.API.EventBusConsumer;
+using Inventory.API.Services;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +37,26 @@ namespace Inventory.API
 
             services.AddScoped<IStockRepository, StockRepository>();
             services.AddScoped<IUpdateRepository, UpdateRepository>();
+            services.AddScoped<IInventoryService, InventoryService>();
+
+            // RabbitMQ & Mass Transit
+            services.AddMassTransit(config =>
+            {
+                config.AddConsumer<PaymentReceivedConsumer>();
+
+                config.UsingRabbitMq((ctx, cfg) =>
+                {
+                    cfg.Host(Configuration["EventBusSettings:HostAddress"]);
+
+                    cfg.ReceiveEndpoint(EventBusConstants.PaymentReceivedQueue, c =>
+                    {
+                        c.ConfigureConsumer<PaymentReceivedConsumer>(ctx);
+                    });
+                });
+            });
+
+            services.AddMassTransitHostedService();
+            services.AddScoped<PaymentReceivedConsumer>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

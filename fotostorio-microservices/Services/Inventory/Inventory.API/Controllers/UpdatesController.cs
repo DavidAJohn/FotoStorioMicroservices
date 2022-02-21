@@ -71,6 +71,8 @@ namespace Inventory.API.Controllers
 
             try
             {
+                // TODO: check existing stock
+
                 var createdUpdate = await _updateRepository.Create(update);
 
                 if (createdUpdate == null) return BadRequest();
