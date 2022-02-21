@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using EventBus.Messages.Events;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Ordering.API.Contracts;
 using Ordering.API.Models;
@@ -16,13 +18,15 @@ namespace Ordering.API.Data
         private readonly IPaymentService _paymentService;
         private readonly IConfiguration _config;
         private readonly IHttpClientFactory _client;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public OrderRepository(OrderDbContext orderDbContext, IPaymentService paymentService, IConfiguration config, IHttpClientFactory client)
+        public OrderRepository(OrderDbContext orderDbContext, IPaymentService paymentService, IConfiguration config, IHttpClientFactory client, IPublishEndpoint publishEndpoint)
         {
             _orderDbContext = orderDbContext;
             _paymentService = paymentService;
             _config = config;
             _client = client;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<Order> CreateOrderAsync(Order order, string token)
@@ -143,6 +147,22 @@ namespace Ordering.API.Data
             order.Status = status;
             await UpdateOrderAsync(order);
 
+            // if order status has changed to 'payment received' - send event(s) to the event bus (RabbitMq) using MassTransit
+            if (order.Status == OrderStatus.PaymentReceived)
+            {
+                foreach (var item in order.Items)
+                {
+                    var eventMessage = new PaymentReceivedEvent // from ./AsyncMessaging/EventBus.Messages class library
+                    {
+                        Sku = item.Product.Sku,
+                        QuantityOrdered = item.Quantity,
+                        OrderId = order.Id
+                    };
+
+                    await _publishEndpoint.Publish(eventMessage);
+                }
+            }
+            
             return order;
         }
 
