@@ -73,7 +73,7 @@ namespace Inventory.API.Controllers
             {
                 var createdUpdate = await _inventoryService.CreateUpdateFromAdmin(update);
 
-                if (createdUpdate == null) return BadRequest();
+                if (createdUpdate == null) return BadRequest("There was a problem updating stock for this Sku");
 
                 return Ok(createdUpdate);
             }

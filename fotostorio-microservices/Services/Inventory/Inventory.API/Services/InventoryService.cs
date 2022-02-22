@@ -24,45 +24,62 @@ namespace Inventory.API.Services
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task CreateUpdateFromPaymentReceived(Update update)
+        public async Task<bool> CreateUpdateFromPaymentReceived(Update update)
         {
             // note: this method should only be called from the payment received consumer class - via the event bus
             // and only after a new order has been created and paid for, so a stock entry for this sku must already exist
 
-            // ...but let's make sure
-            var stockEntryExists = await _stockRepository.GetBySkuAsync(update.Sku);
-
-            if (stockEntryExists != null)
+            try
             {
+                // ...but let's make sure a stock entry exists for this sku
+                var skuToUpdate = await _stockRepository.GetBySkuAsync(update.Sku);
+
+                if (skuToUpdate == null)
+                {
+                    _logger.LogInformation("Inventory update attempted for non-existent Sku: {sku}", update.Sku);
+                    return false;
+                }
+
                 // create an update table entry
                 var stockUpdate = await _updateRepository.Create(update);
 
-                if (stockUpdate != null)
+                if (stockUpdate == null)
                 {
-                    var skuToUpdate = await _stockRepository.GetBySkuAsync(stockUpdate.Sku);
-                    var originalStockCount = skuToUpdate.CurrentStock;
-
-                    if (skuToUpdate != null)
-                    {
-                        int newStockCount = (skuToUpdate.CurrentStock - update.Removed) > 0 ? (skuToUpdate.CurrentStock - update.Removed) : 0;
-                        skuToUpdate.CurrentStock = newStockCount;
-
-                        await _stockRepository.Update(skuToUpdate);
-
-                        // Send an InventoryZero event message to event bus if needed
-                        if (skuToUpdate.CurrentStock == 0)
-                        {
-                            await SendInventoryZeroEvent(skuToUpdate.Sku);
-                        }
-
-                        _logger.LogInformation("Inventory updated after payment received -> Sku: {sku}, Previous Stock: {prev}, Updated Stock: {upd}",
-                            skuToUpdate.Sku, originalStockCount, skuToUpdate.CurrentStock);
-                    }
+                    _logger.LogInformation("Inventory update failed for Sku: {sku}", update.Sku);
+                    return false;
                 }
+
+                // keep the original stock count for later use
+                var originalStockCount = skuToUpdate.CurrentStock;
+
+                // calculate what the new stock level should be after the update
+                int newStockCount = (skuToUpdate.CurrentStock - update.Removed) > 0 ? (skuToUpdate.CurrentStock - update.Removed) : 0;
+                skuToUpdate.CurrentStock = newStockCount;
+
+                var updateSucceeded = await _stockRepository.Update(skuToUpdate);
+
+                if (!updateSucceeded)
+                {
+                    _logger.LogInformation("Inventory stock entry failed for Sku: {sku}", update.Sku);
+                    await _updateRepository.Delete(stockUpdate); // remove the now orphaned update entry we created above
+                    return false;
+                }
+
+                // Send an InventoryZero event message to event bus if needed
+                if (skuToUpdate.CurrentStock == 0)
+                {
+                    await SendInventoryZeroEvent(skuToUpdate.Sku);
+                }
+
+                _logger.LogInformation("Inventory successfully updated after payment received -> Sku: {sku}, Previous Stock: {prev}, Updated Stock: {upd}",
+                    skuToUpdate.Sku, originalStockCount, skuToUpdate.CurrentStock);
+
+                return true;
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogInformation("Inventory update attempted for non-existent Sku: {sku}", update.Sku);
+                _logger.LogError("Error creating stock update for Sku: {sku} -> {message}", update.Sku, ex.Message);
+                return false;
             }
         }
 
@@ -100,7 +117,14 @@ namespace Inventory.API.Services
                 skuToUpdate.CurrentStock = newStockCount;
             }
 
-            await _stockRepository.Update(skuToUpdate);
+            var updateSucceeded = await _stockRepository.Update(skuToUpdate);
+
+            if (!updateSucceeded)
+            {
+                _logger.LogInformation("Inventory stock entry failed for Sku: {sku}", update.Sku);
+                await _updateRepository.Delete(stockUpdate); // remove the now orphaned update entry we created above
+                return null;
+            }
 
             // Send an InventoryZero event message to event bus if needed
             if (skuToUpdate.CurrentStock == 0)

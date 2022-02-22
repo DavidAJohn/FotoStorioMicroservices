@@ -33,10 +33,19 @@ namespace Inventory.API.EventBusConsumer
             };
 
             // send the stockUpdate object to the InventoryService to create a new update
-            await _inventoryService.CreateUpdateFromPaymentReceived(stockUpdate);
+            var stockUpdateSucceeded = await _inventoryService.CreateUpdateFromPaymentReceived(stockUpdate);
 
-            _logger.LogInformation("PaymentReceivedEvent consumed successfully -> OrderId: {orderid}, Sku: {sku}, Quantity: {quantity}", 
+            if (stockUpdateSucceeded)
+            {
+                _logger.LogInformation("PaymentReceivedEvent consumed successfully -> OrderId: {orderid}, Sku: {sku}, Quantity: {quantity}",
                 message.OrderId, message.Sku, message.QuantityOrdered);
+            }
+            else
+            {
+                _logger.LogError("PaymentReceivedEvent was NOT consumed -> OrderId: {orderid}, Sku: {sku}, Quantity: {quantity}",
+                message.OrderId, message.Sku, message.QuantityOrdered);
+            }
+            
         }
     }
 }
