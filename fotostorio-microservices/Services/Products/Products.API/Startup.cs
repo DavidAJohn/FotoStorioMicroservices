@@ -1,3 +1,5 @@
+using EventBus.Messages.Common;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +9,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Products.API.Contracts;
 using Products.API.Data;
+using Products.API.EventBusConsumer;
 using Products.API.Helpers;
+using Products.API.Services;
 
 namespace Products.API
 {
@@ -30,6 +34,26 @@ namespace Products.API
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IMountRepository, MountRepository>();
+            services.AddScoped<IProductsService, ProductsService>();
+
+            // RabbitMQ & Mass Transit
+            services.AddMassTransit(config =>
+            {
+                config.AddConsumer<InventoryZeroConsumer>();
+
+                config.UsingRabbitMq((ctx, cfg) =>
+                {
+                    cfg.Host(Configuration["EventBusSettings:HostAddress"]);
+
+                    cfg.ReceiveEndpoint(EventBusConstants.InventoryZeroQueue, c =>
+                    {
+                        c.ConfigureConsumer<InventoryZeroConsumer>(ctx);
+                    });
+                });
+            });
+
+            services.AddMassTransitHostedService();
+            services.AddScoped<InventoryZeroConsumer>();
 
             services.AddHttpContextAccessor();
 

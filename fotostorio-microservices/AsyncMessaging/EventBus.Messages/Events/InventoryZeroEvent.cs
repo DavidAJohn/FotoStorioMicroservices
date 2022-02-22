@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EventBus.Messages.Events
 {
-    public class InventoryZero : IntegrationBaseEvent
+    public class InventoryZeroEvent : IntegrationBaseEvent
     {
         public string Sku { get; set; }
     }
