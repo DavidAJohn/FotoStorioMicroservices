@@ -13,13 +13,11 @@ namespace Inventory.API.Controllers
     public class UpdatesController : ControllerBase
     {
         private readonly ILogger<UpdatesController> _logger;
-        private readonly IUpdateRepository _updateRepository;
         private readonly IInventoryService _inventoryService;
 
-        public UpdatesController(ILogger<UpdatesController> logger, IUpdateRepository updateRepository, IInventoryService inventoryService)
+        public UpdatesController(ILogger<UpdatesController> logger, IInventoryService inventoryService)
         {
             _logger = logger;
-            _updateRepository = updateRepository;
             _inventoryService = inventoryService;
         }
 
@@ -29,7 +27,7 @@ namespace Inventory.API.Controllers
         {
             try
             {
-                var updates = await _updateRepository.ListAllAsync();
+                var updates = await _inventoryService.GetUpdates();
 
                 if (updates == null) return NotFound();
 
@@ -51,7 +49,7 @@ namespace Inventory.API.Controllers
 
             try
             {
-                var updates = await _updateRepository.GetBySkuAsync(sku);
+                var updates = await _inventoryService.GetUpdatesBySku(sku);
 
                 if (updates == null) return NotFound();
 
@@ -67,7 +65,7 @@ namespace Inventory.API.Controllers
 
         // POST api/updates
         [HttpPost]
-        public async Task<ActionResult<Update>> CreateStockUpdate(Update update)
+        public async Task<ActionResult<Update>> CreateStockUpdate(UpdateCreateDTO update)
         {
             if (update == null) return BadRequest();
 

@@ -3,6 +3,8 @@ using Inventory.API.Contracts;
 using Inventory.API.Entities;
 using MassTransit;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Inventory.API.Services
@@ -64,14 +66,22 @@ namespace Inventory.API.Services
             }
         }
 
-        public async Task<Update> CreateUpdateFromAdmin(Update update)
+        public async Task<Update> CreateUpdateFromAdmin(UpdateCreateDTO update)
         {
             // check for an existing entry in the stock table for this sku
             var skuToUpdate = await _stockRepository.GetBySkuAsync(update.Sku);
             if (skuToUpdate == null) return null;
 
             // if there is an existing stock entry for the sku, create an update entry
-            var stockUpdate = await _updateRepository.Create(update);
+            var updateToCreate = new Update
+            {
+                Sku = update.Sku,
+                UpdatedAt = DateTime.Now,
+                Added = update.Added,
+                Removed = update.Removed
+            };
+
+            var stockUpdate = await _updateRepository.Create(updateToCreate);
             if (stockUpdate == null) return null;
 
             // keep the original stock count for later use
@@ -102,6 +112,22 @@ namespace Inventory.API.Services
                 skuToUpdate.Sku, originalStockCount, skuToUpdate.CurrentStock);
             
             return stockUpdate;
+        }
+
+        public async Task<IEnumerable<Update>> GetUpdates()
+        {
+            var updates = await _updateRepository.ListAllAsync();
+            if (updates == null) return null;
+
+            return updates;
+        }
+
+        public async Task<IEnumerable<Update>> GetUpdatesBySku(string sku)
+        {
+            var updates = await _updateRepository.GetBySkuAsync(sku);
+            if (updates == null) return null;
+
+            return updates;
         }
 
         private async Task SendInventoryZeroEvent(string sku)
