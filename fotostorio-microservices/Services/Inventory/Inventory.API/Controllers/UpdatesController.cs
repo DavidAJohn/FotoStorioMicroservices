@@ -14,11 +14,13 @@ namespace Inventory.API.Controllers
     {
         private readonly ILogger<UpdatesController> _logger;
         private readonly IUpdateRepository _updateRepository;
+        private readonly IInventoryService _inventoryService;
 
-        public UpdatesController(ILogger<UpdatesController> logger, IUpdateRepository updateRepository)
+        public UpdatesController(ILogger<UpdatesController> logger, IUpdateRepository updateRepository, IInventoryService inventoryService)
         {
             _logger = logger;
             _updateRepository = updateRepository;
+            _inventoryService = inventoryService;
         }
 
         // GET api/updates
@@ -42,22 +44,22 @@ namespace Inventory.API.Controllers
         }
 
         // GET api/updates/{sku}
-        [HttpGet("{sku}", Name = "GetUpdateBySku")]
-        public async Task<ActionResult<Update>> GetUpdateBySku(string sku)
+        [HttpGet("{sku}", Name = "GetUpdatesBySku")]
+        public async Task<ActionResult<IEnumerable<Update>>> GetUpdatesBySku(string sku)
         {
             if (sku == null) return BadRequest();
 
             try
             {
-                var update = await _updateRepository.GetBySkuAsync(sku);
+                var updates = await _updateRepository.GetBySkuAsync(sku);
 
-                if (update == null) return NotFound();
+                if (updates == null) return NotFound();
 
-                return Ok(update);
+                return Ok(updates);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetUpdateBySku : {ex.Message}");
+                _logger.LogError($"Error in GetUpdatesBySku : {ex.Message}");
 
                 return BadRequest();
             }
@@ -65,15 +67,13 @@ namespace Inventory.API.Controllers
 
         // POST api/updates
         [HttpPost]
-        public async Task<ActionResult<Update>> CreateUpdate(Update update)
+        public async Task<ActionResult<Update>> CreateStockUpdate(Update update)
         {
             if (update == null) return BadRequest();
 
             try
             {
-                // TODO: check existing stock
-
-                var createdUpdate = await _updateRepository.Create(update);
+                var createdUpdate = await _inventoryService.CreateUpdateFromAdmin(update);
 
                 if (createdUpdate == null) return BadRequest();
 

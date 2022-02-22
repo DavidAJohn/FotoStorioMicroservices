@@ -1,6 +1,8 @@
 ﻿using Inventory.API.Contracts;
 using Inventory.API.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Inventory.API.Data
@@ -14,11 +16,12 @@ namespace Inventory.API.Data
             _context = context;
         }
 
-        public async Task<Update> GetBySkuAsync(string sku)
+        public async Task<IEnumerable<Update>> GetBySkuAsync(string sku)
         {
             return await _context.Set<Update>()
                 .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Sku == sku);
+                .Where(u => u.Sku == sku)
+                .ToListAsync();
         }
     }
 }
