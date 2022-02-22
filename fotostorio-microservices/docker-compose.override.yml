@@ -64,8 +64,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:ProductsConnectionString=Server=productsdb;Database=ProductsDb;User Id=sa;Password=aDmin1234!;"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on:
       - productsdb
+      - rabbitmq
     ports:
       - "8001:80"
 
