@@ -56,6 +56,8 @@ namespace Inventory.API.Services
                 int newStockCount = (skuToUpdate.CurrentStock - update.Removed) > 0 ? (skuToUpdate.CurrentStock - update.Removed) : 0;
                 skuToUpdate.CurrentStock = newStockCount;
 
+                skuToUpdate.LastUpdated = DateTime.Now;
+
                 var updateSucceeded = await _stockRepository.Update(skuToUpdate);
 
                 if (!updateSucceeded)
@@ -116,6 +118,8 @@ namespace Inventory.API.Services
                 int newStockCount = (skuToUpdate.CurrentStock - update.Removed) > 0 ? (skuToUpdate.CurrentStock - update.Removed) : 0;
                 skuToUpdate.CurrentStock = newStockCount;
             }
+
+            skuToUpdate.LastUpdated = DateTime.Now;
 
             var updateSucceeded = await _stockRepository.Update(skuToUpdate);
 
