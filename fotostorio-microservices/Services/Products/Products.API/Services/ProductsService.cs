@@ -18,19 +18,25 @@ namespace Products.API.Services
             _productRepository = productRepository;
         }
 
-        public async Task UpdateProductStockCount(string sku, int quantity)
+        public async Task UpdateProductAvailability(string sku, bool status)
         {
             var productToUpdate = await _productRepository.GetBySkuAsync(sku);
 
             if (productToUpdate != null)
             {
                 var updateProduct = productToUpdate;
-                updateProduct.IsAvailable = quantity == 0 ? false : true;
+                updateProduct.IsAvailable = status;
 
-                await _productRepository.Update(updateProduct);
+                var response = await _productRepository.Update(updateProduct);
 
-                _logger.LogInformation("Stock level for {sku} is {quantity} -> IsAvailable set to {status}", 
-                    sku, quantity, quantity == 0 ? false : true);
+                if (response)
+                {
+                    _logger.LogInformation("Product availability updated for {sku} -> now set to {status}", sku, status);
+                }
+                else
+                {
+                    _logger.LogInformation("Product availability update failed for {sku} -> should have been set to {status}", sku, status);
+                }
             }
         }
     }

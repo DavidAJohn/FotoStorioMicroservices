@@ -130,10 +130,16 @@ namespace Inventory.API.Services
                 return null;
             }
 
-            // Send an InventoryZero event message to event bus if needed
+            // send an InventoryZero event message to event bus if needed
             if (skuToUpdate.CurrentStock == 0)
             {
                 await SendInventoryZeroEvent(skuToUpdate.Sku);
+            }
+
+            // or, send an InventoryRestored event if the original stock count was zero and we're now restoring stock
+            if (originalStockCount == 0 && skuToUpdate.CurrentStock >= 1)
+            {
+                await SendInventoryRestoredEvent(skuToUpdate.Sku);
             }
 
             _logger.LogInformation("Inventory updated -> Sku: {sku}, Previous Stock: {prev}, Updated Stock: {upd}",
@@ -170,6 +176,20 @@ namespace Inventory.API.Services
             await _publishEndpoint.Publish(eventMessage);
 
             _logger.LogInformation("InventoryZeroEvent published to event bus for Sku: {sku}", sku);
+        }
+
+        private async Task SendInventoryRestoredEvent(string sku)
+        {
+            // Send InventoryRestoredEvent to the event bus (RabbitMq) using MassTransit
+
+            var eventMessage = new InventoryRestoredEvent // from ./AsyncMessaging/EventBus.Messages class library
+            {
+                Sku = sku
+            };
+
+            await _publishEndpoint.Publish(eventMessage);
+
+            _logger.LogInformation("InventoryRestoredEvent published to event bus for Sku: {sku}", sku);
         }
     }
 }

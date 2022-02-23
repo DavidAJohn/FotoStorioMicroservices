@@ -36,10 +36,11 @@ namespace Products.API
             services.AddScoped<IMountRepository, MountRepository>();
             services.AddScoped<IProductsService, ProductsService>();
 
-            // RabbitMQ & Mass Transit
+            // Mass Transit and RabbitMQ config
             services.AddMassTransit(config =>
             {
                 config.AddConsumer<InventoryZeroConsumer>();
+                config.AddConsumer<InventoryRestoredConsumer>();
 
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
@@ -49,11 +50,18 @@ namespace Products.API
                     {
                         c.ConfigureConsumer<InventoryZeroConsumer>(ctx);
                     });
+
+                    cfg.ReceiveEndpoint(EventBusConstants.InventoryRestoredQueue, c =>
+                    {
+                        c.ConfigureConsumer<InventoryRestoredConsumer>(ctx);
+                    });
                 });
             });
 
             services.AddMassTransitHostedService();
             services.AddScoped<InventoryZeroConsumer>();
+            services.AddScoped<InventoryRestoredConsumer>();
+
 
             services.AddHttpContextAccessor();
 

@@ -6,29 +6,29 @@ using System.Threading.Tasks;
 
 namespace Products.API.EventBusConsumer
 {
-    public class InventoryZeroConsumer : IConsumer<InventoryZeroEvent>
+    public class InventoryRestoredConsumer : IConsumer<InventoryRestoredEvent>
     {
-        private readonly ILogger<InventoryZeroConsumer> _logger;
+        private readonly ILogger<InventoryRestoredConsumer> _logger;
         private readonly IProductsService _productsService;
         private readonly IProductRepository _productRepository;
 
-        public InventoryZeroConsumer(ILogger<InventoryZeroConsumer> logger, IProductsService productsService, IProductRepository productRepository)
+        public InventoryRestoredConsumer(ILogger<InventoryRestoredConsumer> logger, IProductsService productsService, IProductRepository productRepository)
         {
             _logger = logger;
             _productsService = productsService;
             _productRepository = productRepository;
         }
 
-        public async Task Consume(ConsumeContext<InventoryZeroEvent> context)
+        public async Task Consume(ConsumeContext<InventoryRestoredEvent> context)
         {
             var message = context.Message;
             var productToUpdate = await _productRepository.GetBySkuAsync(message.Sku);
 
             if (productToUpdate != null)
             {
-                await _productsService.UpdateProductAvailability(productToUpdate.Sku, false);
+                await _productsService.UpdateProductAvailability(productToUpdate.Sku, true);
 
-                _logger.LogInformation("InventoryZeroEvent consumed successfully -> Sku: {sku}", productToUpdate.Sku);
+                _logger.LogInformation("InventoryRestoredEvent consumed successfully -> Sku: {sku}", productToUpdate.Sku);
             }
         }
     }
