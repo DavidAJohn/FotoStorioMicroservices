@@ -102,6 +102,18 @@ services:
     ports:
       - "8004:80"
 
+  identity.api:
+    container_name: identity.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:IdentityConnection=Server=identitydb;Database=IdentityDb;User Id=sa;Password=aDmin1234!;"
+      - "JwtIssuer=http://identity.api"
+      - "JwtAudience=http://identity.api"
+    depends_on:
+      - identitydb
+    ports:
+      - "8005:80"
+
   store.gateway:
     container_name: store.gateway
     environment:
@@ -111,6 +123,7 @@ services:
       - products.aggregator
       - products.api
       - basket.api
+      - identity.api
     ports:
       - "8010:80"
 
@@ -146,15 +159,3 @@ services:
       - products.aggregator
     ports:
       - "8012:80"
-
-  #identity.api:
-  #  container_name: identity.api
-  #  environment:
-  #    - ASPNETCORE_ENVIRONMENT=Development
-  #    - "ConnectionStrings:IdentityConnection=Server=identitydb;Database=IdentityDb;User Id=sa;Password=aDmin1234!;"
-  #    - "JwtIssuer=http://identity.api"
-  #    - "JwtAudience=http://identity.api"
-  #  depends_on:
-  #    - identitydb
-  #  ports:
-  #    - "8005:80"
