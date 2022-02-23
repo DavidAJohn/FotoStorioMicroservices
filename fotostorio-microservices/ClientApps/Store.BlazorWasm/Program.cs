@@ -19,9 +19,6 @@ builder.Services.AddHttpClient("StoreGateway", c => c.BaseAddress =
 builder.Services.AddHttpClient("IdentityAPI", c => c.BaseAddress =
     new Uri(builder.Configuration["ApiSettings:IdentityUri"] + "/api/"));
 
-builder.Services.AddHttpClient("OrderAPI", c => c.BaseAddress =
-    new Uri(builder.Configuration["ApiSettings:OrderUri"] + "/api/"));
-
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IBasketService, BasketService>();
 builder.Services.AddScoped<IOrderService, OrderService>();

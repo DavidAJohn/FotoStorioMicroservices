@@ -29,8 +29,8 @@ public class PaymentService : IPaymentService
 
         try
         {
-            var client = _httpClient.CreateClient("OrderAPI");
-            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
+            var client = _httpClient.CreateClient("StoreGateway");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
 
             var intentToCreate = new PaymentIntentCreateDTO
             {
@@ -41,7 +41,7 @@ public class PaymentService : IPaymentService
             HttpContent serializedContent = new StringContent(JsonSerializer.Serialize(intentToCreate));
             serializedContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            HttpResponseMessage response = await client.PostAsync("payments", serializedContent);
+            HttpResponseMessage response = await client.PostAsync("Payments", serializedContent);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {

@@ -36,13 +36,13 @@ public class OrderService : IOrderService
 
         try
         {
-            var client = _httpClient.CreateClient("OrderAPI");
+            var client = _httpClient.CreateClient("StoreGateway");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
 
             HttpContent serializedContent = new StringContent(JsonSerializer.Serialize(order));
             serializedContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            HttpResponseMessage response = await client.PostAsync("orders", serializedContent);
+            HttpResponseMessage response = await client.PostAsync("Orders", serializedContent);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -81,10 +81,10 @@ public class OrderService : IOrderService
 
         try
         {
-            var client = _httpClient.CreateClient("OrderAPI");
+            var client = _httpClient.CreateClient("StoreGateway");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
 
-            var order = await client.GetFromJsonAsync<OrderDetailsDTO>($"orders/{orderId}");
+            var order = await client.GetFromJsonAsync<OrderDetailsDTO>($"Orders/{orderId}");
 
             return order;
         }
@@ -105,10 +105,10 @@ public class OrderService : IOrderService
 
         try
         {
-            var client = _httpClient.CreateClient("OrderAPI");
+            var client = _httpClient.CreateClient("StoreGateway");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
 
-            var orders = await client.GetFromJsonAsync<List<OrderDetailsDTO>>("orders");
+            var orders = await client.GetFromJsonAsync<List<OrderDetailsDTO>>("Orders");
 
             return orders;
         }
