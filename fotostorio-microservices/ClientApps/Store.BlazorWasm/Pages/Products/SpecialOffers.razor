@@ -254,10 +254,17 @@
 
             var updatedBasket = await basketService.UpdateBasket(currentBasket);
 
-            toastService.ShowSuccess("A new item has been added to your basket", "Basket Updated");
+            if (updatedBasket == null)
+            {
+                toastService.ShowError("Sorry, there was a problem adding this item to your basket", "Basket Update Failed");
+            }
+            else
+            {
+                toastService.ShowSuccess("A new item has been added to your basket", "Basket Updated");
 
-            // also set AppState.BasketItemCount to update the item count displayed in the BasketDropdown
-            appState.BasketItemCount = updatedBasket.BasketItems.Count;
+                // also set AppState.BasketItemCount to update the item count displayed in the BasketDropdown
+                appState.BasketItemCount = updatedBasket.BasketItems.Count;
+            }
         }
         else 
         {
