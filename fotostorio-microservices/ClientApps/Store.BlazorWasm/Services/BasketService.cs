@@ -1,6 +1,11 @@
-﻿using Store.BlazorWasm.Contracts;
+﻿using Blazored.LocalStorage;
+using Microsoft.Net.Http.Headers;
+using Store.BlazorWasm.Contracts;
 using Store.BlazorWasm.Models;
+using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace Store.BlazorWasm.Services;
 
@@ -8,26 +13,40 @@ public class BasketService : IBasketService
 {
     private readonly IHttpClientFactory _httpClient;
     private readonly ILogger<BasketService> _logger;
+    private readonly IConfiguration _config;
+    private readonly ILocalStorageService _localStorage;
 
-    public BasketService(IHttpClientFactory httpClient, ILogger<BasketService> logger)
+    public BasketService(IHttpClientFactory httpClient, ILogger<BasketService> logger, IConfiguration config, ILocalStorageService localStorage)
     {
         _httpClient = httpClient;
         _logger = logger;
+        _config = config;
+        _localStorage = localStorage;
     }
 
     public async Task<Basket> GetBasketByID(string id)
     {
         try
         {
-            var client = _httpClient.CreateClient("StoreGateway");
-            var basket = await client.GetFromJsonAsync<Basket>($"Basket?id={id}");
+            var authToken = await _localStorage.GetItemAsync<string>("authToken");
 
-            if (basket == null)
+            HttpClient client = _httpClient.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+            HttpResponseMessage response = await client.GetAsync(_config["ApiSettings:StoreGatewayUri"] + "/Basket?id=" + id);
+
+            if (response.StatusCode == HttpStatusCode.OK)
             {
-                return new Basket{ };
+                var basket = await response.Content.ReadFromJsonAsync<Basket>();
+
+                if (basket == null)
+                {
+                    return new Basket { };
+                }
+
+                return basket;
             }
 
-            return basket;
+            return new Basket { };
         }
         catch (HttpRequestException ex)
         {
@@ -40,8 +59,15 @@ public class BasketService : IBasketService
     {
         try
         {
-            var client = _httpClient.CreateClient("StoreGateway");
-            var response = await client.PostAsJsonAsync($"Basket", basket);
+            var authToken = await _localStorage.GetItemAsync<string>("authToken");
+
+            HttpClient client = _httpClient.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+
+            HttpContent content = new StringContent(JsonSerializer.Serialize(basket));
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            HttpResponseMessage response = await client.PostAsync(_config["ApiSettings:StoreGatewayUri"] + "/Basket", content);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -62,8 +88,16 @@ public class BasketService : IBasketService
     {
         try
         {
-            var client = _httpClient.CreateClient("StoreGateway");
-            await client.DeleteAsync($"Basket?id={id}");
+            var authToken = await _localStorage.GetItemAsync<string>("authToken");
+
+            HttpClient client = _httpClient.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+            HttpResponseMessage response = await client.DeleteAsync(_config["ApiSettings:StoreGatewayUri"] + "/Basket?id=" + id);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Basket could not be deleted: {id}");
+            }
         }
         catch (HttpRequestException ex)
         {

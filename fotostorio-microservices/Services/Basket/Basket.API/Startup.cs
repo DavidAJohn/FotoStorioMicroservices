@@ -51,6 +51,9 @@ namespace Basket.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket.API", Version = "v1" });
             });
 
+            services.AddHttpContextAccessor();
+            services.AddHttpClient();
+
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
