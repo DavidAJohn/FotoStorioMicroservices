@@ -1,8 +1,8 @@
 ﻿using Basket.API.Entities;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading;
@@ -13,14 +13,12 @@ namespace Basket.API.Repositories
     public class BasketRepository : IBasketRepository
     {
         private readonly IDistributedCache _redisCache;
-        private readonly IConfiguration _config;
-        private readonly IHttpClientFactory _client;
+        private readonly IHttpClientFactory _httpClient;
 
-        public BasketRepository(IDistributedCache redisCache, IConfiguration config, IHttpClientFactory client)
+        public BasketRepository(IDistributedCache redisCache, IHttpClientFactory httpClient)
         {
             _redisCache = redisCache;
-            _config = config;
-            _client = client;
+            _httpClient = httpClient;
         }
 
         public async Task<CustomerBasket> GetBasketAsync(string basketId, string token)
@@ -64,9 +62,10 @@ namespace Basket.API.Repositories
 
         private async Task<bool> IsTokenValid(string token)
         {
-            var identityUri = _config["ApiSettings:IdentityUri"] + "/api/accounts/token";
-            var client = _client.CreateClient();
-            var tokenResponse = await client.PostAsJsonAsync(identityUri, token);
+            var client = _httpClient.CreateClient("IdentityAPI");
+            HttpContent serializedContent = new StringContent(JsonSerializer.Serialize(token));
+            serializedContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpResponseMessage tokenResponse = await client.PostAsync("/api/accounts/token", serializedContent);
 
             if (!tokenResponse.IsSuccessStatusCode) return false;
 
