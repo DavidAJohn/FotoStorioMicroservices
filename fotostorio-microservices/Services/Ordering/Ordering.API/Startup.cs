@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using Ordering.API.Contracts;
 using Ordering.API.Data;
 using Ordering.API.Helpers;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +52,22 @@ namespace Ordering.API
             services.AddAutoMapper(typeof(AutoMapperProfiles));
 
             services.AddHttpContextAccessor();
-            services.AddHttpClient();
+
+            // Access the Identity API via a named HttpClient, also using Polly for more resilience
+            services.AddHttpClient("IdentityAPI", client =>
+            {
+                client.BaseAddress = new Uri(Configuration["ApiSettings:IdentityUri"]);
+            })
+            .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new[]
+            {
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(5),
+                TimeSpan.FromSeconds(10)
+            }))
+            .AddTransientHttpErrorPolicy(builder => builder.CircuitBreakerAsync(
+                handledEventsAllowedBeforeBreaking: 3,
+                durationOfBreak: TimeSpan.FromSeconds(30)
+            ));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

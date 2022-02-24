@@ -9,6 +9,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.Net.Http.Headers;
 
 namespace Ordering.API.Data
 {
@@ -16,16 +18,14 @@ namespace Ordering.API.Data
     {
         private readonly OrderDbContext _orderDbContext;
         private readonly IPaymentService _paymentService;
-        private readonly IConfiguration _config;
-        private readonly IHttpClientFactory _client;
+        private readonly IHttpClientFactory _httpClient;
         private readonly IPublishEndpoint _publishEndpoint;
 
-        public OrderRepository(OrderDbContext orderDbContext, IPaymentService paymentService, IConfiguration config, IHttpClientFactory client, IPublishEndpoint publishEndpoint)
+        public OrderRepository(OrderDbContext orderDbContext, IPaymentService paymentService, IHttpClientFactory httpClient, IPublishEndpoint publishEndpoint)
         {
             _orderDbContext = orderDbContext;
             _paymentService = paymentService;
-            _config = config;
-            _client = client;
+            _httpClient = httpClient;
             _publishEndpoint = publishEndpoint;
         }
 
@@ -168,9 +168,10 @@ namespace Ordering.API.Data
 
         private async Task<bool> IsTokenValid(string token)
         {
-            var identityUri = _config["ApiSettings:IdentityUri"] + "/api/accounts/token";
-            var client = _client.CreateClient();
-            var tokenResponse = await client.PostAsJsonAsync(identityUri, token);
+            var client = _httpClient.CreateClient("IdentityAPI");
+            HttpContent serializedContent = new StringContent(JsonSerializer.Serialize(token));
+            serializedContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpResponseMessage tokenResponse = await client.PostAsync("/api/accounts/token", serializedContent);
 
             if (!tokenResponse.IsSuccessStatusCode) return false;
 
