@@ -276,7 +276,7 @@
         }
       ],
       "UpstreamPathTemplate": "/Orders",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "GET", "POST" ]
     },
     {
       "DownstreamPathTemplate": "/api/payments",

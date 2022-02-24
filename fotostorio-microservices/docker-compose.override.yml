@@ -82,6 +82,18 @@ services:
     ports:
       - "8005:80"
 
+  ordering.api:
+    container_name: ordering.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:OrdersConnectionString=Server=mssqldata;Database=OrdersDb;User Id=sa;Password=aDmin1234!;"
+      - "ApiSettings:IdentityUri=http://identity.api"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+    ports:
+      - "8006:80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+
   products.aggregator:
     container_name: products.aggregator
     environment:
@@ -113,8 +125,10 @@ services:
     ports:
       - "8012:80"
 
+  
 volumes:
   fs_mssqldata:
     external: false
   postgres_data:
     external: false
+

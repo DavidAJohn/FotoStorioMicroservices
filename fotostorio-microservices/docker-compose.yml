@@ -54,6 +54,14 @@ services:
     depends_on:
       - mssqldata
 
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: .
+      dockerfile: Services/Ordering/Ordering.API/Dockerfile
+    depends_on:
+      - mssqldata
+
   products.aggregator:
     image: ${DOCKER_REGISTRY-}productsaggregator
     build:
