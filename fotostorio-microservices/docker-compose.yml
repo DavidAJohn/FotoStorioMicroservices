@@ -1,17 +1,11 @@
 version: '3.4'
 
 services:
-  productsdb:
+  mssqldata:
     image: mcr.microsoft.com/mssql/server:2017-latest
 
   basketdb:
     image: redis:alpine
-
-  discountdb:
-    image: mcr.microsoft.com/mssql/server:2017-latest
-
-  identitydb:
-    image: mcr.microsoft.com/mssql/server:2017-latest
 
   inventorydb:
     image: postgres:14-alpine
@@ -24,57 +18,77 @@ services:
     build:
       context: .
       dockerfile: Services/Products/Products.API/Dockerfile
+    depends_on:
+      - mssqldata
+      - rabbitmq
 
   basket.api:
     image: ${DOCKER_REGISTRY-}basketapi
     build:
       context: .
       dockerfile: Services/Basket/Basket.API/Dockerfile
+    depends_on:
+      - basketdb
 
   discount.grpc:
     image: ${DOCKER_REGISTRY-}discountgrpc
     build:
       context: .
       dockerfile: Services/Discount/Discount.Grpc/Dockerfile
+    depends_on:
+      - mssqldata
 
   discount.minapi:
     image: ${DOCKER_REGISTRY-}discountminapi
     build:
       context: .
       dockerfile: Services/Discount/Discount.minAPI/Dockerfile
-
-  products.aggregator:
-    image: ${DOCKER_REGISTRY-}productsaggregator
-    build:
-      context: .
-      dockerfile: ApiGateways/Products.Aggregator/Dockerfile
-
-  store.gateway:
-    image: ${DOCKER_REGISTRY-}storegateway
-    build:
-      context: .
-      dockerfile: ApiGateways/Store.Gateway/Dockerfile
-
-  marketing.gateway:
-    image: ${DOCKER_REGISTRY-}marketinggateway
-    build:
-      context: .
-      dockerfile: ApiGateways/Marketing.Gateway/Dockerfile
-
-  admin.gateway:
-    image: ${DOCKER_REGISTRY-}admingateway
-    build:
-      context: .
-      dockerfile: ApiGateways/Admin.Gateway/Dockerfile
+    depends_on:
+      - mssqldata
 
   identity.api:
     image: ${DOCKER_REGISTRY-}identityapi
     build:
       context: .
       dockerfile: Services/Identity/Identity.API/Dockerfile
+    depends_on:
+      - mssqldata
 
-volumes:
-  products_mssqldata:
-  discount_mssqldata:
-  identity_mssqldata:
-  postgres_data:
+  products.aggregator:
+    image: ${DOCKER_REGISTRY-}productsaggregator
+    build:
+      context: .
+      dockerfile: ApiGateways/Products.Aggregator/Dockerfile
+    depends_on:
+      - products.api
+      - discount.minapi
+
+  store.gateway:
+    image: ${DOCKER_REGISTRY-}storegateway
+    build:
+      context: .
+      dockerfile: ApiGateways/Store.Gateway/Dockerfile
+    depends_on:
+      - products.aggregator
+      - products.api
+      - basket.api
+      - identity.api
+
+  marketing.gateway:
+    image: ${DOCKER_REGISTRY-}marketinggateway
+    build:
+      context: .
+      dockerfile: ApiGateways/Marketing.Gateway/Dockerfile
+    depends_on:
+      - discount.minapi
+      - products.api
+      - products.aggregator
+
+  admin.gateway:
+    image: ${DOCKER_REGISTRY-}admingateway
+    build:
+      context: .
+      dockerfile: ApiGateways/Admin.Gateway/Dockerfile
+    depends_on:
+      - products.api
+      - products.aggregator

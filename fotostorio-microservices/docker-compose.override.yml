@@ -1,44 +1,22 @@
 version: '3.4'
 
 services:
-  productsdb:
-    container_name: productsdb
+  mssqldata:
+    container_name: mssqldata
     environment:
       SA_PASSWORD: "aDmin1234!"
       ACCEPT_EULA: "Y"
     restart: always
     ports:
-      - "1434:1433"
+      - "5433:1433"
     volumes: 
-      - products_mssqldata:/var/opt/mssql
-
-  discountdb:
-    container_name: discountdb
-    environment:
-      SA_PASSWORD: "aDmin1234!"
-      ACCEPT_EULA: "Y"
-    restart: always
-    ports:
-      - "1435:1433"
-    volumes: 
-      - discount_mssqldata:/var/opt/mssql
+      - fs_mssqldata:/var/opt/mssql
 
   basketdb:
     container_name: basketdb
     restart: always
     ports:
       - "6379:6379"
-
-  identitydb:
-    container_name: identitydb
-    environment:
-      SA_PASSWORD: "aDmin1234!"
-      ACCEPT_EULA: "Y"
-    restart: always
-    ports:
-      - "1436:1433"
-    volumes: 
-      - identity_mssqldata:/var/opt/mssql
 
   inventorydb:
     container_name: inventorydb
@@ -56,18 +34,15 @@ services:
     container_name: rabbitmq
     restart: always
     ports:
-        - "5672:5672"
-        - "15672:15672"
+      - "5672:5672"
+      - "15672:15672"
 
   products.api:
     container_name: products.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:ProductsConnectionString=Server=productsdb;Database=ProductsDb;User Id=sa;Password=aDmin1234!;"
+      - "ConnectionStrings:ProductsConnectionString=Server=mssqldata;Database=ProductsDb;User Id=sa;Password=aDmin1234!;"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
-    depends_on:
-      - productsdb
-      - rabbitmq
     ports:
       - "8001:80"
 
@@ -78,8 +53,6 @@ services:
       - "CacheSettings:ConnectionString=basketdb:6379"
       - "GrpcSettings:DiscountUri=http://discount.grpc"
       - "ApiSettings:IdentityUri=http://identity.api"
-    depends_on:
-      - basketdb
     ports:
       - "8002:80"
 
@@ -87,9 +60,7 @@ services:
     container_name: discount.grpc
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:DiscountConnectionString=Server=discountdb;Database=DiscountDb;User Id=sa;Password=aDmin1234!;"
-    depends_on:
-      - discountdb
+      - "ConnectionStrings:DiscountConnectionString=Server=mssqldata;Database=DiscountDb;User Id=sa;Password=aDmin1234!;"
     ports:
       - "8003:80"
 
@@ -97,9 +68,7 @@ services:
     container_name: discount.minapi
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:DiscountConnectionString=Server=discountdb;Database=DiscountDb;User Id=sa;Password=aDmin1234!;"
-    depends_on:
-      - discountdb
+      - "ConnectionStrings:DiscountConnectionString=Server=mssqldata;Database=DiscountDb;User Id=sa;Password=aDmin1234!;"
     ports:
       - "8004:80"
 
@@ -107,26 +76,11 @@ services:
     container_name: identity.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:IdentityConnection=Server=identitydb;Database=IdentityDb;User Id=sa;Password=aDmin1234!;"
+      - "ConnectionStrings:IdentityConnection=Server=mssqldata;Database=IdentityDb;User Id=sa;Password=aDmin1234!;"
       - "JwtIssuer=http://identity.api"
       - "JwtAudience=http://identity.api"
-    depends_on:
-      - identitydb
     ports:
       - "8005:80"
-
-  store.gateway:
-    container_name: store.gateway
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - "Cors_Url=http://store.gateway"
-    depends_on:
-      - products.aggregator
-      - products.api
-      - basket.api
-      - identity.api
-    ports:
-      - "8010:80"
 
   products.aggregator:
     container_name: products.aggregator
@@ -134,20 +88,21 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ApiSettings:ProductsUrl=http://products.api"
       - "ApiSettings:DiscountUrl=http://discount.minapi"
-    depends_on:
-      - products.api
-      - discount.minapi
     ports:
-      - "8015:80"
+      - "8015:80"  
+
+  store.gateway:
+    container_name: store.gateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "Cors_Url=http://store.gateway"
+    ports:
+      - "8010:80"
 
   marketing.gateway:
     container_name: marketing.gateway
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    depends_on:
-      - discount.minapi
-      - products.api
-      - products.aggregator
     ports:
       - "8011:80"
 
@@ -155,8 +110,11 @@ services:
     container_name: admin.gateway
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    depends_on:
-      - products.api
-      - products.aggregator
     ports:
       - "8012:80"
+
+volumes:
+  fs_mssqldata:
+    external: false
+  postgres_data:
+    external: false
