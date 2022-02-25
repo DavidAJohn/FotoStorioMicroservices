@@ -61,6 +61,18 @@ services:
       dockerfile: Services/Ordering/Ordering.API/Dockerfile
     depends_on:
       - mssqldata
+      - rabbitmq
+      - identity.api
+
+  inventory.api:
+    image: ${DOCKER_REGISTRY-}inventoryapi
+    build:
+      context: .
+      dockerfile: Services/Inventory/Inventory.API/Dockerfile
+    depends_on:
+      - inventorydb
+      - rabbitmq
+      - identity.api
 
   products.aggregator:
     image: ${DOCKER_REGISTRY-}productsaggregator

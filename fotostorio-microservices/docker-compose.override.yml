@@ -93,6 +93,16 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
 
+  inventory.api:
+    container_name: inventory.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:InventoryConnectionString=Server=inventorydb;Database=InventoryDb;User Id=admin;Password=admin1234;"
+      - "ApiSettings:IdentityUri=http://identity.api"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+    ports:
+      - "8007:80"
+
   products.aggregator:
     container_name: products.aggregator
     environment:
@@ -124,7 +134,6 @@ services:
     ports:
       - "8012:80"
 
-  
 volumes:
   fs_mssqldata:
     external: false
