@@ -52,7 +52,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "CacheSettings:ConnectionString=basketdb:6379"
       - "GrpcSettings:DiscountUri=http://discount.grpc"
-      - "ApiSettings:IdentityUri=http://identity.api"
     ports:
       - "8002:80"
 
@@ -131,4 +130,3 @@ volumes:
     external: false
   postgres_data:
     external: false
-

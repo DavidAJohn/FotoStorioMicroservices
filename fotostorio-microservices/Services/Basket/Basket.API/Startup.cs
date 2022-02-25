@@ -52,24 +52,6 @@ namespace Basket.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket.API", Version = "v1" });
             });
 
-            services.AddHttpContextAccessor();
-
-            // Access the Identity API via a named HttpClient, also using Polly for more resilience
-            services.AddHttpClient("IdentityAPI", client =>
-            {
-                client.BaseAddress = new Uri(Configuration["ApiSettings:IdentityUri"]);
-            })
-            .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new[]
-            {
-                TimeSpan.FromSeconds(1),
-                TimeSpan.FromSeconds(5),
-                TimeSpan.FromSeconds(10)
-            }))
-            .AddTransientHttpErrorPolicy(builder => builder.CircuitBreakerAsync(
-                handledEventsAllowedBeforeBreaking: 3,
-                durationOfBreak: TimeSpan.FromSeconds(30)
-            ));
-
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",

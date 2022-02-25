@@ -5,8 +5,8 @@ namespace Basket.API.Repositories
 {
     public interface IBasketRepository
     {
-        Task<CustomerBasket> GetBasketAsync(string basketId, string token);
-        Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket, string token);
-        Task DeleteBasketAsync(string basketId, string token);
+        Task<CustomerBasket> GetBasketAsync(string basketId);
+        Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket);
+        Task DeleteBasketAsync(string basketId);
     }
 }

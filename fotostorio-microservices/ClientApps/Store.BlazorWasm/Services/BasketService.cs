@@ -14,24 +14,19 @@ public class BasketService : IBasketService
     private readonly IHttpClientFactory _httpClient;
     private readonly ILogger<BasketService> _logger;
     private readonly IConfiguration _config;
-    private readonly ILocalStorageService _localStorage;
 
-    public BasketService(IHttpClientFactory httpClient, ILogger<BasketService> logger, IConfiguration config, ILocalStorageService localStorage)
+    public BasketService(IHttpClientFactory httpClient, ILogger<BasketService> logger, IConfiguration config)
     {
         _httpClient = httpClient;
         _logger = logger;
         _config = config;
-        _localStorage = localStorage;
     }
 
     public async Task<Basket> GetBasketByID(string id)
     {
         try
         {
-            var authToken = await _localStorage.GetItemAsync<string>("authToken");
-
             HttpClient client = _httpClient.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
             HttpResponseMessage response = await client.GetAsync(_config["ApiSettings:StoreGatewayUri"] + "/Basket?id=" + id);
 
             if (response.StatusCode == HttpStatusCode.OK)
@@ -59,11 +54,7 @@ public class BasketService : IBasketService
     {
         try
         {
-            var authToken = await _localStorage.GetItemAsync<string>("authToken");
-
             HttpClient client = _httpClient.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
-
             HttpContent content = new StringContent(JsonSerializer.Serialize(basket));
             content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
@@ -88,10 +79,7 @@ public class BasketService : IBasketService
     {
         try
         {
-            var authToken = await _localStorage.GetItemAsync<string>("authToken");
-
             HttpClient client = _httpClient.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
             HttpResponseMessage response = await client.DeleteAsync(_config["ApiSettings:StoreGatewayUri"] + "/Basket?id=" + id);
 
             if (!response.IsSuccessStatusCode)

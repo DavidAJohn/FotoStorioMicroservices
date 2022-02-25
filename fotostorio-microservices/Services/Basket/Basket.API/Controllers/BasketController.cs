@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Basket.API.Entities;
-using Basket.API.Extensions;
 using Basket.API.GrpcServices;
 using Basket.API.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -16,22 +15,18 @@ namespace Basket.API.Controllers
         private readonly IBasketRepository _basketRepository;
         private readonly IMapper _mapper;
         private readonly DiscountGrpcService _discountGrpcService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public BasketController(IBasketRepository basketRepository, IMapper mapper, DiscountGrpcService discountGrpcService, IHttpContextAccessor httpContextAccessor)
+        public BasketController(IBasketRepository basketRepository, IMapper mapper, DiscountGrpcService discountGrpcService)
         {
             _mapper = mapper;
             _discountGrpcService = discountGrpcService;
-            _httpContextAccessor = httpContextAccessor;
             _basketRepository = basketRepository;
         }
 
         [HttpGet]
         public async Task<ActionResult<CustomerBasket>> GetBasketById(string id)
         {
-            var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-
-            var basket = await _basketRepository.GetBasketAsync(id, token);
+            var basket = await _basketRepository.GetBasketAsync(id);
 
             return Ok(basket ?? new CustomerBasket(id));
         }
@@ -39,8 +34,6 @@ namespace Basket.API.Controllers
         [HttpPost]
         public async Task<ActionResult<CustomerBasket>> UpdateBasket([FromBody] CustomerBasketDTO basket)
         {
-            var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-
             // for each basket item, check if there is a discounted price from the Discount.Grpc service
             foreach (var item in basket.BasketItems)
             {
@@ -52,7 +45,7 @@ namespace Basket.API.Controllers
             }
 
             var customerBasket = _mapper.Map<CustomerBasketDTO, CustomerBasket>(basket);
-            var updatedBasket = await _basketRepository.UpdateBasketAsync(customerBasket, token);
+            var updatedBasket = await _basketRepository.UpdateBasketAsync(customerBasket);
 
             return Ok(updatedBasket);
         }
@@ -60,9 +53,7 @@ namespace Basket.API.Controllers
         [HttpDelete]
         public async Task DeleteBasket(string id)
         {
-            var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-
-            await _basketRepository.DeleteBasketAsync(id, token);
+            await _basketRepository.DeleteBasketAsync(id);
         }
     }
 }
