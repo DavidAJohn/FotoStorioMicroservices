@@ -32,6 +32,13 @@ namespace Inventory.API.Controllers
             try
             {
                 var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
+                var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
+
+                if (role != "Administrator")
+                {
+                    _logger.LogWarning("Stock Updates: GetUpdates called with role: '" + role + "', NOT 'Administrator'");
+                    return Unauthorized();
+                }
 
                 var updates = await _inventoryService.GetUpdates(token);
 
@@ -56,6 +63,13 @@ namespace Inventory.API.Controllers
             try
             {
                 var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
+                var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
+
+                if (role != "Administrator")
+                {
+                    _logger.LogWarning("Stock Updates: GetUpdatesBySku called with role: '" + role + "', NOT 'Administrator'");
+                    return Unauthorized();
+                }
 
                 var updates = await _inventoryService.GetUpdatesBySku(sku, token);
 
@@ -80,6 +94,13 @@ namespace Inventory.API.Controllers
             try
             {
                 var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
+                var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
+
+                if (role != "Administrator")
+                {
+                    _logger.LogWarning("Stock Updates: CreateStockUpdate called with role: '" + role + "', NOT 'Administrator'");
+                    return Unauthorized();
+                }
 
                 var createdUpdate = await _inventoryService.CreateUpdateFromAdmin(update, token);
 
