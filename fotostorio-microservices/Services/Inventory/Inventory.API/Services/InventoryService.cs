@@ -5,6 +5,9 @@ using MassTransit;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Inventory.API.Services
@@ -15,13 +18,15 @@ namespace Inventory.API.Services
         private readonly IUpdateRepository _updateRepository;
         private readonly IStockRepository _stockRepository;
         private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IHttpClientFactory _httpClient;
 
-        public InventoryService(ILogger<InventoryService> logger, IUpdateRepository updateRepository, IStockRepository stockRepository, IPublishEndpoint publishEndpoint)
+        public InventoryService(ILogger<InventoryService> logger, IUpdateRepository updateRepository, IStockRepository stockRepository, IPublishEndpoint publishEndpoint, IHttpClientFactory httpClient)
         {
             _logger = logger;
             _updateRepository = updateRepository;
             _stockRepository = stockRepository;
             _publishEndpoint = publishEndpoint;
+            _httpClient = httpClient;
         }
 
         public async Task<bool> CreateUpdateFromPaymentReceived(Update update)
@@ -85,8 +90,12 @@ namespace Inventory.API.Services
             }
         }
 
-        public async Task<Update> CreateUpdateFromAdmin(UpdateCreateDTO update)
+        public async Task<Update> CreateUpdateFromAdmin(UpdateCreateDTO update, string token)
         {
+            // check that jwt is valid
+            var validToken = await IsTokenValid(token);
+            if (!validToken) return null;
+
             // check for an existing entry in the stock table for this sku
             var skuToUpdate = await _stockRepository.GetBySkuAsync(update.Sku);
             if (skuToUpdate == null) return null;
@@ -148,16 +157,24 @@ namespace Inventory.API.Services
             return stockUpdate;
         }
 
-        public async Task<IEnumerable<Update>> GetUpdates()
+        public async Task<IEnumerable<Update>> GetUpdates(string token)
         {
+            // check that jwt is valid
+            var validToken = await IsTokenValid(token);
+            if (!validToken) return null;
+
             var updates = await _updateRepository.ListAllAsync();
             if (updates == null) return null;
 
             return updates;
         }
 
-        public async Task<IEnumerable<Update>> GetUpdatesBySku(string sku)
+        public async Task<IEnumerable<Update>> GetUpdatesBySku(string sku, string token)
         {
+            // check that jwt is valid
+            var validToken = await IsTokenValid(token);
+            if (!validToken) return null;
+
             var updates = await _updateRepository.GetBySkuAsync(sku);
             if (updates == null) return null;
 
@@ -190,6 +207,18 @@ namespace Inventory.API.Services
             await _publishEndpoint.Publish(eventMessage);
 
             _logger.LogInformation("InventoryRestoredEvent published to event bus for Sku: {sku}", sku);
+        }
+
+        private async Task<bool> IsTokenValid(string token)
+        {
+            var client = _httpClient.CreateClient("IdentityAPI");
+            HttpContent serializedContent = new StringContent(JsonSerializer.Serialize(token));
+            serializedContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpResponseMessage tokenResponse = await client.PostAsync("/api/accounts/token", serializedContent);
+
+            if (!tokenResponse.IsSuccessStatusCode) return false;
+
+            return true;
         }
     }
 }

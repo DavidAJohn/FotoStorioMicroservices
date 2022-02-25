@@ -1,5 +1,7 @@
 ﻿using Inventory.API.Contracts;
 using Inventory.API.Entities;
+using Inventory.API.Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,11 +16,13 @@ namespace Inventory.API.Controllers
     {
         private readonly ILogger<UpdatesController> _logger;
         private readonly IInventoryService _inventoryService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UpdatesController(ILogger<UpdatesController> logger, IInventoryService inventoryService)
+        public UpdatesController(ILogger<UpdatesController> logger, IInventoryService inventoryService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _inventoryService = inventoryService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET api/updates
@@ -27,7 +31,9 @@ namespace Inventory.API.Controllers
         {
             try
             {
-                var updates = await _inventoryService.GetUpdates();
+                var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
+
+                var updates = await _inventoryService.GetUpdates(token);
 
                 if (updates == null) return NotFound();
 
@@ -49,7 +55,9 @@ namespace Inventory.API.Controllers
 
             try
             {
-                var updates = await _inventoryService.GetUpdatesBySku(sku);
+                var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
+
+                var updates = await _inventoryService.GetUpdatesBySku(sku, token);
 
                 if (updates == null) return NotFound();
 
@@ -71,7 +79,9 @@ namespace Inventory.API.Controllers
 
             try
             {
-                var createdUpdate = await _inventoryService.CreateUpdateFromAdmin(update);
+                var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
+
+                var createdUpdate = await _inventoryService.CreateUpdateFromAdmin(update, token);
 
                 if (createdUpdate == null) return BadRequest("There was a problem updating stock for this Sku");
 
