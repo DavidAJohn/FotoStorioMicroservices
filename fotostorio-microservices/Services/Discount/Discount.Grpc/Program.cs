@@ -12,7 +12,14 @@ ConfigurationManager configuration = builder.Configuration;
 builder.Services.AddGrpc();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => {
-    options.UseSqlServer(configuration.GetConnectionString("DiscountConnectionString"));
+    options.UseSqlServer(configuration.GetConnectionString("DiscountConnectionString"),
+        sqlServerOptionsAction: sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(15),
+            errorNumbersToAdd: null);
+        });
 });
 
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();

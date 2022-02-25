@@ -12,6 +12,7 @@ using Products.API.Data;
 using Products.API.EventBusConsumer;
 using Products.API.Helpers;
 using Products.API.Services;
+using System;
 
 namespace Products.API
 {
@@ -27,7 +28,14 @@ namespace Products.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options => {
-                options.UseSqlServer(Configuration.GetConnectionString("ProductsConnectionString"));
+                options.UseSqlServer(Configuration.GetConnectionString("ProductsConnectionString"),
+                    sqlServerOptionsAction: sqlOptions => 
+                    { 
+                        sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5, 
+                        maxRetryDelay: TimeSpan.FromSeconds(15),
+                        errorNumbersToAdd: null); 
+                    });
             });
 
             services.AddScoped<IProductRepository, ProductRepository>();

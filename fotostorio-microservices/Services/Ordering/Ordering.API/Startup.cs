@@ -32,7 +32,14 @@ namespace Ordering.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<OrderDbContext>(options => {
-                options.UseSqlServer(Configuration.GetConnectionString("OrdersConnectionString"));
+                options.UseSqlServer(Configuration.GetConnectionString("OrdersConnectionString"),
+                    sqlServerOptionsAction: sqlOptions =>
+                    {
+                        sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(15),
+                        errorNumbersToAdd: null);
+                    });
             });
 
             services.AddScoped<IOrderRepository, OrderRepository>();

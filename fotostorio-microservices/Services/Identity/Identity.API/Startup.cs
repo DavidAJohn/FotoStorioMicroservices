@@ -33,7 +33,14 @@ namespace Identity.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<IdentityDbContext>(options => {
-                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"));
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"),
+                    sqlServerOptionsAction: sqlOptions =>
+                    {
+                        sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(15),
+                        errorNumbersToAdd: null);
+                    });
             });
 
             services.AddIdentityServices(Configuration); // extension method: ./Extensions/IdentityServicesExtensions.cs
