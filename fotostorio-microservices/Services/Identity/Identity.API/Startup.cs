@@ -1,23 +1,21 @@
+using HealthChecks.UI.Client;
 using Identity.API.Contracts;
 using Identity.API.Data;
 using Identity.API.Extensions;
 using Identity.API.Helpers;
 using Identity.API.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Identity.API
 {
@@ -47,6 +45,12 @@ namespace Identity.API
 
             services.AddScoped<ITokenService, TokenService>();
 
+            services.AddHealthChecks()
+                .AddCheck("self", () => HealthCheckResult.Healthy())
+                .AddCheck("IdentityDB-check", new SqlConnectionHealthCheck(
+                            Configuration.GetConnectionString("IdentityConnection")), 
+                            HealthStatus.Unhealthy, new string[] { "IdentityDB" });
+
             services.AddHttpContextAccessor();
 
             services.AddControllers();
@@ -60,9 +64,7 @@ namespace Identity.API
                 options.AddPolicy("CorsPolicy",
                     builder => builder
                     .AllowAnyHeader()
-                    //.WithMethods("POST", "GET", "PUT", "OPTIONS")
                     .AllowAnyMethod()
-                    //.WithOrigins("https://localhost:5080")
                     .AllowAnyOrigin()
                     );
             });
@@ -101,6 +103,16 @@ namespace Identity.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+                endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name.Contains("self")
+                });
             });
         }
     }
