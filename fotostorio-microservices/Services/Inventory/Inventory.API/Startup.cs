@@ -1,15 +1,18 @@
 using EventBus.Messages.Common;
+using HealthChecks.UI.Client;
 using Inventory.API.Contracts;
 using Inventory.API.Data;
 using Inventory.API.EventBusConsumer;
 using Inventory.API.Services;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
@@ -59,6 +62,9 @@ namespace Inventory.API
             services.AddMassTransitHostedService();
             services.AddScoped<PaymentReceivedConsumer>();
 
+            services.AddHealthChecks()
+                .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "InventoryAPI" });
+
             services.AddHttpContextAccessor();
 
             // Access the Identity API via a named HttpClient, also using Polly for more resilience
@@ -100,6 +106,16 @@ namespace Inventory.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+                endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name.Contains("self")
+                });
             });
         }
     }

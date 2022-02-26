@@ -46,7 +46,7 @@ namespace Identity.API
             services.AddScoped<ITokenService, TokenService>();
 
             services.AddHealthChecks()
-                .AddCheck("self", () => HealthCheckResult.Healthy())
+                .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "IdentityAPI" })
                 .AddCheck("IdentityDB-check", new SqlConnectionHealthCheck(
                             Configuration.GetConnectionString("IdentityConnection")), 
                             HealthStatus.Unhealthy, new string[] { "IdentityDB" });

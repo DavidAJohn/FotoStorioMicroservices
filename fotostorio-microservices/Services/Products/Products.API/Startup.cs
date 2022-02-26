@@ -1,10 +1,12 @@
 using EventBus.Messages.Common;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Products.API.Contracts;
@@ -13,6 +15,7 @@ using Products.API.EventBusConsumer;
 using Products.API.Helpers;
 using Products.API.Services;
 using System;
+using HealthChecks.UI.Client;
 
 namespace Products.API
 {
@@ -70,6 +73,11 @@ namespace Products.API
             services.AddScoped<InventoryZeroConsumer>();
             services.AddScoped<InventoryRestoredConsumer>();
 
+            services.AddHealthChecks()
+                .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "ProductsAPI" })
+                .AddCheck("ProductsDB-check", new SqlConnectionHealthCheck(
+                            Configuration.GetConnectionString("ProductsConnectionString")),
+                            HealthStatus.Unhealthy, new string[] { "ProductsDB" });
 
             services.AddHttpContextAccessor();
 
@@ -98,6 +106,16 @@ namespace Products.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+                endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name.Contains("self")
+                });
             });
         }
     }
