@@ -27,25 +27,14 @@ builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
-// Data seeding
-var services = builder.Services.BuildServiceProvider();
-
-try
-{
-    var context = services.GetRequiredService<ApplicationDbContext>();
-    await context.Database.MigrateAsync();
-
-    await SeedData.SeedCampaignDataAsync(context);
-    await SeedData.SeedProductDiscountDataAsync(context);
-    await SeedData.CreateStoredProceduresAsync(context);
-}
-catch (Exception ex)
-{
-    var logger = services.GetRequiredService<ILogger<Program>>();
-    logger.LogError(ex, "An error occurred while seeding initial discount data");
-}
+builder.Services.AddTransient<SeedData>();
 
 var app = builder.Build();
+
+//if (args.Length == 1 && args[0].ToLower() == "seeddata")
+//{
+    await SeedData(app);
+//}
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<DiscountService>();
@@ -54,3 +43,27 @@ app.MapGrpcService<CampaignService>();
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client");
 
 app.Run();
+
+// Data seeding
+async Task SeedData(IHost app)
+{
+    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+
+    using (var scope = scopedFactory.CreateScope())
+    {
+        try
+        {
+            var service = scope.ServiceProvider.GetService<SeedData>();
+
+            await service.MigrateDatabaseAsync();
+            await service.SeedCampaignDataAsync();
+            await service.SeedProductDiscountDataAsync();
+            await service.CreateStoredProceduresAsync();
+        }
+        catch (Exception ex)
+        {
+            var logger = scope.ServiceProvider.GetService<ILogger<Program>>();
+            logger.LogError(ex, "An error occurred while seeding initial data");
+        }
+    }
+}
