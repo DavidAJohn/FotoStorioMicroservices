@@ -2,11 +2,14 @@ using Basket.API.GrpcServices;
 using Basket.API.Helpers;
 using Basket.API.Repositories;
 using Discount.Grpc.Protos;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
@@ -40,6 +43,10 @@ namespace Basket.API
                 (options => options.Address = new Uri(Configuration["GrpcSettings:DiscountUri"]));
 
             services.AddScoped<DiscountGrpcService>();
+
+            // health checks
+            services.AddHealthChecks()
+                .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "BasketAPI" });
 
             // general config
             services.AddScoped<IBasketRepository, BasketRepository>();
@@ -81,6 +88,16 @@ namespace Basket.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+                endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name.Contains("self")
+                });
             });
         }
     }

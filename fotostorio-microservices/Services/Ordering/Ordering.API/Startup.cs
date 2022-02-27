@@ -1,10 +1,13 @@
+using HealthChecks.UI.Client;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
@@ -76,6 +79,12 @@ namespace Ordering.API
                 durationOfBreak: TimeSpan.FromSeconds(30)
             ));
 
+            services.AddHealthChecks()
+                .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "OrderingAPI" })
+                .AddCheck("OrderingDB-check", new SqlConnectionHealthCheck(
+                            Configuration.GetConnectionString("OrdersConnectionString")),
+                            HealthStatus.Unhealthy, new string[] { "OrderingDB" });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -113,6 +122,16 @@ namespace Ordering.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+                endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name.Contains("self")
+                });
             });
         }
     }
