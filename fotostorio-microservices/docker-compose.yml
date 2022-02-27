@@ -45,6 +45,7 @@ services:
       dockerfile: Services/Discount/Discount.minAPI/Dockerfile
     depends_on:
       - mssqldata
+      - discount.grpc
 
   identity.api:
     image: ${DOCKER_REGISTRY-}identityapi
