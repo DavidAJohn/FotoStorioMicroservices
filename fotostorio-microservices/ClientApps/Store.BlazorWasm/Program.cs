@@ -8,16 +8,23 @@ using Blazored.SessionStorage;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Components.Authorization;
 using Store.BlazorWasm.Providers;
+using Polly;
+using Polly.Extensions.Http;
+using Serilog;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddHttpClient("StoreGateway", c => c.BaseAddress = 
-    new Uri(builder.Configuration["ApiSettings:StoreGatewayUri"]));
+    new Uri(builder.Configuration["ApiSettings:StoreGatewayUri"]))
+    .AddPolicyHandler(GetRetryPolicy())
+    .AddPolicyHandler(GetCircuitBreakerPolicy());
 
 builder.Services.AddHttpClient("IdentityAPI", c => c.BaseAddress =
-    new Uri(builder.Configuration["ApiSettings:IdentityUri"] + "/api/"));
+    new Uri(builder.Configuration["ApiSettings:IdentityUri"] + "/api/"))
+    .AddPolicyHandler(GetRetryPolicy())
+    .AddPolicyHandler(GetCircuitBreakerPolicy());
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IBasketService, BasketService>();
@@ -55,3 +62,32 @@ builder.Services.AddBlazoredSessionStorage();
 builder.Services.AddBlazoredToast();
 
 await builder.Build().RunAsync();
+
+
+IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+{
+    // Retry with jitter: https://github.com/App-vNext/Polly/wiki/Retry-with-jitter
+    Random jitter = new Random();
+
+    return HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .WaitAndRetryAsync(
+            retryCount: 5,
+            sleepDurationProvider: retryAttempt =>
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))  // exponential backoff (2, 4, 8, 16, 32 secs)
+                  + TimeSpan.FromMilliseconds(jitter.Next(0, 1000)), // plus some jitter: up to 1 second
+            onRetry: (exception, retryCount, context) =>
+            {
+                Log.Warning($"Retry {retryCount} of {context.PolicyKey} at {context.OperationKey}, due to: {exception}.");
+            });
+}
+
+IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+{
+    return HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .CircuitBreakerAsync(
+            handledEventsAllowedBeforeBreaking: 5,
+            durationOfBreak: TimeSpan.FromSeconds(30)
+        );
+}
