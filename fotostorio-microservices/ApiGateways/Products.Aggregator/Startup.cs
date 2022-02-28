@@ -7,9 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Polly;
+using Polly.Extensions.Http;
 using Products.Aggregator.Services;
 using Products.API.Helpers;
+using Serilog;
 using System;
+using System.Net.Http;
 
 namespace Products.Aggregator
 {
@@ -25,10 +29,14 @@ namespace Products.Aggregator
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient<IProductsService, ProductsService>(c =>
-                c.BaseAddress = new Uri(Configuration["ApiSettings:ProductsUrl"]));
+                c.BaseAddress = new Uri(Configuration["ApiSettings:ProductsUrl"]))
+                .AddPolicyHandler(GetRetryPolicy())
+                .AddPolicyHandler(GetCircuitBreakerPolicy());
 
             services.AddHttpClient<IDiscountService, DiscountService>(c =>
-                c.BaseAddress = new Uri(Configuration["ApiSettings:DiscountUrl"]));
+                c.BaseAddress = new Uri(Configuration["ApiSettings:DiscountUrl"]))
+                .AddPolicyHandler(GetRetryPolicy())
+                .AddPolicyHandler(GetCircuitBreakerPolicy());
 
             services.AddHttpContextAccessor();
 
@@ -72,6 +80,34 @@ namespace Products.Aggregator
                     Predicate = r => r.Name.Contains("self")
                 });
             });
+        }
+
+        private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        {
+            // Retry with jitter: https://github.com/App-vNext/Polly/wiki/Retry-with-jitter
+            Random jitter = new Random();
+
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .WaitAndRetryAsync(
+                    retryCount: 5,
+                    sleepDurationProvider: retryAttempt => 
+                            TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))  // exponential backoff (2, 4, 8, 16, 32 secs)
+                          + TimeSpan.FromMilliseconds(jitter.Next(0, 1000)), // plus some jitter: up to 1 second
+                    onRetry: (exception, retryCount, context) =>
+                    {
+                        Log.Warning($"Retry {retryCount} of {context.PolicyKey} at {context.OperationKey}, due to: {exception}.");
+                    });
+        }
+
+        private static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+        {
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .CircuitBreakerAsync(
+                    handledEventsAllowedBeforeBreaking: 5,
+                    durationOfBreak: TimeSpan.FromSeconds(30)
+                );
         }
     }
 }
