@@ -1,7 +1,10 @@
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Products.Aggregator.Services;
@@ -29,6 +32,9 @@ namespace Products.Aggregator
 
             services.AddHttpContextAccessor();
 
+            services.AddHealthChecks()
+                .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "ProductsAggregator" });
+
             services.AddAutoMapper(typeof(AutoMapperProfiles));
 
             services.AddControllers();
@@ -54,6 +60,17 @@ namespace Products.Aggregator
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+
+                endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name.Contains("self")
+                });
             });
         }
     }

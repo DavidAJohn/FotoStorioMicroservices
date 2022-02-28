@@ -7,6 +7,9 @@ using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Cache.CacheManager;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 namespace Store.Gateway
 {
@@ -23,6 +26,9 @@ namespace Store.Gateway
         {
             services.AddOcelot()
                 .AddCacheManager(settings => settings.WithDictionaryHandle());
+
+            services.AddHealthChecks()
+                .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "StoreGateway" });
 
             services.AddCors(opt =>
             {
@@ -52,7 +58,18 @@ namespace Store.Gateway
             {
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("Hello!");
+                    await context.Response.WriteAsync("/");
+                });
+
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+
+                endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name.Contains("self")
                 });
             });
 

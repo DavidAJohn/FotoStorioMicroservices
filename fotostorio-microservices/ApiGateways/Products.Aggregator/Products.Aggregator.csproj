@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
+	<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="5.0.13" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
