@@ -2,7 +2,10 @@ using Discount.Grpc.Contracts;
 using Discount.Grpc.Data;
 using Discount.Grpc.Helpers;
 using Discount.Grpc.Services;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,15 +14,11 @@ ConfigurationManager configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddGrpc();
 
+builder.Services.AddGrpcHealthChecks()
+                .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "Discount.Grpc" });
+
 builder.Services.AddDbContext<ApplicationDbContext>(options => {
-    options.UseSqlServer(configuration.GetConnectionString("DiscountConnectionString"),
-        sqlServerOptionsAction: sqlOptions =>
-        {
-            sqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 5,
-            maxRetryDelay: TimeSpan.FromSeconds(15),
-            errorNumbersToAdd: null);
-        });
+    options.UseSqlServer(configuration.GetConnectionString("DiscountConnectionString"));
 });
 
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
@@ -31,14 +30,13 @@ builder.Services.AddTransient<SeedData>();
 
 var app = builder.Build();
 
-//if (args.Length == 1 && args[0].ToLower() == "seeddata")
-//{
-    await SeedData(app);
-//}
+await SeedData(app);
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<DiscountService>();
 app.MapGrpcService<CampaignService>();
+
+app.MapGrpcHealthChecksService();
 
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client");
 
