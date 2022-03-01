@@ -1,0 +1,22 @@
+﻿@using Admin.BlazorServer.Models
+@using Store.BlazorWasm.Models
+
+<div class="px-2 pt-2 pb-3 space-y-1">
+    <!-- Active: "bg-blue-900 text-white", Default/Inactive: "text-gray-300 hover:bg-blue-900 hover:text-white" -->
+
+    @if (navMenuItems != null)
+    {
+        @foreach (NavMenuItem navItem in navMenuItems)
+        {
+            <a href="@navItem.Url" class="text-gray-300 hover:bg-blue-900 hover:text-white block px-3 py-2 rounded-md text-base font-medium">@navItem.DisplayName</a>
+        }
+
+        <a href="/specialoffers" class="text-gray-300 hover:bg-blue-900 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Special Offers</a>
+    }
+
+</div>
+
+@code {
+    [Parameter]
+    public List<NavMenuItem>? navMenuItems { get; set; }
+}

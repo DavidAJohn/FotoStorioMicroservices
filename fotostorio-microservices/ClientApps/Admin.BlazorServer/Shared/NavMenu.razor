@@ -1,34 +1,47 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Admin.BlazorServer</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
+﻿@using Admin.BlazorServer.Models
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
+<nav class="bg-blue-900 hidden md:block">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-center h-16">
+
+            @if (navMenuItems != null)
+            {
+                <div>
+                    <div class="text-white text-sm">
+                        <NavLink href="/" class="hover:text-white px-3 py-2 my-2 mr-4 rounded-md uppercase font-bold">
+                            <!-- heroicon: home (solid) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform hover:scale-110" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                            </svg>
+                        </NavLink>
+                    </div>
+                </div>
+                <div class="mx-2 text-white">|</div>
+
+                @foreach (NavMenuItem navItem in navMenuItems)
+                {
+                    <div>
+                        <div class="text-white text-sm">
+                            <NavLink href="@navItem.Url" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">@navItem.DisplayName</NavLink>
+                        </div>
+                    </div>
+                    <div class="mx-2 text-white">|</div>
+                }
+
+                <div>
+                    <div class="text-white text-sm">
+                        <NavLink href="/" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-semibold">
+                            Additional Link
+                        </NavLink>
+                    </div>
+                </div>
+            }
+
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-    </nav>
-</div>
+    </div>
+</nav>
 
 @code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
+    [Parameter]
+    public List<NavMenuItem>? navMenuItems { get; set; }
 }

@@ -6,4 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Shared\NotFound.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Shared\NotFound.razor.css" />
+  </ItemGroup>
+
 </Project>
