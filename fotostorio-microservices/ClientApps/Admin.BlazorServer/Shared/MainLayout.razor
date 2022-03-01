@@ -1,5 +1,15 @@
-﻿@using Admin.BlazorServer.Models
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
+
+@using Admin.BlazorServer.Models
+@using Blazored.Toast.Configuration
+
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                Timeout="4"
+                IconType="IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fas fa-check-circle"
+                InfoIcon="fas fa-info-circle"
+                ErrorIcon="fas fa-exclamation-circle" />
 
 <!-- navbar top layer -->
 <nav class="bg-fotoblue" id="navbar-top">
@@ -38,11 +48,9 @@
               </div>
           </div>
 
-          <!-- Login Details -->
+          <!-- Login details -->
           <div class="flex flex-row items-center">
-            <div class="text-white text-sm font-medium md:mr-4">
-              <a href="/login" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log In</a>
-            </div>
+            <LoginDisplay />
           </div>
 
       </div>

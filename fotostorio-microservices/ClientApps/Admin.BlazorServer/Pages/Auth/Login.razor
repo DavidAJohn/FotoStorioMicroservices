@@ -1,8 +1,14 @@
 ﻿@page "/login"
 
-@using Store.BlazorWasm.Models
+@using Admin.BlazorServer.Contracts
+@using Admin.BlazorServer.Models
+@using Blazored.Toast.Services
 
-<div class="mx-2 md:container">
+@inject NavigationManager navigationManager
+@inject IAuthenticationService authenticationService
+@inject IToastService toastService
+
+<div class="mx-2 mt-8 md:container">
     <div class="p-3 lg:p-4 flex justify-center">
         <div class="text-center shadow-md bg-white rounded-md overflow-hidden relative lg:w-112">
             <div class="hidden md:block h-16 w-auto bg-blue-900 py-2">
@@ -29,7 +35,7 @@
                             <ValidationMessage For="@(() => loginModel.Password)" />
                         </div>
                         <div class="my-4 w-full">
-                            <button type="submit" class="bg-fotofuchsia text-gray-50 w-full p-2 mt-3 rounded-sm font-semibold fotofuchsia-ripple disabled:opacity-30 disabled:cursor-default" disabled>
+                            <button type="submit" class="bg-fotofuchsia text-gray-50 w-full p-2 mt-3 rounded-sm font-semibold fotofuchsia-ripple disabled:opacity-30 disabled:cursor-default" >
                                 Sign In
                             </button>
                         </div>
@@ -40,8 +46,10 @@
                 </div>
                 @if (ShowErrors)
                 {
-                    <div class="my-4 alert alert-danger w-full" role="alert">
-                        @Error
+                    <div class="mx-2 animate-pulse">
+                        <div class="bg-red-100 border-solid border-1 border-red-700 text-red-700 font-semibold my-8 py-2 rounded-sm relative w-full" role="alert">
+                            <span class="block sm:inline">@Error</span>
+                        </div>
                     </div>
                 }
             </div>
@@ -58,6 +66,17 @@
     {
         ShowErrors = false;
 
-        // TODO: handle logins
+        var result = await authenticationService.Login(loginModel);
+
+        if (result == null)
+        {
+            Error = "There was an unspecified error during log in";
+            ShowErrors = true;
+        }
+        else if (result.Successful)
+        {
+            toastService.ShowSuccess("You have successfully logged in to your account", "Logged In");
+            navigationManager.NavigateTo("/", true); // force reload to ensure LoginDisplay is correct
+        }
     }
 }

@@ -1,0 +1,53 @@
+﻿@using Admin.BlazorServer.Extensions
+@using Microsoft.AspNetCore.Authorization
+
+@inject IAuthorizationService AuthorizationService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<AuthorizeView>
+    <Authorized>
+        <div class="md:mr-4">
+            @if (displayName != "")
+            {
+                <span class="hidden sm:inline text-gray-50 text-sm font-medium md:mr-2">Logged in as:</span>
+                <span class="hidden sm:inline text-gray-300 text-sm font-medium md:mr-6">@displayName</span>
+            }
+            <NavLink href="logout" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log out</NavLink>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="md:mr-4">
+            <NavLink href="login" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log In</NavLink>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private string? displayName;
+    private string? role;
+    
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await GetClaimsPrincipalData();
+            StateHasChanged();
+        }
+    }
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity != null)
+        {
+            if (user.Identity.IsAuthenticated)
+            {
+                displayName = user.GetEmailFromPrincipal();
+                role = user.GetRoleFromPrincipal();
+            }
+        }
+    }
+}

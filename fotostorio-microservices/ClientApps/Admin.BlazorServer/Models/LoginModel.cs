@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Store.BlazorWasm.Models;
+namespace Admin.BlazorServer.Models;
 
 public class LoginModel
 {
     [Required]
     [EmailAddress(ErrorMessage = "Email Address is invalid")]
     [Display(Name = "Email Address")]
-    public string Email { get; set; }
+    public string? Email { get; set; }
 
     [Required]
     [DataType(DataType.Password)]
-    public string Password { get; set; }
+    public string? Password { get; set; }
 }
