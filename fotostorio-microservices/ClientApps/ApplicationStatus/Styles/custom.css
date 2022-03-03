@@ -1,0 +1,8 @@
+﻿:root {
+    --primaryColor: #111750;
+    --secondaryColor: #1E3B8BFF;
+    --bgMenuActive: #1E3B8BFF;
+    --bgButton: #1E3B8BFF;
+    --logoImageUrl: url('https://i.ibb.co/kyGv6Bt/fotostorio-icon.png');
+    --bgAside: var(--primaryColor);
+}
