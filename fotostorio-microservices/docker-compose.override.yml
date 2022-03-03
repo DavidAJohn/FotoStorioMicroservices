@@ -88,10 +88,11 @@ services:
       - "ConnectionStrings:OrdersConnectionString=Server=mssqldata;Database=OrdersDb;User Id=sa;Password=aDmin1234!;"
       - "ApiSettings:IdentityUri=http://identity.api"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+      - "Stripe:WhSecret=${STRIPE_WHSECRET}"
+      - "Stripe:SecretKey=${STRIPE_SECRET_KEY}"
+      - "Stripe:PublishableKey=${STRIPE_PUBLISHABLE_KEY}"
     ports:
       - "8006:80"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
 
   inventory.api:
     container_name: inventory.api

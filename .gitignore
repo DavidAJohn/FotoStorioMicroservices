@@ -353,3 +353,4 @@ MigrationBackup/
 **/wwwroot/css/tailwind.css
 *.jpg
 *.png
+.env
