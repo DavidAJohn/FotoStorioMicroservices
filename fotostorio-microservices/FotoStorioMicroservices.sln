@@ -64,7 +64,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationStatus", "Client
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3FE54B05-B9EF-42E8-9EC1-FB881778ABD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.PlaywrightTests", "ClientApps\Tests\Store.PlaywrightTests\Store.PlaywrightTests.csproj", "{D3403B2A-1511-42DB-B167-DC26EE2621E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.PlaywrightTests", "ClientApps\Tests\Store.PlaywrightTests\Store.PlaywrightTests.csproj", "{D3403B2A-1511-42DB-B167-DC26EE2621E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

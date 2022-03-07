@@ -1,0 +1,47 @@
+﻿@page "/sitestatus"
+
+<AuthGuard RolesAllowed="Administrator" />
+
+<div class="text-3xl mb-10 font-bold text-center">
+    Site Status
+</div>
+
+<div class="mt-10 mb-10 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
+    <div class="product-card hover:shadow-xl hover:opacity-70">
+        <a href="/orders" class="hover:text-fotoblue">
+            <img src="https://i.ibb.co/HpD1Tjc/mirrorless-cameras.jpg" class="w-full h-16 sm:h-24 object-cover">
+            <div class="m-4 text-center">
+                <span class="font-bold block">Site Status</span>
+                <span class="inline text-gray-500 text-lg">Healthy</span>
+            </div>
+        </a>
+    </div>
+    <div class="text-bold text-md">
+        For full details of site status, see the <a href="http://localhost:8100" target="_blank">Application Status</a> app
+    </div>
+</div>
+
+<div class="mt-10 mb-20 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
+    <div class="product-card hover:shadow-xl hover:opacity-70">
+        <a href="/orders" class="hover:text-fotoblue">
+            <img src="https://i.ibb.co/HpD1Tjc/mirrorless-cameras.jpg" class="w-full h-16 sm:h-24 object-cover">
+            <div class="m-4 text-center">
+                <span class="font-bold block">Orders in Last 7 Days</span>
+                <span class="inline text-gray-500 text-xl">17</span>
+            </div>
+        </a>
+    </div>
+    <div class="product-card hover:shadow-xl hover:opacity-70">
+        <a href="/" class="hover:text-fotoblue">
+            <img src="https://i.ibb.co/HpD1Tjc/mirrorless-cameras.jpg" class="w-full h-16 sm:h-24 object-cover">
+            <div class="m-4 text-center">
+                <span class="font-bold block">Orders in Last 30 Days</span>
+                <span class="inline text-gray-500 text-xl">120</span>
+            </div>
+        </a>
+    </div>
+</div>
+
+@code {
+
+}
