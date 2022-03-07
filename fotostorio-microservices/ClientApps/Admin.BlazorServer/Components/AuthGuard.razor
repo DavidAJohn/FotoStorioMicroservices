@@ -1,0 +1,82 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Admin.BlazorServer.Extensions
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+@inject IToastService ToastService
+
+@if (UserRole != "" && IsAuthorised == false)
+{
+    if (NavigationManager.Uri != NavigationManager.BaseUri)
+    {
+        ToastService.ShowError("You are not authorised to view the requested page", "Not Authorised");
+    }
+    
+    NavigationManager.NavigateTo("/login");
+}
+
+@code {
+    [Parameter]
+    public string? RolesAllowed { get; set; }
+    private string UserRole = "";
+    private bool IsAuthorised = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await GetClaimsPrincipalData();
+            StateHasChanged();
+        }
+    }
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity != null)
+        {
+            if (user.Identity.IsAuthenticated)
+            {
+                UserRole = user.GetRoleFromPrincipal();
+                CheckIsAuthorised();
+            }
+            else
+            {
+                UserRole = "Unauthenticated";
+                IsAuthorised = false;
+            }
+        }
+        else
+        {
+            UserRole = "Unauthenticated";
+            IsAuthorised = false;
+        }
+    }
+
+    private void CheckIsAuthorised() 
+    {
+        if (!String.IsNullOrEmpty(RolesAllowed))
+        {
+            var rolesList = RolesAllowed.Split(",");
+        
+            if (rolesList.Length >= 1)
+            {
+                int roleExists = 0;
+
+                foreach (string role in rolesList)
+                {
+                    if (role.Trim() == UserRole)
+                    {
+                        roleExists++;
+                    }
+                }
+
+                if (roleExists > 0) 
+                {
+                    IsAuthorised = true;
+                }
+            }
+        }
+    }
+}
