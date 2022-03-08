@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using Ordering.API.Contracts;
 using Ordering.API.Data;
 using Ordering.API.Helpers;
+using Ordering.API.Services;
 using Polly;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,7 @@ namespace Ordering.API
 
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IHttpContextService, HttpContextService>();
 
             // RabbitMQ & Mass Transit
             services.AddMassTransit(config =>

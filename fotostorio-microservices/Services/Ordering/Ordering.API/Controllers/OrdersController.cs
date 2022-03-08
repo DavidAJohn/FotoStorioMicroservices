@@ -23,13 +23,15 @@ namespace Ordering.API.Controllers
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextService _contextService;
 
-        public OrdersController(ILogger<OrdersController> logger, IOrderRepository orderRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public OrdersController(ILogger<OrdersController> logger, IOrderRepository orderRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor, IHttpContextService contextService)
         {
             _logger = logger;
             _orderRepository = orderRepository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
+            _contextService = contextService;
         }
 
         /// POST api/orders
@@ -63,8 +65,8 @@ namespace Ordering.API.Controllers
 
             try
             {
-                var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-                var email = _httpContextAccessor.HttpContext.GetClaimValueByType("email");
+                var token = _contextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
+                var email = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "email");
                 order.BuyerEmail = email;
 
                 var createdOrder = await _orderRepository.CreateOrderAsync(order, token);
@@ -95,8 +97,8 @@ namespace Ordering.API.Controllers
         {
             try
             {
-                var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-                var email = _httpContextAccessor.HttpContext.GetClaimValueByType("email");
+                var token = _contextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
+                var email = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "email");
 
                 var order = await _orderRepository.GetOrderByIdAsync(id, email, token);
 
@@ -133,8 +135,8 @@ namespace Ordering.API.Controllers
         {
             try
             {
-                var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-                var email = _httpContextAccessor.HttpContext.GetClaimValueByType("email");
+                var token = _contextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
+                var email = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "email");
 
                 var orders = await _orderRepository.GetOrdersForUserAsync(token, email);
 
