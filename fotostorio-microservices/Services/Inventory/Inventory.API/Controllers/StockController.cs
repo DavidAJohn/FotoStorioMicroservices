@@ -62,5 +62,25 @@ namespace Inventory.API.Controllers
                 return BadRequest();
             }
         }
+
+        // GET api/stock/level/{stockLevel:int}
+        [HttpGet("level/{stockLevel:int}")]
+        public async Task<ActionResult<IEnumerable<Stock>>> GetStockAtOrBelowLevel(int stockLevel)
+        {
+            try
+            {
+                var stock = await _stockRepository.GetByStockLevelAtOrBelow(stockLevel);
+
+                if (stock == null) return NotFound();
+
+                return Ok(stock);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error in GetStockAtOrBelowLevel : {ex.Message}");
+
+                return BadRequest();
+            }
+        }
     }
 }

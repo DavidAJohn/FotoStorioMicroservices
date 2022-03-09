@@ -1,6 +1,8 @@
 ﻿using Inventory.API.Contracts;
 using Inventory.API.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Inventory.API.Data
@@ -19,6 +21,14 @@ namespace Inventory.API.Data
             return await _context.Set<Stock>()
                 .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Sku == sku);
+        }
+
+        public async Task<IEnumerable<Stock>> GetByStockLevelAtOrBelow(int stockLevel)
+        {
+            return await _context.Set<Stock>()
+                .AsNoTracking()
+                .Where(s => s.CurrentStock <= stockLevel)
+                .ToListAsync();
         }
     }
 }
