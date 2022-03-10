@@ -1,74 +1,98 @@
 [
-    {
-        "Sku":  "NIK7500C"
-    },
-    {
-        "Sku": "NIK850C"
-    },
-    {
-        "Sku": "NIKZ62C"
-    },
-    {
-        "Sku": "NIKZ72C"
-    },
-    {
-        "Sku": "FUJXT4C"
-    },
-    {
-        "Sku": "FUJXT3C"
-    },
-    {
-        "Sku": "FUJXT30C"
-    },
-    {
-        "Sku": "FUJXE3C"
-    },
-    {
-        "Sku": "SON6600C"
-    },
-    {
-        "Sku": "SONA73C"
-    },
-    {
-        "Sku": "SONA7R3C"
-    },
-    {
-        "Sku": "SONA92C"
-    },
-    {
-        "Sku": "CAN850DC"
-    },
-    {
-        "Sku": "CAN5DM4C"
-    },
-    {
-        "Sku": "CANEOSRC"
-    },
-    {
-        "Sku": "CANEOSR6C"
-    },
-    {
-        "Sku": "NIK5018L"
-    },
-    {
-        "Sku": "NIK2470L"
-    },
-    {
-        "Sku": "CANEF50L"
-    },
-    {
-        "Sku": "CANEF24L"
-    },
-    {
-        "Sku": "FUJ1855L"
-    },
-    {
-        "Sku": "FUJ55200L"
-    },
-    {
-        "Sku": "SON8518L"
-    },
-    {
-        "Sku": "SON2470L"
-    }
+  {
+    "Sku": "NIK7500C",
+    "Name": "Nikon D7500"
+  },
+  {
+    "Sku": "NIK850C",
+    "Name": "Nikon D850"
+  },
+  {
+    "Sku": "NIKZ62C",
+    "Name": "Nikon Z6 II"
+  },
+  {
+    "Sku": "NIKZ72C",
+    "Name": "Nikon Z7 II"
+  },
+  {
+    "Sku": "FUJXT4C",
+    "Name": "Fujifilm X-T4"
+  },
+  {
+    "Sku": "FUJXT3C",
+    "Name": "Fujifilm X-T3"
+  },
+  {
+    "Sku": "FUJXT30C",
+    "Name": "Fujifilm X-T30"
+  },
+  {
+    "Sku": "FUJXE3C",
+    "Name": "Fujifilm X-E3"
+  },
+  {
+    "Sku": "SON6600C",
+    "Name": "Sony a6600"
+  },
+  {
+    "Sku": "SONA73C",
+    "Name": "Sony a7 III"
+  },
+  {
+    "Sku": "SONA7R3C",
+    "Name": "Sony a7R III"
+  },
+  {
+    "Sku": "SONA92C",
+    "Name": "Sony a9 II"
+  },
+  {
+    "Sku": "CAN850DC",
+    "Name": "Canon EOS 850D"
+  },
+  {
+    "Sku": "CAN5DM4C",
+    "Name": "Canon EOS 5D Mark IV"
+  },
+  {
+    "Sku": "CANEOSRC",
+    "Name": "Canon EOS R"
+  },
+  {
+    "Sku": "CANEOSR6C",
+    "Name": "Canon EOS R6"
+  },
+  {
+    "Sku": "NIK5018L",
+    "Name": "Nikon 50mm f/1.8"
+  },
+  {
+    "Sku": "NIK2470L",
+    "Name": "Nikon 24-70mm f/4"
+  },
+  {
+    "Sku": "CANEF50L",
+    "Name": "Canon EF 50mm f/1.8 STM"
+  },
+  {
+    "Sku": "CANEF24L",
+    "Name": "Canon EF 24-70mm f/2.8L"
+  },
+  {
+    "Sku": "FUJ1855L",
+    "Name": "Fujifilm 18-55m f/2.8-4"
+  },
+  {
+    "Sku": "FUJ55200L",
+    "Name": "Fujifilm 55-200mm f/3.5-4.8"
+  },
+  {
+    "Sku": "SON8518L",
+    "Name": "Sony 85mm f/1.8 FE"
+  },
+  {
+    "Sku": "SON2470L",
+    "Name": "Sony FE 24-70mm f/2.8 GM"
+  }
 ]
