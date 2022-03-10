@@ -1,0 +1,58 @@
+﻿@using Store.BlazorWasm.Models
+@using Store.BlazorWasm.Shared
+
+@inherits TestContext
+
+@code {
+    [Fact]
+    public void MobileMenu_Renders_Correct_Number_Of_NavMenuItems()
+    {
+        List<NavMenuItem> NavMenuItems = new List<NavMenuItem>();
+        NavMenuItems.Add(new NavMenuItem { DisplayName = "DSLR Cameras", Url = "products/categories/1" });
+        NavMenuItems.Add(new NavMenuItem { DisplayName = "Mirrorless Cameras", Url = "products/categories/2" });
+
+        var cut = Render(@<MobileMenu navMenuItems=@NavMenuItems />);
+
+        var menuItems = cut.FindAll("a");
+        Assert.Equal(3, menuItems.Count); // a hard-coded 'special offers' item is also always added
+    }
+
+    [Fact]
+    public void MobileMenu_Correctly_Renders_Supplied_Display_Name()
+    {
+        List<NavMenuItem> NavMenuItems = new List<NavMenuItem>();
+        NavMenuItems.Add(new NavMenuItem { DisplayName = "Test Display Name", Url = "/" });
+
+        var cut = Render(@<MobileMenu navMenuItems=@NavMenuItems />);
+        var menuItem = cut.Find("a");
+
+        Assert.Equal("Test Display Name", menuItem.TextContent);
+    }
+
+    [Fact]
+    public void MobileMenu_Correctly_Renders_Supplied_Url()
+    {
+        List<NavMenuItem> NavMenuItems = new List<NavMenuItem>();
+        NavMenuItems.Add(new NavMenuItem { DisplayName = "DSLR Cameras", Url = "products/categories/1" });
+
+        var cut = Render(@<MobileMenu navMenuItems=@NavMenuItems />);
+        var menuItem = cut.Find("a");
+
+        Assert.Equal("products/categories/1", menuItem.GetAttribute("href"));
+    }
+
+    [Fact]
+    public void MobileMenu_Correctly_Renders_One_NavMenuItem_Link()
+    {
+        List<NavMenuItem> NavMenuItems = new List<NavMenuItem>();
+        NavMenuItems.Add(new NavMenuItem { DisplayName = "DSLR Cameras", Url = "products/categories/1" });
+
+        var cut = Render(@<MobileMenu navMenuItems=@NavMenuItems />);
+        var menuItem = cut.Find("a");
+
+        menuItem.MarkupMatches(@<a href="products/categories/1" class:ignore="">
+                                    DSLR Cameras
+                                </a>
+        );
+    }
+}

@@ -1,0 +1,56 @@
+﻿@using Store.BlazorWasm.Components
+
+@inherits TestContext
+
+@code {
+    [Fact]
+    public void ClickSearch_Correctly_Renders_Placeholder_And_Outlined_Button()
+    {
+        var cut = Render(@<ClickSearch Placeholder="Search the store..." ButtonType="outlined" />);
+
+        cut.MarkupMatches(@<div>
+                <input type="text" class:ignore="" placeholder="Search the store..." />
+                <span class="ml-1">
+                    <button type="button" 
+                            class="px-2 py-1 text-gray-300 hover:bg-blue-900 hover:text-white rounded-md text-sm font-medium fotoblue-ripple">
+                        Search
+                    </button>
+                </span>
+            </div>
+        );
+    }
+
+    [Fact]
+    public void ClickSearch_Correctly_Renders_Placeholder_And_Standard_Button()
+    {
+        var cut = Render(@<ClickSearch Placeholder="Search the store..." ButtonType="standard" />);
+
+        cut.MarkupMatches(@<div>
+            <input type="text" class:ignore="" placeholder="Search the store..." />
+            <span class="ml-1">
+                <button type="button" 
+                        class="px-2 py-1 bg-fotoblue text-white rounded-sm text-base font-semibold hover:opacity-90 fotoblue-ripple">
+                    Search
+                </button>
+            </span>
+        </div>
+        );
+    }
+
+    [Fact]
+    public void ClickSearch_Correctly_Renders_With_Standard_Button_When_ButtonType_Unspecified()
+    {
+        var cut = Render(@<ClickSearch Placeholder="Search the store..." />);
+
+        cut.MarkupMatches(@<div>
+            <input type="text" class:ignore="" placeholder="Search the store..." />
+            <span class="ml-1">
+                <button type="button" 
+                        class="px-2 py-1 bg-fotoblue text-white rounded-sm text-base font-semibold hover:opacity-90 fotoblue-ripple">
+                    Search
+                </button>
+            </span>
+        </div>
+        );
+    }
+}

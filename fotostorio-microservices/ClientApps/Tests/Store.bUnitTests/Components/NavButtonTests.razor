@@ -1,0 +1,16 @@
+﻿@using Store.BlazorWasm.Components
+
+@inherits TestContext
+
+@code {
+    [Fact]
+    public void NavButton_Correctly_Renders_Href_And_Text()
+    {
+        var cut = Render(@<NavButton Href="/products" ButtonText="Go Back" />);
+
+        cut.MarkupMatches(@<button class:ignore="">
+                               <a href="/products" class:ignore="">Go Back</a>
+                           </button>
+        );
+    }
+}

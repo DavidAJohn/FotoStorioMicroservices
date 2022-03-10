@@ -1,0 +1,16 @@
+﻿@using Store.BlazorWasm.Components
+
+@inherits TestContext
+
+@code {
+    [Fact]
+    public void TypeSearch_Correctly_Renders_Placeholder()
+    {
+        var cut = Render(@<TypeSearch Placeholder="Search..." />);
+
+        cut.MarkupMatches(@<div class:ignore="inline">
+                               <input type="search" class:ignore="" placeholder="Search..." />
+                           </div>
+        );
+    }
+}
