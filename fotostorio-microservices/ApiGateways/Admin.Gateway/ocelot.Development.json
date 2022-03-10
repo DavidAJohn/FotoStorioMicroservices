@@ -37,6 +37,45 @@
       ],
       "UpstreamPathTemplate": "/Admin/Catalog/{value}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+
+    // Inventory (from Inventory.API)
+    {
+      "DownstreamPathTemplate": "/api/stock",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "inventory.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Stock",
+      "UpstreamHttpMethod": [ "GET" ],
+      "FileCacheOptions": { "TtlSeconds": 30 }
+    },
+    {
+      "DownstreamPathTemplate": "/api/stock/level/{value}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "inventory.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Stock/{value}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/updates",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "inventory.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Stock",
+      "UpstreamHttpMethod": [ "POST" ]
     }
   ],
   "GlobalConfiguration": {
