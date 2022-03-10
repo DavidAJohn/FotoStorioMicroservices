@@ -20,7 +20,7 @@
 
                 @foreach (NavMenuItem navItem in navMenuItems)
                 {
-                    <div>
+                    <div class="nav-menu-item">
                         <div class="text-white text-sm">
                             <NavLink href="@navItem.Url" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">@navItem.DisplayName</NavLink>
                         </div>
@@ -30,8 +30,8 @@
 
                 <div>
                     <div class="text-white text-sm">
-                        <NavLink href="/" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-semibold">
-                            Additional Link
+                        <NavLink href="orders" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-semibold">
+                            Customer Orders
                         </NavLink>
                     </div>
                 </div>
