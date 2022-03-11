@@ -115,8 +115,35 @@
 
                     @if (ShowPaymentOptions)
                     {
-                        <div class="text-lg text-center md:text-xl lg:text-2xl font-bold my-8">
+                        <div class="text-lg text-center md:text-xl lg:text-2xl font-bold mt-8 mb-3">
                             Card Details
+                        </div>
+                        <div class="mb-4 flex flex-row justify-center items-center">
+                            <div class="text-sm text-center text-gray-400 flex flex-row justify-center items-center mr-2.5">
+                                <div class="mr-0.5">
+                                    <a href="https://stripe.com" target="_blank">
+                                        <img src="https://i.ibb.co/rGNqmg3/powered-by-stripe.jpg">
+                                    </a>
+                                </div>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-300 mr-2.5">|</div>
+                            <div class="text-sm text-center text-gray-400 flex flex-row justify-center items-center">
+                                <div class="mr-1.5">
+                                    <a href="/stripe" target="_blank" class="text-gray-400 hover:text-gray-500">
+                                        Read why this is safe
+                                    </a>
+                                </div>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
                         <div class="flex justify-center">
                             <div>
