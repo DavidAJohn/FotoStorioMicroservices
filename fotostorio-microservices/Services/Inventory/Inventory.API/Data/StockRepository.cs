@@ -28,6 +28,7 @@ namespace Inventory.API.Data
             return await _context.Set<Stock>()
                 .AsNoTracking()
                 .Where(s => s.CurrentStock <= stockLevel)
+                .OrderBy(s => s.Name)
                 .ToListAsync();
         }
     }
