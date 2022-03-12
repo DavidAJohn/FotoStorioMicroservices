@@ -107,23 +107,30 @@
 
     private void RemoveAfterUpdateStock(ChangeEventArgs obj)
     {
-        int result;
-        var tryparse = int.TryParse(obj.Value.ToString(), out result);
-
-        if (tryparse)
+        if (obj.Value != null)
         {
-            if (result < 0)
-            {
-                UpdateStock.Removed = 0;
-                result = 0;
-            }
+            int result;
+            var tryparse = int.TryParse(obj.Value.ToString(), out result);
 
-            if (result > CurrentStock)
+            if (tryparse)
             {
-                result = CurrentStock;
-            }
+                if (result < 0)
+                {
+                    UpdateStock.Removed = 0;
+                    result = 0;
+                }
 
-            AfterUpdateStock = CurrentStock - result;
+                if (result > CurrentStock)
+                {
+                    result = CurrentStock;
+                }
+
+                AfterUpdateStock = CurrentStock - result;
+            }
+            else
+            {
+                AfterUpdateStock = CurrentStock;
+            }
         }
         else
         {

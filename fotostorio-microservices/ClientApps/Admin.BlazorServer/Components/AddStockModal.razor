@@ -48,7 +48,7 @@
     [Parameter]
     public int CurrentStock { get; set; }
 
-    [CascadingParameter] 
+    [CascadingParameter]
     BlazoredModalInstance ModalInstance { get; set; }
 
     private AddStockValidationModel UpdateStock = new AddStockValidationModel();
@@ -107,18 +107,25 @@
 
     private void AddAfterUpdateStock(ChangeEventArgs obj)
     {
-        int result;
-        var tryparse = int.TryParse(obj.Value.ToString(), out result);
-
-        if (tryparse)
+        if (obj.Value != null)
         {
-            if (result < 0)
-            {
-                UpdateStock.Added = 0;
-                result = 0;
-            }
+            int result;
+            var tryparse = int.TryParse(obj.Value.ToString(), out result);
 
-            AfterUpdateStock = CurrentStock + result;
+            if (tryparse)
+            {
+                if (result < 0)
+                {
+                    UpdateStock.Added = 0;
+                    result = 0;
+                }
+
+                AfterUpdateStock = CurrentStock + result;
+            }
+            else
+            {
+                AfterUpdateStock = CurrentStock;
+            }
         }
         else
         {
