@@ -1,0 +1,256 @@
+﻿@page "/stockcontrol"
+
+@using Admin.BlazorServer.Contracts
+@using Admin.BlazorServer.Models
+
+@inject IInventoryService inventoryService
+@inject NavigationManager navigationManager
+@inject IToastService ToastService
+
+<AuthGuard RolesAllowed="Administrator" />
+
+<div class="min-h-min">
+    <div class="px-0 md:container md:max-w-7xl md:mt-8">
+        <div class="w-full p-4 rounded-md shadow-md bg-white focus:outline-none z-10">
+            <div class="text-lg text-center md:text-xl lg:text-2xl font-bold mb-4">
+                Stock Control
+            </div>
+
+            @if (errorMessage != "")
+            {
+                <div class="mx-2 px-2 animate-pulse">
+                    <div class="alert-box" role="alert">
+                        <span class="block sm:inline">@errorMessage</span>
+                    </div>
+                </div>
+            }
+            else if (products == null)
+            {
+                <text>Loading products...</text>
+            }
+            else
+            {
+                @if (products.Count() > 0)
+                {
+                    <div class="flex flex-col lg:flex-row flex-wrap justify-items-center items-center lg:justify-between">
+                        <div class="relative inline-block">
+                            <!-- Filter By dropdown -->
+                            <div class="text-center mt-8 lg:mt-0 lg:text-left">
+                                <div class="text-gray-700 mr-2 py-2 text-base font-medium inline">Show stock at or below:</div>
+                                <div class="inline-block">
+                                    <button type="button" class="inline-flex md:flex-grow justify-center w-32 rounded-sm border border-gray-700 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" 
+                                        id="menu-button"
+                                        @onclick="ToggleDropdown"
+                                    >
+                                        @FilterBySelected
+                                        <!-- Heroicon name: solid/chevron-down -->
+                                        <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                    @if (dropdownOptions != null)
+                                    {
+                                        <div class="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-md bg-white focus:outline-none transition duration-300 transform ease-in-out @DropdownTransformClass" role="menu" tabindex="-1">
+                                            <div class="py-1 hover:cursor-pointer">
+                                                @foreach (DropdownItem item in dropdownOptions)
+                                                {
+                                                    <NavLink  
+                                                        class="block px-4 py-1 text-base text-center font-semibold text-gray-700 hover:bg-gray-200 hover:text-gray-700 " 
+                                                        role="menuitem" 
+                                                        tabindex="-1" 
+                                                        id=@($"menu-item-{item.Id}")
+                                                        @onclick='async () => await UpdateStockLevelFilter(item.OptionRef, item.OptionName)'
+                                                    >
+                                                        <span class="text-center cursor-pointer">@item.OptionName</span>
+                                                    </NavLink>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-2 md:p-4 text-center w-auto text-sm lg:text-base">
+                        <div class="flex flex-row mb-2 font-bold uppercase">
+                            <div class="px-1 w-0 hidden md:block md:w-1/4 md:px-2">Sku</div>
+                            <div class="px-1 w-1/3 md:w-1/4 md:px-2">Name</div>
+                            <div class="px-1 w-1/3 text-right md:w-1/4 md:px-2 sm:text-center">Current Stock</div>
+                            <div class="px-1 w-1/3 md:w-1/4 md:px-2">&nbsp;</div>
+                        </div>
+                        <div class="font-normal">
+                            @foreach (var product in products)
+                            {
+                                <div class="flex flex-row items-center -mb-3">
+                                    <div class="px-1 w-0 hidden md:block md:w-1/4 md:px-2">@product.Sku</div>
+                                    <div class="px-1 w-1/3 md:w-1/4 md:px-2">@product.Name</div>
+                                    <div class="px-1 w-1/3 text-right md:w-1/4 md:px-2 sm:text-center">@product.CurrentStock</div>
+                                    <div class="px-1 w-1/3 md:w-1/4 md:px-2 md:-ml-16">
+                                        <button type="button" class="hidden lg:inline btn-fotofuchsia fotofuchsia-ripple" @onclick="() => AddStock(product.Sku, product.Name, product.CurrentStock)">Add</button>
+	                                    <button type="button" class="lg:hidden btn-fotofuchsia fotofuchsia-ripple" @onclick="() => AddStock(product.Sku, product.Name, product.CurrentStock)">Add</button>
+	                                    <button type="button" class="hidden lg:inline btn-fotofuchsia fotofuchsia-ripple" @onclick="() => RemoveStock(product.Sku, product.Name, product.CurrentStock)">Remove</button>
+	                                    <button type="button" class="lg:hidden btn-fotofuchsia fotofuchsia-ripple" @onclick="() => RemoveStock(product.Sku, product.Name, product.CurrentStock)">Remove</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="pt-8 text-center font-semibold text-xl">
+                        <p>No products found...</p>
+                    </div>
+                    <div class="pt-8 text-center mb-64">
+                        <button class="p-2 bg-fotofuchsia text-white rounded-sm text-base font-semibold hover:opacity-90 fotofuchsia-ripple" 
+                            @onclick="GoToHomePage"
+                        >
+                            Go to Home page
+                        </button>
+                    </div>
+                }
+            }
+            
+        </div>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] 
+    public IModalService Modal { get; set; }
+
+    [Parameter]
+    public string? searchTerm { get; set; }
+
+    List<ProductStock>? products = null;
+
+    List<DropdownItem> dropdownOptions = new();
+
+    private bool collapseDropdown = true;
+
+    private string DropdownTransformClass => collapseDropdown ? "transform opacity-0 scale-90 z-0" : "z-10";
+
+    private void ToggleDropdown()
+    {
+        collapseDropdown = !collapseDropdown;
+    }
+
+    private string FilterBySelected = "5";
+
+    private bool ShowErrors = false;
+    private string errorMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetProducts();
+    }
+
+    protected override void OnInitialized()
+    {
+        SetSortByDropdownOptions();
+    }
+
+    private async Task GetProducts()
+    {
+        try
+        {
+            int result;
+            var tryStockParse = int.TryParse(FilterBySelected, out result);
+            var stockLevel = tryStockParse ? result : 0;
+
+            if (stockLevel == 0)
+            {
+                products = await inventoryService.GetInventoryAsync();
+            }
+            else
+            {
+                products = await inventoryService.GetInventoryAtOrBelowLevelAsync(stockLevel);
+            }
+
+            errorMessage = "";
+        }
+        catch (Exception)
+        {
+            errorMessage = "Could not retrieve list of products";
+        }
+    }
+
+    private async Task UpdateStockLevelFilter(string FilterBy, string FilterByName) 
+    {
+        FilterBySelected = FilterByName;
+        ToggleDropdown();
+        await GetProducts();
+    }
+
+    private void SetSortByDropdownOptions()
+    {
+        dropdownOptions.Add(new DropdownItem{ Id = 1, OptionName = "All Stock", OptionRef = "0" });
+        dropdownOptions.Add(new DropdownItem{ Id = 2, OptionName = "25", OptionRef = "25" });
+        dropdownOptions.Add(new DropdownItem{ Id = 3, OptionName = "10", OptionRef = "10" });
+        dropdownOptions.Add(new DropdownItem{ Id = 4, OptionName = "5", OptionRef = "5" });
+    }
+
+    private async Task AddStock(string? sku, string? name, int currentStock)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(AddStockModal.Sku), sku);
+        parameters.Add(nameof(AddStockModal.Name), name);
+        parameters.Add(nameof(AddStockModal.CurrentStock), currentStock);
+
+        var addStockModal = Modal.Show<AddStockModal>("", parameters);
+        var result = await addStockModal.Result;
+
+        if (!result.Cancelled)
+        {
+            var requestResponse = (UpdateStockResult)result.Data;
+
+            if (requestResponse.Successful == false)
+            {
+                ShowErrors = true;
+                errorMessage = requestResponse.Error == null ? "There was an error updating this product" : requestResponse.Error;
+            }
+            else 
+            {
+                ShowErrors = false;
+                ToastService.ShowSuccess($"The stock level for '{name}' has been updated", "Stock Updated");
+                await GetProducts();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+
+    private async Task RemoveStock(string? sku, string? name, int currentStock)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(RemoveStockModal.Sku), sku);
+        parameters.Add(nameof(RemoveStockModal.Name), name);
+        parameters.Add(nameof(RemoveStockModal.CurrentStock), currentStock);
+
+        var removeStockModal = Modal.Show<RemoveStockModal>("", parameters);
+        var result = await removeStockModal.Result;
+
+        if (!result.Cancelled)
+        {
+            var requestResponse = (UpdateStockResult)result.Data;
+
+            if (requestResponse.Successful == false)
+            {
+                ShowErrors = true;
+                errorMessage = requestResponse.Error == null ? "There was an error updating this product" : requestResponse.Error;
+            }
+            else 
+            {
+                ShowErrors = false;
+                ToastService.ShowSuccess($"The stock level for '{name}' has been updated", "Stock Updated");
+                await GetProducts();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+
+    private void GoToHomePage()
+    {
+        navigationManager.NavigateTo("/");
+    }
+}

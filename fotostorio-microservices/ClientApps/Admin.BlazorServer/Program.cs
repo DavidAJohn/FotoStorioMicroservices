@@ -2,6 +2,7 @@ using Admin.BlazorServer.Contracts;
 using Admin.BlazorServer.Providers;
 using Admin.BlazorServer.Services;
 using Blazored.LocalStorage;
+using Blazored.Modal;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -39,8 +40,11 @@ builder.Services.AddAuthorizationCore(config =>
 builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddBlazoredToast();
+builder.Services.AddBlazoredModal();
 
 var app = builder.Build();
 
