@@ -31,7 +31,7 @@ namespace Products.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetMounts : {ex.Message}");
+                _logger.LogError("Error in GetMounts : {message}", ex.Message);
 
                 return StatusCode(500, "Internal server error");
             }
@@ -47,7 +47,7 @@ namespace Products.API.Controllers
 
                 if (mount == null)
                 {
-                    _logger.LogError($"Mount with id: {id}, not found");
+                    _logger.LogError("Mount with id: {id}, not found", id);
 
                     return NotFound();
                 }
@@ -58,7 +58,7 @@ namespace Products.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetMountById : {ex.Message}");
+                _logger.LogError("Error in GetMountById : {message}", ex.Message);
 
                 return StatusCode(500, "Internal server error");
             }

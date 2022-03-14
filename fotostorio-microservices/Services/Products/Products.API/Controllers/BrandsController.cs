@@ -31,7 +31,7 @@ namespace Products.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetBrands : {ex.Message}");
+                _logger.LogError("Error in GetBrands : {message}", ex.Message);
 
                 return StatusCode(500, "Internal server error");
             }
@@ -47,7 +47,7 @@ namespace Products.API.Controllers
 
                 if (brand == null)
                 {
-                    _logger.LogError($"Brand with id: {id}, not found");
+                    _logger.LogError("Brand with id: {id}, not found", id);
 
                     return NotFound();
                 }
@@ -58,7 +58,7 @@ namespace Products.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetBrandById : {ex.Message}");
+                _logger.LogError("Error in GetBrandById : {message}", ex.Message);
 
                 return StatusCode(500, "Internal server error");
             }

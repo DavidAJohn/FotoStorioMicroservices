@@ -31,7 +31,7 @@ namespace Products.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetCategories : {ex.Message}");
+                _logger.LogError("Error in GetCategories : {message}", ex.Message);
 
                 return StatusCode(500, "Internal server error");
             }
@@ -47,7 +47,7 @@ namespace Products.API.Controllers
 
                 if (category == null)
                 {
-                    _logger.LogError($"Category with id: {id}, not found");
+                    _logger.LogError("Category with id: {id}, not found", id);
 
                     return NotFound();
                 }
@@ -58,7 +58,7 @@ namespace Products.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetCategoryById : {ex.Message}");
+                _logger.LogError("Error in GetCategoryById : {message}", ex.Message);
 
                 return StatusCode(500, "Internal server error");
             }

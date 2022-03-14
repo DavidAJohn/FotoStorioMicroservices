@@ -53,7 +53,7 @@ namespace Products.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetProducts : {ex.Message}");
+                _logger.LogError("Error in GetProducts : {message}", ex.Message);
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -77,7 +77,7 @@ namespace Products.API.Controllers
 
                 if (product == null)
                 {
-                    _logger.LogError($"Product with id: {id}, not found");
+                    _logger.LogError("Product with id: {id}, not found", id);
                     return NotFound();
                 }
                 else
@@ -87,7 +87,7 @@ namespace Products.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetProductById, from id {id} : {ex.Message}");
+                _logger.LogError("Error in GetProductById, from id {id} : {message}", id, ex.Message);
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -111,7 +111,7 @@ namespace Products.API.Controllers
 
                 if (product == null)
                 {
-                    _logger.LogError($"Product with sku: {sku}, not found");
+                    _logger.LogError("Product with sku: {sku}, not found", sku);
                     return NotFound();
                 }
                 else
@@ -121,7 +121,7 @@ namespace Products.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetProductBySku, from sku {sku} : {ex.Message}");
+                _logger.LogError("Error in GetProductBySku, from sku {sku} : {message}", sku, ex.Message);
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -151,7 +151,7 @@ namespace Products.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in CreateProduct : {ex.Message}");
+                _logger.LogError("Error in CreateProduct : {message}", ex.Message);
 
                 return BadRequest();
             }
@@ -184,7 +184,7 @@ namespace Products.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in UpdateProduct : {ex.Message}");
+                _logger.LogError("Error in UpdateProduct : {message}", ex.Message);
 
                 return BadRequest();
             }
@@ -216,7 +216,7 @@ namespace Products.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in DeleteProduct : {ex.Message}");
+                _logger.LogError("Error in DeleteProduct : {message}", ex.Message);
 
                 return BadRequest();
             }
