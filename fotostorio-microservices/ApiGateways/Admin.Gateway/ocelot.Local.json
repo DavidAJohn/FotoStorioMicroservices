@@ -38,6 +38,18 @@
       "UpstreamPathTemplate": "/Admin/Catalog/{value}",
       "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
     },
+    {
+      "DownstreamPathTemplate": "/api/upload/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": "8001"
+        }
+      ],
+      "UpstreamPathTemplate": "/Upload",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
     // Categories, Brands and Mounts from Products.API -> Catalog
     {
       "DownstreamPathTemplate": "/api/brands",
