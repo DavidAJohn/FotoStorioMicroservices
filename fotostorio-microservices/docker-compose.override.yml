@@ -43,6 +43,10 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:ProductsConnectionString=Server=mssqldata;Database=ProductsDb;User Id=sa;Password=aDmin1234!;"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+      - "AzureUploadSettings:AzureStorageConnectionString=${AZURE_STORAGE_CONNECTION_STRING}"
+      - "AzureUploadSettings:AzureContainersAllowed=${AZURE_CONTAINERS_ALLOWED}"
+      - "AzureUploadSettings:FileUploadTypesAllowed=${FILE_EXTENSION_TYPES_ALLOWED}"
+      - "AzureUploadSettings:MaxFileUploadSize=${MAX_FILE_UPLOAD_SIZE}"
     ports:
       - "8001:80"
 
