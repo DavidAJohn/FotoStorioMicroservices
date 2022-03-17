@@ -36,7 +36,7 @@ namespace Inventory.API.Controllers
 
                 if (role != "Administrator")
                 {
-                    _logger.LogWarning("Stock Updates: GetUpdates called with role: '" + role + "', NOT 'Administrator'");
+                    _logger.LogWarning("Stock Updates: GetUpdates called with role: '{role}', NOT 'Administrator'", role);
                     return Unauthorized();
                 }
 
@@ -48,7 +48,7 @@ namespace Inventory.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetUpdates : {ex.Message}");
+                _logger.LogError("Error in GetUpdates : {message}", ex.Message);
 
                 return BadRequest();
             }
@@ -67,7 +67,7 @@ namespace Inventory.API.Controllers
 
                 if (role != "Administrator")
                 {
-                    _logger.LogWarning("Stock Updates: GetUpdatesBySku called with role: '" + role + "', NOT 'Administrator'");
+                    _logger.LogWarning("Stock Updates: GetUpdatesBySku called with role: '{role}', NOT 'Administrator'", role);
                     return Unauthorized();
                 }
 
@@ -79,7 +79,7 @@ namespace Inventory.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetUpdatesBySku : {ex.Message}");
+                _logger.LogError("Error in GetUpdatesBySku : {message}", ex.Message);
 
                 return BadRequest();
             }
@@ -98,7 +98,7 @@ namespace Inventory.API.Controllers
 
                 if (role != "Administrator")
                 {
-                    _logger.LogWarning("Stock Updates: CreateStockUpdate called with role: '" + role + "', NOT 'Administrator'");
+                    _logger.LogWarning("Stock Updates: CreateStockUpdate called with role: '{role}', NOT 'Administrator'", role);
                     return Unauthorized();
                 }
 
@@ -110,7 +110,7 @@ namespace Inventory.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in CreateUpdate : {ex.Message}");
+                _logger.LogError("Error in CreateUpdate : {message}", ex.Message);
 
                 return BadRequest();
             }

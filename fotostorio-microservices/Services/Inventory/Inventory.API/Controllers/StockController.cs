@@ -35,7 +35,7 @@ namespace Inventory.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetStock : {ex.Message}");
+                _logger.LogError("Error in GetStock : {message}", ex.Message);
 
                 return BadRequest();
             }
@@ -57,7 +57,7 @@ namespace Inventory.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetStockBySku : {ex.Message}");
+                _logger.LogError("Error in GetStockBySku : {message}", ex.Message);
 
                 return BadRequest();
             }
@@ -77,7 +77,7 @@ namespace Inventory.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetStockAtOrBelowLevel : {ex.Message}");
+                _logger.LogError("Error in GetStockAtOrBelowLevel : {message}", ex.Message);
 
                 return BadRequest();
             }
