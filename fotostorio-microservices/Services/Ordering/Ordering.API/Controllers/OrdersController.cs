@@ -77,7 +77,7 @@ namespace Ordering.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in CreateOrder : {ex.Message}");
+                _logger.LogError("Error in CreateOrder : {message}", ex.Message);
 
                 return BadRequest();
             }
@@ -104,7 +104,7 @@ namespace Ordering.API.Controllers
 
                 if (order == null)
                 {
-                    _logger.LogError($"Order with id: {id}, not found");
+                    _logger.LogError("Order with id: {orderId}, not found", id);
 
                     return NotFound();
                 }
@@ -116,7 +116,7 @@ namespace Ordering.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetOrderById, from id {id} : {ex.Message}");
+                _logger.LogError("Error in GetOrderById, from id {orderId} : {message}", id, ex.Message);
 
                 return StatusCode(500, "Internal server error");
             }
@@ -142,7 +142,7 @@ namespace Ordering.API.Controllers
 
                 if (orders == null)
                 {
-                    _logger.LogError($"Orders for user: {email}, not found");
+                    _logger.LogError("Orders for user: {email}, not found", email);
 
                     return NotFound();
                 }
@@ -153,7 +153,7 @@ namespace Ordering.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error in GetOrdersForUser: {ex.Message}");
+                _logger.LogError("Error in GetOrdersForUser: {message}", ex.Message);
 
                 return StatusCode(500, "Internal server error");
             }
