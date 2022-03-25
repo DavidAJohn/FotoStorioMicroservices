@@ -138,7 +138,6 @@
 
     private string FilterBySelected = "5";
 
-    private bool ShowErrors = false;
     private string errorMessage = "";
 
     protected override async Task OnInitializedAsync()
@@ -207,12 +206,11 @@
 
             if (requestResponse.Successful == false)
             {
-                ShowErrors = true;
                 errorMessage = requestResponse.Error == null ? "There was an error updating this product" : requestResponse.Error;
             }
             else 
             {
-                ShowErrors = false;
+                errorMessage = "";
                 ToastService.ShowSuccess($"The stock level for '{name}' has been updated", "Stock Updated");
                 await GetProducts();
                 await InvokeAsync(StateHasChanged);
@@ -236,12 +234,11 @@
 
             if (requestResponse.Successful == false)
             {
-                ShowErrors = true;
                 errorMessage = requestResponse.Error == null ? "There was an error updating this product" : requestResponse.Error;
             }
             else 
             {
-                ShowErrors = false;
+                errorMessage = "";
                 ToastService.ShowSuccess($"The stock level for '{name}' has been updated", "Stock Updated");
                 await GetProducts();
                 await InvokeAsync(StateHasChanged);
