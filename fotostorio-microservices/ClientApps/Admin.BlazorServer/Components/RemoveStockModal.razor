@@ -69,7 +69,7 @@
             Removed = UpdateStock.Removed
         };
 
-        var stockUpdate = await inventoryService.UpdateStock(update);
+        var stockUpdate = await inventoryService.CreateNewUpdate(update);
 
         if (stockUpdate != null)
         {

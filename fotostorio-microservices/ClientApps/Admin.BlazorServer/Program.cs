@@ -41,6 +41,8 @@ builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStatePr
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ISkuService, SkuService>();
 
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddBlazoredToast();

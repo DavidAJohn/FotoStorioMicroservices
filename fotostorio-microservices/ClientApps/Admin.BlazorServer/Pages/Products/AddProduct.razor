@@ -1,0 +1,276 @@
+﻿@page "/addproduct"
+
+@using Admin.BlazorServer.Contracts
+@using Admin.BlazorServer.DTOs
+@using Admin.BlazorServer.Models
+@using Blazored.FluentValidation
+@using Blazored.Toast
+
+@inject IProductService productService
+@inject ISkuService skuService
+@inject IInventoryService inventoryService
+@inject NavigationManager navigationManager
+@inject IToastService toastService
+
+<AuthGuard RolesAllowed="Administrator" />
+
+<div class="p-2 lg:w-1/2 text-center">
+    <div class="mb-4 text-lg md:text-xl lg:text-2xl font-bold">
+        Add a Product
+    </div>
+    @if (errorMessage != "")
+    {
+        <div class="mx-2 px-2 animate-pulse">
+            <div class="alert-box" role="alert">
+                <span class="block sm:inline">@errorMessage</span>
+            </div>
+        </div>
+    }
+    <button class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm hover:opacity-90 fotofuchsia-ripple">
+        <NavLink href="/products" class="hover:text-white">Go Back</NavLink>
+    </button>
+
+    <div class="px-2 md:px-4 py-2">
+        <EditForm Model="AddProductModel" id="AddProductForm" OnValidSubmit="SubmitNewProduct">
+            <FluentValidationValidator />
+            <div class="mb-3 w-full text-left">
+                <label for="brand">Brand:</label>
+                <InputSelect @bind-Value="AddProductModel.BrandId" id="brand" Class="px-2 py-1 rounded-sm focus:border-blue-300 border-3 outline-none w-full" >
+                    <option value="">-- Select Brand --</option>
+                    @if (brands != null)
+                    {
+                        foreach (var brand in brands)
+                        {
+                            <option value="@brand.Id">@brand.Name</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => AddProductModel.BrandId)" />
+            </div>
+            <div class="mb-3 w-full text-left">
+                <label for="category">Category:</label>
+                <InputSelect @bind-Value="AddProductModel.CategoryId" id="category" Class="px-2 py-1 rounded-sm focus:border-blue-300 border-3 outline-none w-full" >
+                    <option value="">-- Select Category --</option>
+                    @if (categories != null)
+                    {
+                        foreach (var category in categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => AddProductModel.CategoryId)" />
+            </div>
+            <div class="mb-3 w-full text-left">
+                <label for="mount">Mount:</label>
+                <InputSelect @bind-Value="AddProductModel.MountId" id="mount" Class="px-2 py-1 rounded-sm focus:border-blue-300 border-3 outline-none w-full" >
+                    <option value="">-- Select Mount --</option>
+                    @if (mounts != null)
+                    {
+                        foreach (var mount in mounts)
+                        {
+                            <option value="@mount.Id">@mount.Name</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => AddProductModel.MountId)" />
+            </div>
+            <div class="mb-3 w-full text-left">
+                <label for="name">Name</label>
+                <InputText Id="name" @bind-Value="AddProductModel.Name" Class="px-2 py-1 rounded-sm focus:border-blue-300 border-3 outline-none w-full" />
+                <ValidationMessage For="@(() => AddProductModel.Name)" />
+            </div>
+            <div class="mb-3 w-full text-left">
+                <label for="sku">SKU</label>
+                <div class="w-full">
+                    <span class="w-2/3 inline">
+                        <InputText Id="sku" @bind-Value="AddProductModel.Sku" Placeholder="Select items above first" Class="px-2 py-1 rounded-sm focus:border-blue-300 border-3 outline-none" />
+                    </span>
+                    <span class="w-1/3 inline">
+                         <button type="button" @onclick="GenerateSku" class="bg-fotofuchsia text-gray-50 px-2 py-1 rounded-sm font-semibold fotofuchsia-ripple disabled:opacity-30 disabled:cursor-default" >
+                            <span class="text-sm hover:text-white">Generate a SKU</span>
+                        </button>
+                    </span>
+                </div>
+                <ValidationMessage For="@(() => AddProductModel.Sku)" />
+            </div>
+            <div class="mb-3 w-full text-left">
+                <label for="description">Description</label>
+                <InputTextArea Id="description" rows="5" @bind-Value="AddProductModel.Description" Class="rounded-sm border-3 focus:border-blue-300 outline-none mt-1 w-full sm:text-sm" />
+                <ValidationMessage For="@(() => AddProductModel.Description)" />
+            </div>
+            <div class="mb-3 w-full text-left">
+                <label for="imageUrl">Product Image</label>
+                <FileUpload 
+                    ButtonText="Choose product image"
+                    UploadContainer="test-container"
+                    MaxImageWidth=375
+                    MaxImageHeight=600
+                    @bind-FileValue="AddProductModel.ImageUrl"
+                    @bind-FileValue:event="FileValueChanged"
+                />
+                <ValidationMessage For="@(() => AddProductModel.ImageUrl)" />
+            </div>
+            <div class="mb-3 w-full text-left">
+                <label for="price">Price (£)</label>
+                <InputNumber Id="price" @bind-Value="AddProductModel.Price" Class="px-2 py-1 rounded-sm focus:border-blue-300 border-3 outline-none w-full" />
+                <ValidationMessage For="@(() => AddProductModel.Price)" />
+            </div>
+            <div class="mb-3 w-full text-left">
+                <label for="stock">Initial Stock</label>
+                <InputNumber Id="stock" @bind-Value="AddProductModel.Stock" Class="px-2 py-1 rounded-sm focus:border-blue-300 border-3 outline-none w-full" />
+                <ValidationMessage For="@(() => AddProductModel.Stock)" />
+            </div>
+            
+            <div class="my-4 w-full">
+                <button type="submit" class="bg-fotofuchsia text-gray-50 w-full p-2 mt-3 rounded-sm font-semibold fotofuchsia-ripple disabled:opacity-30 disabled:cursor-default" >
+                    Submit
+                </button>
+                <button type="submit" @onclick="Cancel" class="bg-fotoblue text-gray-50 w-full p-2 mt-3 rounded-sm font-semibold fotoblue-ripple disabled:opacity-30 disabled:cursor-default" >
+                    Cancel
+                </button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private AddNewProductModel AddProductModel = new AddNewProductModel();
+
+    private List<Brand> brands;
+    private List<Category> categories;
+    private List<Mount> mounts;
+
+    private string errorMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetBrands();
+        await GetCategories();
+        await GetMounts();
+    }
+
+    private async Task GetBrands()
+    {
+        brands = await productService.GetProductBrandsAsync();
+    }
+
+    private async Task GetCategories()
+    {
+        categories = await productService.GetProductCategoriesAsync();
+    }
+
+    private async Task GetMounts()
+    {
+        mounts = await productService.GetProductMountsAsync();
+    }
+
+    private void CheckGenerateSku(ChangeEventArgs obj)
+    {
+        Console.WriteLine("AddProductModel.BrandId: " + AddProductModel.BrandId);
+        Console.WriteLine("AddProductModel.CategoryId: " + AddProductModel.CategoryId);
+        Console.WriteLine("AddProductModel.Name: " + AddProductModel.Name);
+
+        if (AddProductModel.BrandId != 0 && AddProductModel.CategoryId != 0 && !string.IsNullOrEmpty(AddProductModel.Name))
+        {
+            GenerateSku();
+        }
+    }
+
+    private void GenerateSku()
+    {
+        // generate a suggested SKU based on brand, category and name
+
+        var brandId = AddProductModel.BrandId;
+        var brand = brands.Find(b => b.Id == brandId);
+
+        var categoryId = AddProductModel.CategoryId;
+        var category = categories.Find(c => c.Id == categoryId);
+
+        if (brand != null && category != null)
+        {
+            if (string.IsNullOrWhiteSpace(brand.Name) || string.IsNullOrWhiteSpace(category.Name) || string.IsNullOrWhiteSpace(AddProductModel.Name))
+            {
+                AddProductModel.Sku = "";
+            }
+            else
+            {
+                AddProductModel.Sku = skuService.GenerateSku(brand, category, AddProductModel.Name);
+            }
+        }
+        else
+        {
+            AddProductModel.Sku = "";
+        }
+    }
+
+    private async Task SubmitNewProduct()
+    {
+        var productToCreate = new ProductCreateDTO
+        {
+            Sku = AddProductModel.Sku,
+            Name = AddProductModel.Name,
+            Description = AddProductModel.Description,
+            Price = AddProductModel.Price,
+            ImageUrl = AddProductModel.ImageUrl,
+            BrandId = AddProductModel.BrandId,
+            CategoryId = AddProductModel.CategoryId,
+            MountId = AddProductModel.MountId
+        };
+
+        var createdProduct = await productService.CreateProductAsync(productToCreate);
+
+        if (createdProduct != null)
+        {
+            // post a stock entry to Inventory.API, setting initial stock
+            var newStock = new ProductStock
+            {
+                Sku = createdProduct.Sku,
+                Name = createdProduct.Name,
+                CurrentStock = 0, // the subsequent update will add the correct stock level
+                LastUpdated = DateTime.Now
+            };
+
+            var newStockResponse = await inventoryService.CreateNewStock(newStock);
+
+            if (newStockResponse != null && newStockResponse.Successful)
+            {
+                // post an update to Inventory.API
+                var newUpdate = new UpdateStockModel
+                {
+                    Sku = createdProduct.Sku,
+                    Added = AddProductModel.Stock,
+                    Removed = 0
+                };
+
+                var newUpdateResponse = await inventoryService.CreateNewUpdate(newUpdate);
+
+                if (newUpdateResponse != null && newUpdateResponse.Successful)
+                {
+                    errorMessage = "";
+                    toastService.ShowSuccess($"'{createdProduct.Name}' has now been added to the product range", "Success");
+                }
+                else
+                {
+                    errorMessage = "There was a problem adding this product";
+                    toastService.ShowError("There was a problem adding this product", "Error");
+                }
+            }
+            else
+            {
+                errorMessage = "There was a problem adding this product";
+                toastService.ShowError("There was a problem adding this product", "Error");
+            }
+        }
+        else 
+        {
+            errorMessage = "There was a problem adding this product";
+            toastService.ShowError("There was a problem adding this product", "Error");
+        }
+    }
+
+    private void Cancel()
+    {
+        navigationManager.NavigateTo("products");
+    }
+}

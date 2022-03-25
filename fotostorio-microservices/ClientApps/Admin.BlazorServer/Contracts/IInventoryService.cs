@@ -6,5 +6,6 @@ public interface IInventoryService
 {
     Task<List<ProductStock>?> GetInventoryAsync();
     Task<List<ProductStock>?> GetInventoryAtOrBelowLevelAsync(int stockLevel);
-    Task<UpdateStockResult?> UpdateStock(UpdateStockModel stockUpdate);
+    Task<UpdateStockResult?> CreateNewUpdate(UpdateStockModel stockUpdate);
+    Task<UpdateStockResult?> CreateNewStock(ProductStock stock);
 }
