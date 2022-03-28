@@ -113,3 +113,9 @@ services:
     depends_on:
       - products.api
       - products.aggregator
+
+  applicationstatus:
+    image: ${DOCKER_REGISTRY-}applicationstatus
+    build:
+      context: .
+      dockerfile: ClientApps/ApplicationStatus/Dockerfile
