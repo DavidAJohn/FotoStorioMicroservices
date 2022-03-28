@@ -141,13 +141,6 @@ services:
     ports:
       - "8012:80"
 
-  applicationstatus:
-    container_name: applicationstatus
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "8100:80"
-
 volumes:
   fs_mssqldata:
     external: false

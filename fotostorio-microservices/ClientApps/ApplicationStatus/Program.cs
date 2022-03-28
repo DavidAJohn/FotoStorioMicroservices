@@ -17,7 +17,7 @@ app.MapGet("/", () => "For health checks, go to: /hc-ui");
 app.MapHealthChecksUI(options =>
 {
     options.UIPath = "/hc-ui";
-    options.AddCustomStylesheet("./Styles/custom.css");
+    options.AddCustomStylesheet("styles/custom.css");
     options.AsideMenuOpened = false;
     //options.ApiPath = "/api";
 });
