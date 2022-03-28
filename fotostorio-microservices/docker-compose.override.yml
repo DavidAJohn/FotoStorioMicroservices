@@ -80,8 +80,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:IdentityConnection=Server=mssqldata;Database=IdentityDb;User Id=sa;Password=aDmin1234!;"
+      - "JwtKey=${JWT_KEY}"
       - "JwtIssuer=http://identity.api"
       - "JwtAudience=http://identity.api"
+      - "JwtExpiryInDays=${JWT_EXPIRY_IN_DAYS}"
     ports:
       - "8005:80"
 
