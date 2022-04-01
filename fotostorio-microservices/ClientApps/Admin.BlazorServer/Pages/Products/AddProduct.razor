@@ -14,7 +14,7 @@
 
 <AuthGuard RolesAllowed="Administrator" />
 
-<div class="p-2 lg:w-1/2 text-center">
+<div class="p-2 lg:w-1/2 text-center mx-auto">
     <div class="mb-4 text-lg md:text-xl lg:text-2xl font-bold">
         Add a Product
     </div>
@@ -27,7 +27,7 @@
         </div>
     }
     <button class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm hover:opacity-90 fotofuchsia-ripple">
-        <NavLink href="/products" class="hover:text-white">Go Back</NavLink>
+        <NavLink href="/" class="hover:text-white">Go Back</NavLink>
     </button>
 
     <div class="px-2 md:px-4 py-2">
@@ -271,6 +271,6 @@
 
     private void Cancel()
     {
-        navigationManager.NavigateTo("products");
+        navigationManager.NavigateTo("sitestatus");
     }
 }

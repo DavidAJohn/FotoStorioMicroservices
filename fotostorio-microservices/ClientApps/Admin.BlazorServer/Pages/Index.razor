@@ -1,7 +1,19 @@
 ﻿@page "/"
 
+@inject NavigationManager navigationManager
+
+<AuthGuard RolesAllowed="Administrator" />
+
 <div class="min-h-screen">
     <div class="container max-w-7xl mt-8">
-        Index page content
+        &nbsp;
     </div>
 </div>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        navigationManager.NavigateTo("sitestatus");
+    }
+}
