@@ -19,7 +19,7 @@ app.MapHealthChecksUI(options =>
     options.UIPath = "/hc-ui";
     options.AddCustomStylesheet("styles/custom.css");
     options.AsideMenuOpened = false;
-    //options.ApiPath = "/api";
+    options.ApiPath = "/api";
 });
 
 app.Run();
