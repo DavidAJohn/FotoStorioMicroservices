@@ -1,47 +1,118 @@
 ﻿@page "/sitestatus"
 
+@inject IConfiguration config
+
 <AuthGuard RolesAllowed="Administrator" />
 
-<div class="text-3xl mb-10 font-bold text-center">
-    Site Status
+<div class="text-3xl mb-8 mt-8 font-bold text-center">
+    <span class="text-blue-800">FotoStorio</span> Store Status
 </div>
 
-<div class="mt-10 mb-10 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
-    <div class="product-card hover:shadow-xl hover:opacity-70">
-        <a href="/orders" class="hover:text-fotoblue">
-            <img src="https://i.ibb.co/HpD1Tjc/mirrorless-cameras.jpg" class="w-full h-16 sm:h-24 object-cover">
-            <div class="m-4 text-center">
-                <span class="font-bold block">Site Status</span>
-                <span class="inline text-gray-500 text-lg">Healthy</span>
-            </div>
-        </a>
+<div class="text-lg text-gray-600 mb-4 font-semibold text-center">
+    Last Updated: @LastUpdated
+</div>
+
+<div class="my-10 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
+    <div class="mx-auto w-72">
+        <img src="https://i.ibb.co/HpD1Tjc/mirrorless-cameras.jpg" class="w-full object-cover object-center shadow-md rounded-md">
+         <div class="relative px-4 -mt-16 text-center">
+               <div class="bg-white p-4 rounded-lg shadow-lg">
+                    <h4 class="mt-1 text-xl font-semibold uppercase leading-tight truncate">Website Status</h4>
+                    <div class="mt-4">
+                        <span class="text-teal-600 text-lg font-semibold">Healthy</span>
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-sm text-gray-600">
+                            For full details, see the <a href="http://localhost:8100/hc-ui" target="_blank" class="text-blue-800">Application Status</a> app
+                        </span>
+                    </div>  
+              </div>
+         </div>
     </div>
-    <div class="text-bold text-md">
-        For full details of site status, see the <a href="http://localhost:8100" target="_blank">Application Status</a> app
+
+    <div class="mx-auto w-72">
+        <img src="https://i.ibb.co/HpD1Tjc/mirrorless-cameras.jpg" class="w-full object-cover object-center shadow-md rounded-md">
+         <div class="relative px-4 -mt-16 text-center">
+               <div class="bg-white p-4 rounded-lg shadow-lg">
+                    <h4 class="mt-1 text-xl font-semibold uppercase leading-tight truncate">Recent Orders</h4>
+                    <div class="mt-4">
+                        <span class="text-teal-600 text-lg font-semibold">12 orders this week</span>
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-sm text-gray-600">
+                            For full details, see the <a href="orders" class="text-blue-800">Customer Orders</a> page
+                        </span>
+                    </div>
+              </div>
+         </div>
+    </div>
+
+    <div class="mx-auto w-72">
+        <img src="https://i.ibb.co/HpD1Tjc/mirrorless-cameras.jpg" class="w-full object-cover object-center shadow-md rounded-md">
+         <div class="relative px-4 -mt-16 text-center">
+               <div class="bg-white p-4 rounded-lg shadow-lg">
+                    <h4 class="mt-1 text-xl font-semibold uppercase leading-tight truncate">Low Stock</h4>
+                    <div class="mt-4">
+                        <span class="text-teal-600 text-lg font-semibold">3 products</span>
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-sm text-gray-600">
+                            For full details, see the <a href="stockcontrol" class="text-blue-800">Stock Control</a> page
+                        </span>
+                    </div>  
+              </div>
+         </div>
     </div>
 </div>
 
-<div class="mt-10 mb-20 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
-    <div class="product-card hover:shadow-xl hover:opacity-70">
-        <a href="/orders" class="hover:text-fotoblue">
-            <img src="https://i.ibb.co/HpD1Tjc/mirrorless-cameras.jpg" class="w-full h-16 sm:h-24 object-cover">
-            <div class="m-4 text-center">
-                <span class="font-bold block">Orders in Last 7 Days</span>
-                <span class="inline text-gray-500 text-xl">17</span>
-            </div>
-        </a>
-    </div>
-    <div class="product-card hover:shadow-xl hover:opacity-70">
-        <a href="/" class="hover:text-fotoblue">
-            <img src="https://i.ibb.co/HpD1Tjc/mirrorless-cameras.jpg" class="w-full h-16 sm:h-24 object-cover">
-            <div class="m-4 text-center">
-                <span class="font-bold block">Orders in Last 30 Days</span>
-                <span class="inline text-gray-500 text-xl">120</span>
-            </div>
-        </a>
-    </div>
+<div class="text-xl mt-24 font-semibold text-center">
+    There are currently <span class="text-teal-600">24</span> products listed in the store
 </div>
+
+@if (AzureConfigured)
+{
+    <div class="border-dashed border-3 rounded-md border-blue-800 p-4 mx-auto w-64 text-center mt-12 mb-4">
+        <span class="text-xl font-semibold">
+            <a href="addproduct">Add a New Product</a>
+        </span>
+    </div>
+}
+else 
+{
+    <div class="text-lg mt-12 mb-4 font-semibold text-center text-gray-500">
+        To be able to add new products, you need to configure an Azure storage account.
+        <br />
+        You can find documentation on how to do that here: <a href="https://github.com/DavidAJohn/FotoStorioMicroservices" class="text-blue-800">https://github.com/DavidAJohn/FotoStorioMicroservices</a>
+    </div>
+}
 
 @code {
+    string LastUpdated = "";
+    bool AzureConfigured = false;
 
+    protected override void OnInitialized()
+    {
+        LastUpdated = DateTime.Now.ToString();
+
+        CheckAzureConfig();
+    }
+
+    private void CheckAzureConfig()
+    {
+        var storageAccountName = config["AssetBaseUrl"];
+        var maxFileUploadSize = config["MaxFileUploadSize"];
+        var fileUploadTypes = config["FileUploadTypesAllowed"];
+
+        if (string.IsNullOrWhiteSpace(storageAccountName) ||
+            string.IsNullOrWhiteSpace(maxFileUploadSize) ||
+            string.IsNullOrWhiteSpace(fileUploadTypes)
+            )
+        {
+            AzureConfigured = false;
+        }
+        else
+        {
+            AzureConfigured = true;
+        }
+    }
 }
