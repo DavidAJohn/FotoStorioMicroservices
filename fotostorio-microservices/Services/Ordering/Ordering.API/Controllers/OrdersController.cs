@@ -158,5 +158,42 @@ namespace Ordering.API.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        /// GET api/orders/latest/{int}
+        /// <summary>
+        /// Get orders since no. of {days}
+        /// </summary>
+        /// <returns>IEnumerable<OrderDetailsDTO></returns>
+        [HttpGet("latest/{days:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IEnumerable<OrderDetailsDTO>>> GetLatestOrders(int days)
+        {
+            try
+            {
+                var token = _contextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
+                var email = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "email");
+
+                var orders = await _orderRepository.GetLatestOrdersAsync(token, days);
+
+                if (orders == null)
+                {
+                    _logger.LogError("Orders for user: {email}, not found", email);
+
+                    return NotFound();
+                }
+                else
+                {
+                    return Ok(_mapper.Map<IEnumerable<Order>, IEnumerable<OrderDetailsDTO>>(orders));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in GetRecentOrders: {message}", ex.Message);
+
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }

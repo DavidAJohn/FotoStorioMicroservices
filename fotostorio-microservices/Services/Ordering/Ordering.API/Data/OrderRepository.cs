@@ -11,6 +11,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.Net.Http.Headers;
+using System;
 
 namespace Ordering.API.Data
 {
@@ -105,6 +106,24 @@ namespace Ordering.API.Data
             
             var orders = await _orderDbContext.Orders
                 .Where(o => o.BuyerEmail == buyerEmail)
+                .Include(o => o.Items)
+                .ToListAsync();
+
+            if (orders == null) return null;
+
+            return orders;
+        }
+
+        public async Task<IEnumerable<Order>> GetLatestOrdersAsync(string token, int days)
+        {
+            // check that jwt is valid
+            var validToken = await IsTokenValid(token);
+            if (!validToken) return null;
+
+            if (days <= 0 || days > 365) days = 30; // effectively defaults to 30 days
+
+            var orders = await _orderDbContext.Orders
+                .Where(o => o.OrderDate >= DateTime.Now.AddDays((days*(-1))))
                 .Include(o => o.Items)
                 .ToListAsync();
 
