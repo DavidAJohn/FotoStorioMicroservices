@@ -220,6 +220,19 @@
       ],
       "UpstreamPathTemplate": "/Stock",
       "UpstreamHttpMethod": [ "POST" ]
+    },
+    // Orders (from Ordering.API)
+    {
+      "DownstreamPathTemplate": "/api/orders/latest/{value}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ordering.api",
+          "Port": "80"
+        }
+      ],
+      "UpstreamPathTemplate": "/Orders/{value}",
+      "UpstreamHttpMethod": [ "GET" ]
     }
   ],
   "GlobalConfiguration": {
