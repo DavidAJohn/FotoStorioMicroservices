@@ -98,6 +98,21 @@ namespace Ordering.API.Data
             return order;
         }
 
+        public async Task<Order> GetOrderByIdForAdminAsync(int id, string token)
+        {
+            // check that jwt is valid
+            var validToken = await IsTokenValid(token);
+            if (!validToken) return null;
+
+            var order = await _orderDbContext.Orders
+                .Include(o => o.Items)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
+            if (order == null) return null;
+
+            return order;
+        }
+
         public async Task<IEnumerable<Order>> GetOrdersForUserAsync(string token, string buyerEmail)
         {
             // check that jwt is valid
@@ -124,6 +139,7 @@ namespace Ordering.API.Data
 
             var orders = await _orderDbContext.Orders
                 .Where(o => o.OrderDate >= DateTime.Now.AddDays((days*(-1))))
+                .OrderByDescending(o => o.OrderDate)
                 .Include(o => o.Items)
                 .ToListAsync();
 

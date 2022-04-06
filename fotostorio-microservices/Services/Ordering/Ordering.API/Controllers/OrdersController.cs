@@ -99,9 +99,19 @@ namespace Ordering.API.Controllers
             {
                 var token = _contextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
                 var email = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "email");
+                var role = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "role");
 
-                var order = await _orderRepository.GetOrderByIdAsync(id, email, token);
+                Order order = new Order {};
 
+                if (role == "Administrator")
+                {
+                    order = await _orderRepository.GetOrderByIdForAdminAsync(id, token);
+                }
+                else
+                {
+                    order = await _orderRepository.GetOrderByIdAsync(id, email, token);
+                }
+                
                 if (order == null)
                 {
                     _logger.LogError("Order with id: {orderId}, not found", id);
