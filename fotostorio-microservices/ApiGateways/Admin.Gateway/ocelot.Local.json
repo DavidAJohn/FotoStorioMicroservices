@@ -231,6 +231,18 @@
           "Port": "8006"
         }
       ],
+      "UpstreamPathTemplate": "/Orders/Latest/{value}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/orders/{value}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": "8006"
+        }
+      ],
       "UpstreamPathTemplate": "/Orders/{value}",
       "UpstreamHttpMethod": [ "GET" ]
     }

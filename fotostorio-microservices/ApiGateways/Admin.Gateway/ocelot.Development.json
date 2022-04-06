@@ -231,6 +231,18 @@
           "Port": "80"
         }
       ],
+      "UpstreamPathTemplate": "/Orders/Latest/{value}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/orders/{value}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "ordering.api",
+          "Port": "80"
+        }
+      ],
       "UpstreamPathTemplate": "/Orders/{value}",
       "UpstreamHttpMethod": [ "GET" ]
     }
