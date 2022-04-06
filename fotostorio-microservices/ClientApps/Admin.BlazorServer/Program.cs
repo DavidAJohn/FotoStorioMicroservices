@@ -43,6 +43,7 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ISkuService, SkuService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddBlazoredToast();
