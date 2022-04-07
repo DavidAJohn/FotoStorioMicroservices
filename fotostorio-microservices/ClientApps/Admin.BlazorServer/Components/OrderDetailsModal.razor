@@ -1,0 +1,110 @@
+﻿@using Admin.BlazorServer.Contracts
+@using Admin.BlazorServer.DTOs
+@using Admin.BlazorServer.Extensions
+
+@inject IOrderService orderService
+
+<div class="w-full lg:px-14 lg:mx-4">
+    <div class="lg:w-full px-24 -mt-8 pt-0 pb-8 bg-white focus:outline-none z-10">
+        <div class="text-xl text-center lg:text-2xl font-bold mb-8">
+            <h3>Order Details for #@Id</h3>
+        </div>
+        @if (errorMessage != "")
+        {
+            <div class="mx-2 animate-pulse">
+                <div class="alert-box text-center" role="alert">
+                    <span class="block sm:inline">@errorMessage</span>
+                </div>
+            </div>
+        }
+        else if (orderDetails != null && orderItems != null)
+        {
+            <div class="flex flex-col md:flex-row justify-center align-top w-full px-4 py-2 mb-2">
+                <div class="w-full md:w-1/2">
+                    <div class="px-4 font-bold text-base lg:text-lg place-content-center md:text-right text-fotoblue">Order Date:</div>
+                    <div class="px-4 font-semibold text-base lg:text-lg place-content-center md:text-right">@orderDetails.OrderDate.ToUKStandardDate()</div>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <div class="px-4 font-bold text-base lg:text-lg place-content-center md:text-left text-fotoblue">Status:</div> 
+                    <div class="px-4 font-semibold text-base lg:text-lg place-content-center md:text-left">@orderDetails.Status</div>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-center align-top w-full p-4 ">
+                <div class="w-full md:w-1/2">
+                    <div class="px-4 pb-4 font-bold text-lg lg:text-right text-fotoblue">Items Ordered:</div>
+                    <div class="px-4 -ml-48 text-right">
+                        @foreach (OrderItemReceivedDTO item in orderItems)
+                        {
+                            <div class="font-semibold text-base flex items-center justify-end">
+                                <div class="inline-block flex-shrink-0">@item.Quantity &nbsp;x&nbsp; @item.Product.Name</div>
+                                <div class="hidden lg:block ml-2 font-bold"> = £@(item.Quantity * item.Product.Price)</div>
+                            </div>
+                        }
+                    </div>
+                    <div class="-mt-1.5 md:mt-1.5 px-4 text-right text-base font-semibold">
+                        Total:&nbsp; <span class="inline font-bold">£@orderDetails.Total</span>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2 mt-3.5 md:mt-0">
+                    <div class="px-4 mt-3.5 md:mt-0 font-bold text-lg text-fotoblue">Delivery Address:</div>
+                    <div class="p-4 text-left font-medium" >
+                        <div>@orderDetails.SendToAddress.FirstName @orderDetails.SendToAddress.LastName</div>
+                        <div>@orderDetails.SendToAddress.Street</div>
+                        <div class="@(string.IsNullOrWhiteSpace(orderDetails.SendToAddress.SecondLine) ? "hidden" : "")">@orderDetails.SendToAddress.SecondLine</div>
+                        <div>@orderDetails.SendToAddress.City</div>
+                        <div>@orderDetails.SendToAddress.County</div>
+                        <div>@orderDetails.SendToAddress.PostCode</div>
+                        <div>United Kingdom</div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button type="button" @onclick="Close" class="bg-fotoblue text-gray-50 w-full p-2 mt-3 rounded-sm font-semibold fotoblue-ripple">
+                    Close
+                </button>
+            </div>
+        }
+        else 
+        {
+            <div class="p-4 text-center font-semibold">
+                This order could not be found
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [CascadingParameter] 
+    BlazoredModalInstance ModalInstance { get; set; }
+
+    private OrderDetailsDTO orderDetails;
+    private List<OrderItemReceivedDTO> orderItems;
+    private string errorMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetOrder();
+    }
+
+    private async Task GetOrder()
+    {
+        try
+        {
+            orderDetails = await orderService.GetOrderByIdAsync(Id);
+            orderItems = orderDetails.Items;
+            errorMessage = "";
+        }
+        catch (Exception)
+        {
+            errorMessage = "Could not retrieve this order";
+        }
+    }
+
+    private void Close()
+    {
+        ModalInstance.CloseAsync();
+    }
+}
