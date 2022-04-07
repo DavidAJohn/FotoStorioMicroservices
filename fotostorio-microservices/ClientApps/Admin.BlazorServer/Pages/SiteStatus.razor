@@ -1,6 +1,9 @@
 ﻿@page "/sitestatus"
+@using Admin.BlazorServer.Contracts
+@using Admin.BlazorServer.DTOs
 
 @inject IConfiguration config
+@inject IOrderService orderService
 
 <AuthGuard RolesAllowed="Administrator" />
 
@@ -36,7 +39,7 @@
                <div class="bg-white p-4 rounded-lg shadow-lg">
                     <h4 class="mt-1 text-xl font-semibold uppercase leading-tight truncate">Recent Orders</h4>
                     <div class="mt-4">
-                        <span class="text-teal-600 text-lg font-semibold">12 orders this week</span>
+                        <span class="text-teal-600 text-lg font-semibold">@ordersMessage</span>
                     </div>
                     <div class="mt-4">
                         <span class="text-sm text-gray-600">
@@ -90,11 +93,18 @@ else
     string LastUpdated = "";
     bool AzureConfigured = false;
 
+    private string ordersMessage = "";
+
     protected override void OnInitialized()
     {
         LastUpdated = DateTime.Now.ToString();
 
         CheckAzureConfig();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetRecentOrders();
     }
 
     private void CheckAzureConfig()
@@ -113,6 +123,28 @@ else
         else
         {
             AzureConfigured = true;
+        }
+    }
+
+    private async Task GetRecentOrders()
+    {
+        try
+        {
+            var days = 60;
+            var orders = await orderService.GetLatestOrdersAsync(days);
+
+            if (orders != null)
+            {
+                ordersMessage = $"{orders.Count} orders in last {days} days";
+            }
+            else
+            {
+                ordersMessage = "Unknown";
+            }
+        }
+        catch (Exception)
+        {
+            ordersMessage = "Unknown";
         }
     }
 }
