@@ -1,9 +1,11 @@
 ﻿@page "/sitestatus"
+
 @using Admin.BlazorServer.Contracts
 @using Admin.BlazorServer.DTOs
 
 @inject IConfiguration config
 @inject IOrderService orderService
+@inject IInventoryService inventoryService
 
 <AuthGuard RolesAllowed="Administrator" />
 
@@ -18,53 +20,53 @@
 <div class="my-10 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
     <div class="mx-auto w-72">
         <img src="https://i.ibb.co/HpD1Tjc/mirrorless-cameras.jpg" class="w-full object-cover object-center shadow-md rounded-md">
-         <div class="relative px-4 -mt-16 text-center">
-               <div class="bg-white p-4 rounded-lg shadow-lg">
-                    <h4 class="mt-1 text-xl font-semibold uppercase leading-tight truncate">Website Status</h4>
-                    <div class="mt-4">
-                        <span class="text-teal-600 text-lg font-semibold">Healthy</span>
-                    </div>
-                    <div class="mt-4">
-                        <span class="text-sm text-gray-600">
-                            For full details, see the <a href="http://localhost:8100/hc-ui" target="_blank" class="text-blue-800">Application Status</a> app
-                        </span>
-                    </div>  
-              </div>
-         </div>
+        <div class="relative px-4 -mt-16 text-center">
+            <div class="bg-white p-4 rounded-lg shadow-lg">
+                <h4 class="mt-1 text-xl font-semibold uppercase leading-tight truncate">Website Status</h4>
+                <div class="mt-4">
+                    <span class="text-teal-600 text-lg font-semibold">Healthy</span>
+                </div>
+                <div class="mt-4">
+                    <span class="text-sm text-gray-600">
+                        For full details, see the <a href="http://localhost:8100/hc-ui" target="_blank" class="text-blue-800">Application Status</a> app
+                    </span>
+                </div>  
+            </div>
+        </div>
     </div>
 
     <div class="mx-auto w-72">
         <img src="https://i.ibb.co/HpD1Tjc/mirrorless-cameras.jpg" class="w-full object-cover object-center shadow-md rounded-md">
-         <div class="relative px-4 -mt-16 text-center">
-               <div class="bg-white p-4 rounded-lg shadow-lg">
-                    <h4 class="mt-1 text-xl font-semibold uppercase leading-tight truncate">Recent Orders</h4>
-                    <div class="mt-4">
-                        <span class="text-teal-600 text-lg font-semibold">@ordersMessage</span>
-                    </div>
-                    <div class="mt-4">
-                        <span class="text-sm text-gray-600">
-                            For full details, see the <a href="orders" class="text-blue-800">Customer Orders</a> page
-                        </span>
-                    </div>
-              </div>
-         </div>
+        <div class="relative px-4 -mt-16 text-center">
+            <div class="bg-white p-4 rounded-lg shadow-lg">
+                <h4 class="mt-1 text-xl font-semibold uppercase leading-tight truncate">Recent Orders</h4>
+                <div class="mt-4">
+                    <span class="text-teal-600 text-lg font-semibold">@ordersMessage</span>
+                </div>
+                <div class="mt-4">
+                    <span class="text-sm text-gray-600">
+                        For full details, see the <a href="orders" class="text-blue-800">Customer Orders</a> page
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="mx-auto w-72">
         <img src="https://i.ibb.co/HpD1Tjc/mirrorless-cameras.jpg" class="w-full object-cover object-center shadow-md rounded-md">
-         <div class="relative px-4 -mt-16 text-center">
-               <div class="bg-white p-4 rounded-lg shadow-lg">
-                    <h4 class="mt-1 text-xl font-semibold uppercase leading-tight truncate">Low Stock</h4>
-                    <div class="mt-4">
-                        <span class="text-teal-600 text-lg font-semibold">3 products</span>
-                    </div>
-                    <div class="mt-4">
-                        <span class="text-sm text-gray-600">
-                            For full details, see the <a href="stockcontrol" class="text-blue-800">Stock Control</a> page
-                        </span>
-                    </div>  
-              </div>
-         </div>
+        <div class="relative px-4 -mt-16 text-center">
+            <div class="bg-white p-4 rounded-lg shadow-lg">
+                <h4 class="mt-1 text-xl font-semibold uppercase leading-tight truncate">Low Stock</h4>
+                <div class="mt-4">
+                    <span class="text-teal-600 text-lg font-semibold">@stockMessage</span>
+                </div>
+                <div class="mt-4">
+                    <span class="text-sm text-gray-600">
+                        For full details, see the <a href="stockcontrol" class="text-blue-800">Stock Control</a> page
+                    </span>
+                </div>  
+            </div>
+        </div>
     </div>
 </div>
 
@@ -93,7 +95,8 @@ else
     string LastUpdated = "";
     bool AzureConfigured = false;
 
-    private string ordersMessage = "";
+    private string ordersMessage = "Checking...";
+    private string stockMessage = "Checking...";
 
     protected override void OnInitialized()
     {
@@ -104,7 +107,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await GetRecentOrders();
+        await GetRecentOrderCount();
+        await GetLowStockProductCount();
     }
 
     private void CheckAzureConfig()
@@ -126,7 +130,7 @@ else
         }
     }
 
-    private async Task GetRecentOrders()
+    private async Task GetRecentOrderCount()
     {
         try
         {
@@ -135,16 +139,40 @@ else
 
             if (orders != null)
             {
-                ordersMessage = $"{orders.Count} orders in last {days} days";
+                string orderText = orders.Count == 1 ? "order" : "orders";
+                ordersMessage = $"{orders.Count} {orderText} in last {days} days";
             }
             else
             {
-                ordersMessage = "Unknown";
+                ordersMessage = "Unknown - try page refresh";
             }
         }
         catch (Exception)
         {
-            ordersMessage = "Unknown";
+            ordersMessage = "Unknown - try page refresh";
+        }
+    }
+
+    private async Task GetLowStockProductCount()
+    {
+        try
+        {
+            var lowStockThreshold = 3;
+
+            if (lowStockThreshold >= 0)
+            {
+                var products = await inventoryService.GetInventoryAtOrBelowLevelAsync(lowStockThreshold);
+
+                if (products != null)
+                {
+                    string productsText = products.Count == 1 ? "product" : "products";
+                    stockMessage = $"{products.Count} {productsText}";
+                }
+            }
+        }
+        catch (Exception)
+        {
+            stockMessage = "Unknown - try page refresh";
         }
     }
 }
