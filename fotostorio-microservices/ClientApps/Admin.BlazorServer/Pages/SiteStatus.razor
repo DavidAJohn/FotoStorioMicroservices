@@ -113,9 +113,9 @@ else
 
     private void CheckAzureConfig()
     {
-        var storageAccountName = config["AssetBaseUrl"];
-        var maxFileUploadSize = config["MaxFileUploadSize"];
-        var fileUploadTypes = config["FileUploadTypesAllowed"];
+        var storageAccountName = config["AzureSettings:AssetBaseUrl"];
+        var maxFileUploadSize = config["AzureSettings:MaxFileUploadSize"];
+        var fileUploadTypes = config["AzureSettings:FileUploadTypesAllowed"];
 
         if (string.IsNullOrWhiteSpace(storageAccountName) ||
             string.IsNullOrWhiteSpace(maxFileUploadSize) ||
@@ -134,7 +134,7 @@ else
     {
         try
         {
-            var days = 60;
+            var days = config.GetValue<int>("StoreStatusSettings:RecentOrderDaysThreshold");
             var orders = await orderService.GetLatestOrdersAsync(days);
 
             if (orders != null)
@@ -157,7 +157,7 @@ else
     {
         try
         {
-            var lowStockThreshold = 3;
+            var lowStockThreshold = config.GetValue<int>("StoreStatusSettings:LowStockThreshold");
 
             if (lowStockThreshold >= 0)
             {
