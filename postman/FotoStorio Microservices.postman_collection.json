@@ -1,0 +1,4386 @@
+{
+	"info": {
+		"_postman_id": "aebd6f24-fb90-48bb-8847-f7d8da3e94a6",
+		"name": "FotoStorio Microservices",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Get Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}/api/categories/",
+							"host": [
+								"{{products_url}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}/api/categories/1",
+							"host": [
+								"{{products_url}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Brands",
+			"item": [
+				{
+					"name": "Get Brands",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}/api/brands/",
+							"host": [
+								"{{products_url}}"
+							],
+							"path": [
+								"api",
+								"brands",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Brand By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}/api/brands/4",
+							"host": [
+								"{{products_url}}"
+							],
+							"path": [
+								"api",
+								"brands",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Mounts",
+			"item": [
+				{
+					"name": "Get Mounts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}/api/mounts/",
+							"host": [
+								"{{products_url}}"
+							],
+							"path": [
+								"api",
+								"mounts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get MountsBy Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}/api/mounts/2",
+							"host": [
+								"{{products_url}}"
+							],
+							"path": [
+								"api",
+								"mounts",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Sorting, Filtering & Paging",
+					"item": [
+						{
+							"name": "Sort Products By Price Desc",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_url}}/api/products?sort=priceDesc",
+									"host": [
+										"{{products_url}}"
+									],
+									"path": [
+										"api",
+										"products"
+									],
+									"query": [
+										{
+											"key": "sort",
+											"value": "priceDesc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Sort Products By Name Asc",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_url}}/api/products?sort=nameAsc",
+									"host": [
+										"{{products_url}}"
+									],
+									"path": [
+										"api",
+										"products"
+									],
+									"query": [
+										{
+											"key": "sort",
+											"value": "nameAsc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter Products By Brand",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_url}}/api/products?brandId=4",
+									"host": [
+										"{{products_url}}"
+									],
+									"path": [
+										"api",
+										"products"
+									],
+									"query": [
+										{
+											"key": "brandId",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter Products By Category",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_url}}/api/products?categoryId=2",
+									"host": [
+										"{{products_url}}"
+									],
+									"path": [
+										"api",
+										"products"
+									],
+									"query": [
+										{
+											"key": "categoryId",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter Products By Mount",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_url}}/api/products?mountId=2",
+									"host": [
+										"{{products_url}}"
+									],
+									"path": [
+										"api",
+										"products"
+									],
+									"query": [
+										{
+											"key": "mountId",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter Products By Brand & Sort By Price Desc",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_url}}/api/products?brandId=4&sort=priceDesc",
+									"host": [
+										"{{products_url}}"
+									],
+									"path": [
+										"api",
+										"products"
+									],
+									"query": [
+										{
+											"key": "brandId",
+											"value": "4"
+										},
+										{
+											"key": "sort",
+											"value": "priceDesc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search Products by Name",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_url}}/api/products?search=Z&sort=priceDesc",
+									"host": [
+										"{{products_url}}"
+									],
+									"path": [
+										"api",
+										"products"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "Z"
+										},
+										{
+											"key": "sort",
+											"value": "priceDesc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Paged Products",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_url}}/api/products?pageIndex=1&pageSize=10&sort=priceDesc",
+									"host": [
+										"{{products_url}}"
+									],
+									"path": [
+										"api",
+										"products"
+									],
+									"query": [
+										{
+											"key": "pageIndex",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "sort",
+											"value": "priceDesc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Special Offers (By Price Desc)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/offers?sort=priceDesc",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"offers"
+									],
+									"query": [
+										{
+											"key": "sort",
+											"value": "priceDesc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Special Offers (By Amount Saved Desc)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/api/offers?sort=savingDesc",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"offers"
+									],
+									"query": [
+										{
+											"key": "sort",
+											"value": "savingDesc"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}/api/products/",
+							"host": [
+								"{{products_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}/api/products/3",
+							"host": [
+								"{{products_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By Sku",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}/api/products/sku/NIKZ62C",
+							"host": [
+								"{{products_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"sku",
+								"NIKZ62C"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sku\": \"NIK750C\",\r\n    \"name\": \"Nikon D750\",\r\n    \"description\": \"Dolor laboris exercitation laborum aute sunt commodo commodo consequat esse aute ut amet occaecat esse.\",\r\n    \"price\": 999.00,\r\n    \"imageUrl\": \"https://i.ibb.co/vs9CgP5/Generic-Camera-Icon-711x600.png\",\r\n    \"brandId\": 2,\r\n    \"categoryId\": 1,\r\n    \"mountId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{products_url}}/api/products",
+							"host": [
+								"{{products_url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sku\": \"NIK750C\",\r\n    \"name\": \"Nikon D750\",\r\n    \"description\": \"Dolor laboris exercitation laborum aute sunt commodo commodo consequat esse aute ut amet occaecat esse.\",\r\n    \"price\": 899.00,\r\n    \"imageUrl\": \"https://i.ibb.co/vs9CgP5/Generic-Camera-Icon-711x600.png\",\r\n    \"brandId\": 2,\r\n    \"categoryId\": 1,\r\n    \"mountId\": 1,\r\n    \"isAvailable\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{products_url}}/api/products/25",
+							"host": [
+								"{{products_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"25"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}/api/products/26",
+							"host": [
+								"{{products_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"26"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Basket",
+			"item": [
+				{
+					"name": "POST Basket",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"basket1\",\r\n  \"basketItems\": [\r\n    {\r\n      \"quantity\": 1,\r\n      \"product\": {\r\n        \"id\": 1,\r\n        \"sku\": \"FUJXT3C\",\r\n        \"name\": \"Fujifilm X-T3\",\r\n        \"price\": 1299.00,\r\n        \"imageUrl\": \"https://i.ibb.co/THsp3mw/fuji-x-t3.png\",\r\n        \"brand\": \"Fujifilm\",\r\n        \"category\": \"Mirrorless Cameras\",\r\n        \"mount\": \"Fujifilm X-Mount\"\r\n      },\r\n      \"total\": 1299.00\r\n    },\r\n    {\r\n      \"quantity\": 2,\r\n      \"product\": {\r\n        \"id\": 3,\r\n        \"sku\": \"FUJ1855L\",\r\n        \"name\": \"Fujifilm 18-55m f/2.8-4\",\r\n        \"price\": 599.00,\r\n        \"imageUrl\": \"https://i.ibb.co/vkQLTrP/fuji-xf18-55mmf2-8-4-r-lm-ois.jpg\",\r\n        \"brand\": \"Fujifilm\",\r\n        \"category\": \"Lenses\",\r\n        \"mount\": \"Fujifilm X-Mount\"\r\n      },\r\n      \"total\": 1198.00\r\n    }\r\n  ],\r\n  \"basketTotal\": 2497.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{basket_url}}/api/basket",
+							"host": [
+								"{{basket_url}}"
+							],
+							"path": [
+								"api",
+								"basket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Basket By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{basket_url}}/api/basket?id=basket1",
+							"host": [
+								"{{basket_url}}"
+							],
+							"path": [
+								"api",
+								"basket"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "basket1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Empty Basket",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{basket_url}}/api/basket?id=basket1",
+							"host": [
+								"{{basket_url}}"
+							],
+							"path": [
+								"api",
+								"basket"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "basket1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Discounts",
+			"item": [
+				{
+					"name": "Get All Discounts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{discount_url}}/api/discounts",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"discounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current Discounts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{discount_url}}/api/discounts/current",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"discounts",
+								"current"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current and Future Discounts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{discount_url}}/api/discounts/currentfuture",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"discounts",
+								"currentfuture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Discount by Sku",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{discount_url}}/api/discounts/sku/NIKZ72C",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"discounts",
+								"sku",
+								"NIKZ72C"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Discount by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{discount_url}}/api/discounts/id/3",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"discounts",
+								"id",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Discount",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sku\": \"FUJ55200L\",\r\n    \"campaignId\": 2,\r\n    \"salePrice\": 749.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{discount_url}}/api/discounts/",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"discounts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Discount",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sku\": \"FUJ55200L\",\r\n    \"campaignId\": 2,\r\n    \"salePrice\": 729.00,\r\n    \"id\": 6\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{discount_url}}/api/discounts/",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"discounts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Discount",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{discount_url}}/api/discounts/6",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"discounts",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Campaigns",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{discount_url}}/api/campaigns",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"campaigns"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current Campaigns",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{discount_url}}/api/campaigns/current",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"campaigns",
+								"current"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Campaign by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{discount_url}}/api/campaigns/id/2",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"campaigns",
+								"id",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Campaign",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Test Discount Campaign\",\r\n    \"startDate\": \"2022-01-06T16:49:14.525557\",\r\n    \"endDate\": \"2022-04-05T16:49:14.5255611\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{discount_url}}/api/campaigns/",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"campaigns",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Campaign",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Testing Discount Campaign\",\r\n    \"startDate\": \"2022-01-06T16:49:14.525557\",\r\n    \"endDate\": \"2022-05-06T16:49:14.5255611\",\r\n    \"id\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{discount_url}}/api/campaigns/",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"campaigns",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Campaign",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{discount_url}}/api/campaigns/3",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"campaigns",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Gateways",
+			"item": [
+				{
+					"name": "Store",
+					"item": [
+						{
+							"name": "Catalog",
+							"item": [
+								{
+									"name": "GET Catalog from Store Gateway",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Catalog",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Catalog"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GET Catalog Item By Id from Store Gateway",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Catalog/3",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Catalog",
+												"3"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GET Paged Catalog data",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Catalog?pageIndex=1&pageSize=8&sort=priceDesc",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Catalog"
+											],
+											"query": [
+												{
+													"key": "pageIndex",
+													"value": "1"
+												},
+												{
+													"key": "pageSize",
+													"value": "8"
+												},
+												{
+													"key": "sort",
+													"value": "priceDesc"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Filter Catalog By Brand",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Catalog?brandId=4&sort=priceDesc",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Catalog"
+											],
+											"query": [
+												{
+													"key": "brandId",
+													"value": "4"
+												},
+												{
+													"key": "sort",
+													"value": "priceDesc"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Search Catalog by Name",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Catalog?search=Z&sort=priceDesc",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Catalog"
+											],
+											"query": [
+												{
+													"key": "search",
+													"value": "Z"
+												},
+												{
+													"key": "sort",
+													"value": "priceDesc"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Categories",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Categories",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Categories"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Category By Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Categories/1",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Categories",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Brands",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Brands",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Brands"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Brands By Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Brands/4",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Brands",
+												"4"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Mounts",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Mounts",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Mounts"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Mounts By Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Mounts/2",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Mounts",
+												"2"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get All Current Special Offers from Store Gateway",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Catalog/SpecialOffers",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Catalog",
+												"SpecialOffers"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Sort Special Offers By savingDesc from Store Gateway",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Catalog/SpecialOffers?sort=savingDesc",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Catalog",
+												"SpecialOffers"
+											],
+											"query": [
+												{
+													"key": "sort",
+													"value": "savingDesc"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Sort Special Offers By priceDesc from Store Gateway",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Catalog/SpecialOffers?sort=priceDesc",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Catalog",
+												"SpecialOffers"
+											],
+											"query": [
+												{
+													"key": "sort",
+													"value": "priceDesc"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Basket",
+							"item": [
+								{
+									"name": "POST Basket",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": \"basket1\",\r\n  \"basketItems\": [\r\n    {\r\n      \"quantity\": 1,\r\n      \"product\": {\r\n        \"id\": 1,\r\n        \"sku\": \"FUJXT3C\",\r\n        \"name\": \"Fujifilm X-T3\",\r\n        \"price\": 1299.00,\r\n        \"imageUrl\": \"https://i.ibb.co/THsp3mw/fuji-x-t3.png\",\r\n        \"brand\": \"Fujifilm\",\r\n        \"category\": \"Mirrorless Cameras\",\r\n        \"mount\": \"Fujifilm X-Mount\"\r\n      },\r\n      \"total\": 1299.00\r\n    },\r\n    {\r\n      \"quantity\": 2,\r\n      \"product\": {\r\n        \"id\": 3,\r\n        \"sku\": \"FUJ1855L\",\r\n        \"name\": \"Fujifilm 18-55m f/2.8-4\",\r\n        \"price\": 599.00,\r\n        \"imageUrl\": \"https://i.ibb.co/vkQLTrP/fuji-xf18-55mmf2-8-4-r-lm-ois.jpg\",\r\n        \"brand\": \"Fujifilm\",\r\n        \"category\": \"Lenses\",\r\n        \"mount\": \"Fujifilm X-Mount\"\r\n      },\r\n      \"total\": 1198.00\r\n    }\r\n  ],\r\n  \"basketTotal\": 2497.00\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{store_gtw_url}}/Basket",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Basket"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GET Basket By Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Basket?id=basket1",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Basket"
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "basket1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "DELETE Empty Basket",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Basket?id=basket1",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Basket"
+											],
+											"query": [
+												{
+													"key": "id",
+													"value": "basket1"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Orders",
+							"item": [
+								{
+									"name": "Place New Order (with price cheating)",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{User_Token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"Quantity\": 1,\r\n            \"Product\": {\r\n                \"Id\": 18,\r\n                \"Name\": \"Fujifilm X-T3\",\r\n                \"Price\": 1099,\r\n                \"ImageUrl\": \"https://i.ibb.co/THsp3mw/fuji-x-t3.png\",\r\n                \"Brand\": \"Fujifilm\",\r\n                \"Category\": \"Mirrorless Cameras\",\r\n                \"SalePrice\": 0\r\n            },\r\n            \"Total\": 1299\r\n        },\r\n        {\r\n            \"Quantity\": 1,\r\n            \"Product\": {\r\n                \"Id\": 3,\r\n                \"Name\": \"Fujifilm 18-55m f/2.8-4\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/vkQLTrP/fuji-xf18-55mmf2-8-4-r-lm-ois.jpg\",\r\n                \"Brand\": \"Fujifilm\",\r\n                \"Category\": \"Lenses\",\r\n                \"SalePrice\": 0\r\n            },\r\n            \"Total\": 599\r\n        }\r\n    ],\r\n    \"sendToAddress\": {\r\n        \"firstName\": \"Dave\",\r\n        \"lastName\": \"Dobbs\",\r\n        \"street\": \"10 High Street\",\r\n        \"secondLine\": \"\",\r\n        \"city\": \"Newport\",\r\n        \"county\": \"Gwent\",\r\n        \"postCode\": \"NP1 9XL\"\r\n    }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{store_gtw_url}}/Orders",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Orders"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Place New Order (with price cheating, offers and multiple quantities)",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{User_Token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"Quantity\": 1,\r\n            \"Product\": {\r\n                \"Id\": 21,\r\n                \"Name\": \"Nikon Z6 II\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/7p9D7sG/nikon-Z6-II.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Mirrorless Cameras\",\r\n                \"SalePrice\": 1\r\n            },\r\n            \"Total\": 1\r\n        },\r\n        {\r\n            \"Quantity\": 2,\r\n            \"Product\": {\r\n                \"Id\": 6,\r\n                \"Name\": \"Nikon 24-70mm f/4\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/416TG7N/nikon-Z-24-70mm-f4.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Lenses\",\r\n                \"SalePrice\": 0\r\n            },\r\n            \"Total\": 1\r\n        }\r\n    ],\r\n    \"sendToAddress\": {\r\n        \"firstName\": \"Dave\",\r\n        \"lastName\": \"Dobbs\",\r\n        \"street\": \"10 High Street\",\r\n        \"secondLine\": \"\",\r\n        \"city\": \"Newport\",\r\n        \"county\": \"Gwent\",\r\n        \"postCode\": \"NP1 9XL\"\r\n    }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{store_gtw_url}}/Orders",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Orders"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Place New Order (No auth)",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"Items\": [\r\n        {\r\n            \"Quantity\": 1,\r\n            \"Product\": {\r\n                \"Id\":20,\r\n\t\t\t\t\"Sku\":\"NIKZ62C\",\r\n\t\t\t\t\"Name\":\"Nikon Z6 II\",\r\n\t\t\t\t\"ImageUrl\":\"https://i.ibb.co/7p9D7sG/nikon-Z6-II.png\",\r\n\t\t\t\t\"Price\":1799,\r\n\t\t\t\t\"Brand\":\"Nikon\",\r\n\t\t\t\t\"Category\":\"Mirrorless Cameras\",\r\n\t\t\t\t\"Mount\":\"Nikon Z-Mount\"\r\n            },\r\n            \"Total\": 1799\r\n        },\r\n        {\r\n            \"Quantity\": 2,\r\n            \"Product\": {\r\n                \"Id\":6,\r\n\t\t\t\t\"Sku\":\"NIK2470L\",\r\n\t\t\t\t\"Name\":\"Nikon 24-70mm f/4\",\r\n\t\t\t\t\"ImageUrl\":\"https://i.ibb.co/416TG7N/nikon-Z-24-70mm-f4.png\",\r\n\t\t\t\t\"Price\":899,\r\n\t\t\t\t\"Brand\":\"Nikon\",\r\n\t\t\t\t\"Category\":\"Lenses\",\r\n\t\t\t\t\"Mount\":\"Nikon Z-Mount\"\r\n            },\r\n            \"Total\": 1798\r\n        }\r\n    ],\r\n    \"sendToAddress\": {\r\n        \"firstName\": \"Dave\",\r\n        \"lastName\": \"Dobbs\",\r\n        \"street\": \"10 High Street\",\r\n        \"secondLine\": \"\",\r\n        \"city\": \"Newport\",\r\n        \"county\": \"Gwent\",\r\n        \"postCode\": \"NP1 9XL\"\r\n    }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{store_gtw_url}}/Orders",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Orders"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Orders For User",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{User_Token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Orders",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Orders"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Orders For User (No auth)",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Orders",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Orders"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Order By Id For User",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{User_Token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Orders/1",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Orders",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Order By Id For User (No Auth)",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{store_gtw_url}}/Orders/1",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Orders",
+												"1"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Payments",
+							"item": [
+								{
+									"name": "Create payment intent as authenticated user",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{User_Token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{bob_token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"Quantity\": 1,\r\n            \"Product\": {\r\n                \"Id\": 21,\r\n                \"Name\": \"Nikon Z6 II\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/7p9D7sG/nikon-Z6-II.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Mirrorless Cameras\",\r\n                \"SalePrice\": 1\r\n            },\r\n            \"Total\": 1\r\n        },\r\n        {\r\n            \"Quantity\": 2,\r\n            \"Product\": {\r\n                \"Id\": 6,\r\n                \"Name\": \"Nikon 24-70mm f/4\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/416TG7N/nikon-Z-24-70mm-f4.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Lenses\",\r\n                \"SalePrice\": 0\r\n            },\r\n            \"Total\": 1\r\n        }\r\n    ],\r\n    \"paymentIntentId\": \"\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{store_gtw_url}}/Payments",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Payments"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create payment intent (No Auth)",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{bob_token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"Quantity\": 1,\r\n            \"Product\": {\r\n                \"Id\": 21,\r\n                \"Name\": \"Nikon Z6 II\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/7p9D7sG/nikon-Z6-II.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Mirrorless Cameras\",\r\n                \"SalePrice\": 1\r\n            },\r\n            \"Total\": 1\r\n        },\r\n        {\r\n            \"Quantity\": 2,\r\n            \"Product\": {\r\n                \"Id\": 6,\r\n                \"Name\": \"Nikon 24-70mm f/4\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/416TG7N/nikon-Z-24-70mm-f4.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Lenses\",\r\n                \"SalePrice\": 0\r\n            },\r\n            \"Total\": 1\r\n        }\r\n    ],\r\n    \"paymentIntentId\": \"\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{store_gtw_url}}/Payments",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Payments"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update existing payment intent as authenticated user",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{User_Token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{bob_token}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"Quantity\": 1,\r\n            \"Product\": {\r\n                \"Id\": 21,\r\n                \"Name\": \"Nikon Z6 II\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/7p9D7sG/nikon-Z6-II.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Mirrorless Cameras\",\r\n                \"SalePrice\": 1\r\n            },\r\n            \"Total\": 1\r\n        },\r\n        {\r\n            \"Quantity\": 2,\r\n            \"Product\": {\r\n                \"Id\": 6,\r\n                \"Name\": \"Nikon 24-70mm f/4\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/416TG7N/nikon-Z-24-70mm-f4.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Lenses\",\r\n                \"SalePrice\": 0\r\n            },\r\n            \"Total\": 1\r\n        }\r\n    ],\r\n    \"paymentIntentId\": \"pi_3JKrv4ERF3StIjRl1LHIWdPh\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{store_gtw_url}}/Payments/",
+											"host": [
+												"{{store_gtw_url}}"
+											],
+											"path": [
+												"Payments",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Marketing",
+					"item": [
+						{
+							"name": "Discounts",
+							"item": [
+								{
+									"name": "Get All Discounts",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Discounts",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Discounts"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Current Discounts",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Discounts/current",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Discounts",
+												"current"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Discount by Sku",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Discounts/sku/NIKZ72C",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Discounts",
+												"sku",
+												"NIKZ72C"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Discount by Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Discounts/id/2",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Discounts",
+												"id",
+												"2"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create Discount",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"sku\": \"FUJ55200L\",\r\n    \"campaignId\": 2,\r\n    \"salePrice\": 749.00\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Discounts",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Discounts"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update Discount",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"sku\": \"FUJ55200L\",\r\n    \"campaignId\": 2,\r\n    \"salePrice\": 729.00,\r\n    \"id\": 6\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Discounts",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Discounts"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Discount",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Discounts/6",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Discounts",
+												"6"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Campaigns",
+							"item": [
+								{
+									"name": "Get All Campaigns",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Campaigns",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Campaigns"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Current Campaigns",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Campaigns/current",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Campaigns",
+												"current"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Campaign by Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Campaigns/id/2",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Campaigns",
+												"id",
+												"2"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create Campaign",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"Test Discount Campaign\",\r\n    \"startDate\": \"2022-01-06T16:49:14.525557\",\r\n    \"endDate\": \"2022-04-05T16:49:14.5255611\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Campaigns",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Campaigns"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update Campaign",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"Testing Discount Campaign\",\r\n    \"startDate\": \"2022-01-06T16:49:14.525557\",\r\n    \"endDate\": \"2022-05-06T16:49:14.5255611\",\r\n    \"id\": 3\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Campaigns",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Campaigns"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Catalog",
+							"item": [
+								{
+									"name": "Get Catalog",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Catalog",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Catalog"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Catalog Item By Id from Marketing Gateway",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Catalog/3",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Catalog",
+												"3"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Paged Catalog data",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Catalog?pageIndex=1&pageSize=10&sort=priceDesc",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Catalog"
+											],
+											"query": [
+												{
+													"key": "pageIndex",
+													"value": "1"
+												},
+												{
+													"key": "pageSize",
+													"value": "10"
+												},
+												{
+													"key": "sort",
+													"value": "priceDesc"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Search Catalog by Name",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Catalog?search=Z&sort=priceDesc",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Catalog"
+											],
+											"query": [
+												{
+													"key": "search",
+													"value": "Z"
+												},
+												{
+													"key": "sort",
+													"value": "priceDesc"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Filter Catalog By Brand",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Catalog?brandId=4&sort=priceDesc",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Catalog"
+											],
+											"query": [
+												{
+													"key": "brandId",
+													"value": "4"
+												},
+												{
+													"key": "sort",
+													"value": "priceDesc"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Catalog",
+							"item": [
+								{
+									"name": "Get Catalog",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{admin_gtw_url}}/Admin/Catalog",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Admin",
+												"Catalog"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Catalog Item By Id from Admin Gateway",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{admin_gtw_url}}/Admin/Catalog/1",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Admin",
+												"Catalog",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Paged Catalog data",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{admin_gtw_url}}/Admin/Catalog?pageIndex=1&pageSize=10&sort=priceDesc",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Admin",
+												"Catalog"
+											],
+											"query": [
+												{
+													"key": "pageIndex",
+													"value": "1"
+												},
+												{
+													"key": "pageSize",
+													"value": "10"
+												},
+												{
+													"key": "sort",
+													"value": "priceDesc"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Search Catalog by Name",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{admin_gtw_url}}/Admin/Catalog?search=Z&sort=priceDesc",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Admin",
+												"Catalog"
+											],
+											"query": [
+												{
+													"key": "search",
+													"value": "Z"
+												},
+												{
+													"key": "sort",
+													"value": "priceDesc"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Filter Catalog By Brand",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{admin_gtw_url}}/Admin/Catalog?brandId=4&sort=priceDesc",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Admin",
+												"Catalog"
+											],
+											"query": [
+												{
+													"key": "brandId",
+													"value": "4"
+												},
+												{
+													"key": "sort",
+													"value": "priceDesc"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Brands",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{admin_gtw_url}}/Brands",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Brands"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Categories",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{admin_gtw_url}}/Categories",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Categories"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Mounts",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{admin_gtw_url}}/Mounts",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Mounts"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create Product",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"sku\": \"NIK750C\",\r\n    \"name\": \"Nikon D750\",\r\n    \"description\": \"Dolor laboris exercitation laborum aute sunt commodo commodo consequat esse aute ut amet occaecat esse.\",\r\n    \"price\": 999.00,\r\n    \"imageUrl\": \"https://i.ibb.co/vs9CgP5/Generic-Camera-Icon-711x600.png\",\r\n    \"brandId\": 2,\r\n    \"categoryId\": 1,\r\n    \"mountId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{admin_gtw_url}}/Admin/Catalog",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Admin",
+												"Catalog"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update Product",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"sku\": \"NIK750C\",\r\n    \"name\": \"Nikon D750\",\r\n    \"description\": \"Dolor laboris exercitation laborum aute sunt commodo commodo consequat esse aute ut amet occaecat esse.\",\r\n    \"price\": 899.00,\r\n    \"imageUrl\": \"https://i.ibb.co/vs9CgP5/Generic-Camera-Icon-711x600.png\",\r\n    \"brandId\": 2,\r\n    \"categoryId\": 1,\r\n    \"mountId\": 1,\r\n    \"isAvailable\": false\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{admin_gtw_url}}/Admin/Catalog/25",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Admin",
+												"Catalog",
+												"25"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Product",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{admin_gtw_url}}/Admin/Catalog/25",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Admin",
+												"Catalog",
+												"25"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Inventory",
+							"item": [
+								{
+									"name": "Get Stock at or below level of...",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{admin_gtw_url}}/Stock/4",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Stock",
+												"4"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get All Stock",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{admin_gtw_url}}/Stock",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Stock"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create New Product Entry in Stock",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{Admin_Token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"Sku\": \"NIKZ50C\",\r\n    \"Name\": \"Nikon Z 50\",\r\n    \"CurrentStock\": 3\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{admin_gtw_url}}/Stock",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Stock"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create New Stock Update (Add Stock)",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{Admin_Token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"Sku\": \"NIKZ5C\",\r\n    \"Added\": 3,\r\n    \"Removed\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{admin_gtw_url}}/Updates",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Updates"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Orders",
+							"item": [
+								{
+									"name": "Get Latest Orders (Admin)",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{Admin_Token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{admin_gtw_url}}/Orders/Latest/60",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Orders",
+												"Latest",
+												"60"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Order By Id For Admin",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{Admin_Token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{admin_gtw_url}}/Orders/1",
+											"host": [
+												"{{admin_gtw_url}}"
+											],
+											"path": [
+												"Orders",
+												"1"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Products Aggregator",
+					"item": [
+						{
+							"name": "Special Offers",
+							"item": [
+								{
+									"name": "Get All Current Special Offers from Aggregator",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{products_aggr_url}}/api/aggr/products/offers",
+											"host": [
+												"{{products_aggr_url}}"
+											],
+											"path": [
+												"api",
+												"aggr",
+												"products",
+												"offers"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Sort Special Offers By savingDesc from Aggregator",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{products_aggr_url}}/api/aggr/products/offers?sort=savingDesc",
+											"host": [
+												"{{products_aggr_url}}"
+											],
+											"path": [
+												"api",
+												"aggr",
+												"products",
+												"offers"
+											],
+											"query": [
+												{
+													"key": "sort",
+													"value": "savingDesc"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Sort Special Offers By priceDesc from Aggregator",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{products_aggr_url}}/api/aggr/products/offers?sort=priceDesc",
+											"host": [
+												"{{products_aggr_url}}"
+											],
+											"path": [
+												"api",
+												"aggr",
+												"products",
+												"offers"
+											],
+											"query": [
+												{
+													"key": "sort",
+													"value": "priceDesc"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Sort Special Offers By nameAsc from Aggregator",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{products_aggr_url}}/api/aggr/products/offers?sort=nameAsc",
+											"host": [
+												"{{products_aggr_url}}"
+											],
+											"path": [
+												"api",
+												"aggr",
+												"products",
+												"offers"
+											],
+											"query": [
+												{
+													"key": "sort",
+													"value": "nameAsc"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Get Products from Aggregator",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_aggr_url}}/api/aggr/products",
+									"host": [
+										"{{products_aggr_url}}"
+									],
+									"path": [
+										"api",
+										"aggr",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Item By Id from Products Aggregator",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_aggr_url}}/api/aggr/products/3",
+									"host": [
+										"{{products_aggr_url}}"
+									],
+									"path": [
+										"api",
+										"aggr",
+										"products",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Sort Products By Price Desc",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_aggr_url}}/api/aggr/products?sort=priceDesc",
+									"host": [
+										"{{products_aggr_url}}"
+									],
+									"path": [
+										"api",
+										"aggr",
+										"products"
+									],
+									"query": [
+										{
+											"key": "sort",
+											"value": "priceDesc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter Products By Brand",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_aggr_url}}/api/aggr/products?brandId=4&sort=priceDesc",
+									"host": [
+										"{{products_aggr_url}}"
+									],
+									"path": [
+										"api",
+										"aggr",
+										"products"
+									],
+									"query": [
+										{
+											"key": "brandId",
+											"value": "4"
+										},
+										{
+											"key": "sort",
+											"value": "priceDesc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter Products By Category",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_aggr_url}}/api/aggr/products?categoryId=2&sort=priceDesc",
+									"host": [
+										"{{products_aggr_url}}"
+									],
+									"path": [
+										"api",
+										"aggr",
+										"products"
+									],
+									"query": [
+										{
+											"key": "categoryId",
+											"value": "2"
+										},
+										{
+											"key": "sort",
+											"value": "priceDesc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter Products By Mount",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_aggr_url}}/api/aggr/products?mountId=2&sort=priceDesc",
+									"host": [
+										"{{products_aggr_url}}"
+									],
+									"path": [
+										"api",
+										"aggr",
+										"products"
+									],
+									"query": [
+										{
+											"key": "mountId",
+											"value": "2"
+										},
+										{
+											"key": "sort",
+											"value": "priceDesc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search Products by Name",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_aggr_url}}/api/aggr/products?search=Z&sort=priceDesc",
+									"host": [
+										"{{products_aggr_url}}"
+									],
+									"path": [
+										"api",
+										"aggr",
+										"products"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "Z"
+										},
+										{
+											"key": "sort",
+											"value": "priceDesc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Paged Products",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_aggr_url}}/api/aggr/products?pageIndex=1&pageSize=8&sort=priceDesc",
+									"host": [
+										"{{products_aggr_url}}"
+									],
+									"path": [
+										"api",
+										"aggr",
+										"products"
+									],
+									"query": [
+										{
+											"key": "pageIndex",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "8"
+										},
+										{
+											"key": "sort",
+											"value": "priceDesc"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Identity",
+			"item": [
+				{
+					"name": "Login as Admin (and save token to env)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Has properties\", function () {",
+									"    pm.expect(res).to.have.property('successful');",
+									"    pm.expect(res).to.have.property('token');",
+									"});",
+									"",
+									"pm.test(\"Is Successful\"), function() {",
+									"    pm.expect(res.successful).to.equl(true);",
+									"};",
+									"",
+									"if (pm.test(\"Has properties\" && pm.test(\"Is Successful\"))) {",
+									"    pm.environment.set(\"Admin_Token\", res.token);",
+									"};"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"admin@test.com\",\n\t\"password\": \"Pa$$w0rd\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{identity_url}}/api/accounts/login",
+							"host": [
+								"{{identity_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login as Marketing (and save token to env)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const marketing = pm.response.json();",
+									"",
+									"pm.test(\"Has properties\", function () {",
+									"    pm.expect(marketing).to.have.property('displayName');",
+									"    pm.expect(marketing).to.have.property('email');",
+									"    pm.expect(marketing).to.have.property('token');",
+									"});",
+									"",
+									"if (pm.test(\"Has properties\")) {",
+									"    pm.environment.set(\"Marketing_Token\", marketing.token);",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"marketing@test.com\",\n\t\"password\": \"Pa$$w0rd\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{identity_url}}/api/accounts/login",
+							"host": [
+								"{{identity_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register as Dave (and save token to env)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const user = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Has properties\", function () {\r",
+									"    pm.expect(user).to.have.property('displayName');\r",
+									"    pm.expect(user).to.have.property('email');\r",
+									"    pm.expect(user).to.have.property('token');\r",
+									"});\r",
+									"\r",
+									"if (pm.test(\"Has properties\")) {\r",
+									"    pm.environment.set(\"User_Token\", user.token);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"displayName\": \"Dave\",\r\n\t\"email\": \"dave@test.com\",\r\n\t\"password\": \"Pa$$w0rd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{identity_url}}/api/accounts/register",
+							"host": [
+								"{{identity_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login as dave@test.com (and save token to env)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Has properties\", function () {",
+									"    pm.expect(res).to.have.property('successful');",
+									"    pm.expect(res).to.have.property('token');",
+									"});",
+									"",
+									"pm.test(\"Is Successful\"), function() {",
+									"    pm.expect(res.successful).to.equl(true);",
+									"};",
+									"",
+									"if (pm.test(\"Has properties\" && pm.test(\"Is Successful\"))) {",
+									"    pm.environment.set(\"User_Token\", res.token);",
+									"};",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"dave@test.com\",\n\t\"password\": \"Pa$$w0rd\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{identity_url}}/api/accounts/login",
+							"host": [
+								"{{identity_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login as Dave - bad password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"dave@test.com\",\n\t\"password\": \"BadPassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{identity_url}}/api/accounts/login",
+							"host": [
+								"{{identity_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login as Dave - bad username/email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"davidX@test.com\",\n\t\"password\": \"Pa$$w0rd\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{identity_url}}/api/accounts/login",
+							"host": [
+								"{{identity_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register as Bob (and save token to env)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const user = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Has properties\", function () {\r",
+									"    pm.expect(user).to.have.property('displayName');\r",
+									"    pm.expect(user).to.have.property('email');\r",
+									"    pm.expect(user).to.have.property('token');\r",
+									"});\r",
+									"\r",
+									"if (pm.test(\"Has properties\")) {\r",
+									"    pm.environment.set(\"User_Token\", user.token);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"displayName\": \"Bob\",\r\n\t\"email\": \"bob@test.com\",\r\n\t\"password\": \"Pa$$w0rd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{identity_url}}/api/accounts/register",
+							"host": [
+								"{{identity_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register as Bob (bad parameter 'name' - should produce 400 Bad Request)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"name\": \"Bob\",\r\n\t\"email\": \"bob@test.com\",\r\n\t\"password\": \"Pa$$w0rd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{identity_url}}/api/accounts/register",
+							"host": [
+								"{{identity_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login as Bob (and save token to env)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const user = pm.response.json();",
+									"",
+									"pm.test(\"Has properties\", function () {",
+									"    pm.expect(user).to.have.property('displayName');",
+									"    pm.expect(user).to.have.property('email');",
+									"    pm.expect(user).to.have.property('token');",
+									"});",
+									"",
+									"if (pm.test(\"Has properties\")) {",
+									"    pm.environment.set(\"User_Token\", user.token);",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"bob@test.com\",\n\t\"password\": \"Pa$$w0rd\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{identity_url}}/api/accounts/login",
+							"host": [
+								"{{identity_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check if token is valid",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\"{{User_Token}}\"",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{identity_url}}/api/accounts/token",
+							"host": [
+								"{{identity_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check if email exists",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{identity_url}}/api/accounts/emailExists?email=dave@test.com",
+							"host": [
+								"{{identity_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"emailExists"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "dave@test.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User Address (User)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{User_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{identity_url}}/api/accounts/address",
+							"host": [
+								"{{identity_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User Address (Admin)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Admin_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{identity_url}}/api/accounts/address",
+							"host": [
+								"{{identity_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Address (User)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{User_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"David\",\n    \"lastName\": \"John\",\n    \"street\": \"40 Stansfield Road\",\n    \"secondLine\": \"\",\n    \"city\": \"Brixton\",\n    \"county\": \"London\",\n    \"postCode\": \"SW9 1DJ\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{identity_url}}/api/accounts/address",
+							"host": [
+								"{{identity_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Address (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Admin_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"street\": \"1 Admin Avenue\",\n    \"secondLine\": \"\",\n    \"city\": \"-\",\n    \"county\": \"London\",\n    \"postCode\": \"-\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{identity_url}}/api/accounts/address",
+							"host": [
+								"{{identity_url}}"
+							],
+							"path": [
+								"api",
+								"accounts",
+								"address"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Place New Order (with price cheating)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{User_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"Quantity\": 1,\r\n            \"Product\": {\r\n                \"Id\": 18,\r\n                \"Name\": \"Fujifilm X-T3\",\r\n                \"Price\": 1099,\r\n                \"ImageUrl\": \"https://i.ibb.co/THsp3mw/fuji-x-t3.png\",\r\n                \"Brand\": \"Fujifilm\",\r\n                \"Category\": \"Mirrorless Cameras\",\r\n                \"SalePrice\": 0\r\n            },\r\n            \"Total\": 1299\r\n        },\r\n        {\r\n            \"Quantity\": 1,\r\n            \"Product\": {\r\n                \"Id\": 3,\r\n                \"Name\": \"Fujifilm 18-55m f/2.8-4\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/vkQLTrP/fuji-xf18-55mmf2-8-4-r-lm-ois.jpg\",\r\n                \"Brand\": \"Fujifilm\",\r\n                \"Category\": \"Lenses\",\r\n                \"SalePrice\": 0\r\n            },\r\n            \"Total\": 599\r\n        }\r\n    ],\r\n    \"sendToAddress\": {\r\n        \"firstName\": \"Dave\",\r\n        \"lastName\": \"Dobbs\",\r\n        \"street\": \"10 High Street\",\r\n        \"secondLine\": \"\",\r\n        \"city\": \"Newport\",\r\n        \"county\": \"Gwent\",\r\n        \"postCode\": \"NP1 9XL\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{orders_url}}/api/orders",
+							"host": [
+								"{{orders_url}}"
+							],
+							"path": [
+								"api",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Place New Order (with price cheating, offers and multiple quantities)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{User_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"Quantity\": 1,\r\n            \"Product\": {\r\n                \"Id\": 21,\r\n                \"Name\": \"Nikon Z6 II\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/7p9D7sG/nikon-Z6-II.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Mirrorless Cameras\",\r\n                \"SalePrice\": 1\r\n            },\r\n            \"Total\": 1\r\n        },\r\n        {\r\n            \"Quantity\": 2,\r\n            \"Product\": {\r\n                \"Id\": 6,\r\n                \"Name\": \"Nikon 24-70mm f/4\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/416TG7N/nikon-Z-24-70mm-f4.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Lenses\",\r\n                \"SalePrice\": 0\r\n            },\r\n            \"Total\": 1\r\n        }\r\n    ],\r\n    \"sendToAddress\": {\r\n        \"firstName\": \"Dave\",\r\n        \"lastName\": \"Dobbs\",\r\n        \"street\": \"10 High Street\",\r\n        \"secondLine\": \"\",\r\n        \"city\": \"Newport\",\r\n        \"county\": \"Gwent\",\r\n        \"postCode\": \"NP1 9XL\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{orders_url}}/api/orders",
+							"host": [
+								"{{orders_url}}"
+							],
+							"path": [
+								"api",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Place New Order (No auth)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Items\": [\r\n        {\r\n            \"Quantity\": 1,\r\n            \"Product\": {\r\n                \"Id\":20,\r\n\t\t\t\t\"Sku\":\"NIKZ62C\",\r\n\t\t\t\t\"Name\":\"Nikon Z6 II\",\r\n\t\t\t\t\"ImageUrl\":\"https://i.ibb.co/7p9D7sG/nikon-Z6-II.png\",\r\n\t\t\t\t\"Price\":1799,\r\n\t\t\t\t\"Brand\":\"Nikon\",\r\n\t\t\t\t\"Category\":\"Mirrorless Cameras\",\r\n\t\t\t\t\"Mount\":\"Nikon Z-Mount\"\r\n            },\r\n            \"Total\": 1799\r\n        },\r\n        {\r\n            \"Quantity\": 2,\r\n            \"Product\": {\r\n                \"Id\":6,\r\n\t\t\t\t\"Sku\":\"NIK2470L\",\r\n\t\t\t\t\"Name\":\"Nikon 24-70mm f/4\",\r\n\t\t\t\t\"ImageUrl\":\"https://i.ibb.co/416TG7N/nikon-Z-24-70mm-f4.png\",\r\n\t\t\t\t\"Price\":899,\r\n\t\t\t\t\"Brand\":\"Nikon\",\r\n\t\t\t\t\"Category\":\"Lenses\",\r\n\t\t\t\t\"Mount\":\"Nikon Z-Mount\"\r\n            },\r\n            \"Total\": 1798\r\n        }\r\n    ],\r\n    \"sendToAddress\": {\r\n        \"firstName\": \"Dave\",\r\n        \"lastName\": \"Dobbs\",\r\n        \"street\": \"10 High Street\",\r\n        \"secondLine\": \"\",\r\n        \"city\": \"Newport\",\r\n        \"county\": \"Gwent\",\r\n        \"postCode\": \"NP1 9XL\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{orders_url}}/api/orders",
+							"host": [
+								"{{orders_url}}"
+							],
+							"path": [
+								"api",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orders For User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{User_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{orders_url}}/api/orders",
+							"host": [
+								"{{orders_url}}"
+							],
+							"path": [
+								"api",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Orders For User (No auth)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{orders_url}}/api/orders",
+							"host": [
+								"{{orders_url}}"
+							],
+							"path": [
+								"api",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order By Id For User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{User_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{orders_url}}/api/orders/1",
+							"host": [
+								"{{orders_url}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order By Id For User (from Store Gateway)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{User_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{store_gtw_url}}/orders/1",
+							"host": [
+								"{{store_gtw_url}}"
+							],
+							"path": [
+								"orders",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order By Id For User (No Auth)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{orders_url}}/api/orders/1",
+							"host": [
+								"{{orders_url}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Latest Orders (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Admin_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{orders_url}}/api/orders/latest/60",
+							"host": [
+								"{{orders_url}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"latest",
+								"60"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payments",
+			"item": [
+				{
+					"name": "Create payment intent as authenticated user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{User_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bob_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"Quantity\": 1,\r\n            \"Product\": {\r\n                \"Id\": 21,\r\n                \"Name\": \"Nikon Z6 II\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/7p9D7sG/nikon-Z6-II.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Mirrorless Cameras\",\r\n                \"SalePrice\": 1\r\n            },\r\n            \"Total\": 1\r\n        },\r\n        {\r\n            \"Quantity\": 2,\r\n            \"Product\": {\r\n                \"Id\": 6,\r\n                \"Name\": \"Nikon 24-70mm f/4\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/416TG7N/nikon-Z-24-70mm-f4.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Lenses\",\r\n                \"SalePrice\": 0\r\n            },\r\n            \"Total\": 1\r\n        }\r\n    ],\r\n    \"paymentIntentId\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{orders_url}}/api/payments/",
+							"host": [
+								"{{orders_url}}"
+							],
+							"path": [
+								"api",
+								"payments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create payment intent (No Auth)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bob_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"Quantity\": 1,\r\n            \"Product\": {\r\n                \"Id\": 21,\r\n                \"Name\": \"Nikon Z6 II\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/7p9D7sG/nikon-Z6-II.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Mirrorless Cameras\",\r\n                \"SalePrice\": 1\r\n            },\r\n            \"Total\": 1\r\n        },\r\n        {\r\n            \"Quantity\": 2,\r\n            \"Product\": {\r\n                \"Id\": 6,\r\n                \"Name\": \"Nikon 24-70mm f/4\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/416TG7N/nikon-Z-24-70mm-f4.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Lenses\",\r\n                \"SalePrice\": 0\r\n            },\r\n            \"Total\": 1\r\n        }\r\n    ],\r\n    \"paymentIntentId\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{orders_url}}/api/payments/",
+							"host": [
+								"{{orders_url}}"
+							],
+							"path": [
+								"api",
+								"payments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update existing payment intent as authenticated user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{User_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bob_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"Quantity\": 1,\r\n            \"Product\": {\r\n                \"Id\": 21,\r\n                \"Name\": \"Nikon Z6 II\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/7p9D7sG/nikon-Z6-II.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Mirrorless Cameras\",\r\n                \"SalePrice\": 1\r\n            },\r\n            \"Total\": 1\r\n        },\r\n        {\r\n            \"Quantity\": 2,\r\n            \"Product\": {\r\n                \"Id\": 6,\r\n                \"Name\": \"Nikon 24-70mm f/4\",\r\n                \"Price\": 1,\r\n                \"ImageUrl\": \"https://i.ibb.co/416TG7N/nikon-Z-24-70mm-f4.png\",\r\n                \"Brand\": \"Nikon\",\r\n                \"Category\": \"Lenses\",\r\n                \"SalePrice\": 0\r\n            },\r\n            \"Total\": 1\r\n        }\r\n    ],\r\n    \"paymentIntentId\": \"pi_3JKrv4ERF3StIjRl1LHIWdPh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{orders_url}}/api/payments/",
+							"host": [
+								"{{orders_url}}"
+							],
+							"path": [
+								"api",
+								"payments",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inventory",
+			"item": [
+				{
+					"name": "Get Stock Count",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{inventory_url}}/api/stock",
+							"host": [
+								"{{inventory_url}}"
+							],
+							"path": [
+								"api",
+								"stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Stock Count By Sku",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{inventory_url}}/api/stock/FUJ1855L",
+							"host": [
+								"{{inventory_url}}"
+							],
+							"path": [
+								"api",
+								"stock",
+								"FUJ1855L"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Stock Count At Or Below Stock Level",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{inventory_url}}/api/stock/level/4",
+							"host": [
+								"{{inventory_url}}"
+							],
+							"path": [
+								"api",
+								"stock",
+								"level",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Stock Updates",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Admin_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{inventory_url}}/api/updates",
+							"host": [
+								"{{inventory_url}}"
+							],
+							"path": [
+								"api",
+								"updates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Stock Updates (No Auth)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{inventory_url}}/api/updates",
+							"host": [
+								"{{inventory_url}}"
+							],
+							"path": [
+								"api",
+								"updates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Stock Updates (Not Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{User_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{inventory_url}}/api/updates",
+							"host": [
+								"{{inventory_url}}"
+							],
+							"path": [
+								"api",
+								"updates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Product Entry in Stock",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Admin_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Sku\": \"NIKZ50C\",\r\n    \"Name\": \"Nikon Z 50\",\r\n    \"CurrentStock\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{inventory_url}}/api/stock",
+							"host": [
+								"{{inventory_url}}"
+							],
+							"path": [
+								"api",
+								"stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Stock Updates By Sku",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Admin_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{inventory_url}}/api/updates/NIKZ62C",
+							"host": [
+								"{{inventory_url}}"
+							],
+							"path": [
+								"api",
+								"updates",
+								"NIKZ62C"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Stock Updates By Sku (No Auth)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{inventory_url}}/api/updates/NIKZ62C",
+							"host": [
+								"{{inventory_url}}"
+							],
+							"path": [
+								"api",
+								"updates",
+								"NIKZ62C"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Stock Updates By Sku (Not Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{User_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{inventory_url}}/api/updates/NIKZ62C",
+							"host": [
+								"{{inventory_url}}"
+							],
+							"path": [
+								"api",
+								"updates",
+								"NIKZ62C"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Stock Update (Add Stock)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Admin_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Sku\": \"FUJ1855L\",\r\n    \"Added\": 2,\r\n    \"Removed\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{inventory_url}}/api/updates",
+							"host": [
+								"{{inventory_url}}"
+							],
+							"path": [
+								"api",
+								"updates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Stock Update (Add Stock) (Not Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{User_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Sku\": \"FUJ1855L\",\r\n    \"Added\": 3,\r\n    \"Removed\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{inventory_url}}/api/updates",
+							"host": [
+								"{{inventory_url}}"
+							],
+							"path": [
+								"api",
+								"updates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Stock Update (Add Stock) (No Auth)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Sku\": \"FUJ1855L\",\r\n    \"Added\": 3,\r\n    \"Removed\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{inventory_url}}/api/updates",
+							"host": [
+								"{{inventory_url}}"
+							],
+							"path": [
+								"api",
+								"updates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Stock Update (Remove Stock)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Admin_Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Sku\": \"FUJ1855L\",\r\n    \"Added\": 0,\r\n    \"Removed\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{inventory_url}}/api/updates",
+							"host": [
+								"{{inventory_url}}"
+							],
+							"path": [
+								"api",
+								"updates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Stock Update (Remove Stock) (No Auth)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Sku\": \"FUJ1855L\",\r\n    \"Added\": 0,\r\n    \"Removed\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{inventory_url}}/api/updates",
+							"host": [
+								"{{inventory_url}}"
+							],
+							"path": [
+								"api",
+								"updates"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
