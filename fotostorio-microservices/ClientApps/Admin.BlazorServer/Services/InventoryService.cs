@@ -10,11 +10,13 @@ namespace Admin.BlazorServer.Services;
 public class InventoryService : IInventoryService
 {
     private readonly IHttpClientFactory _httpClient;
+    private readonly ILogger<InventoryService> _logger;
     private readonly ILocalStorageService _localStorage;
 
-    public InventoryService(IHttpClientFactory httpClient, ILocalStorageService localStorage)
+    public InventoryService(IHttpClientFactory httpClient, ILogger<InventoryService> logger, ILocalStorageService localStorage)
     {
         _httpClient = httpClient;
+        _logger = logger;
         _localStorage = localStorage;
     }
 
@@ -29,6 +31,7 @@ public class InventoryService : IInventoryService
         }
         catch (HttpRequestException ex)
         {
+            _logger.LogError(ex, "Status Code: {code}, Message: {message}", ex.StatusCode, ex.Message);
             throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
         }
     }
@@ -44,6 +47,7 @@ public class InventoryService : IInventoryService
         }
         catch (HttpRequestException ex)
         {
+            _logger.LogError(ex, "Status Code: {code}, Message: {message}", ex.StatusCode, ex.Message);
             throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
         }
     }
@@ -89,6 +93,7 @@ public class InventoryService : IInventoryService
         }
         catch (HttpRequestException ex)
         {
+            _logger.LogError(ex, "Status Code: {code}, Message: {message}", ex.StatusCode, ex.Message);
             throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
         }
     }
@@ -134,6 +139,7 @@ public class InventoryService : IInventoryService
         }
         catch (HttpRequestException ex)
         {
+            _logger.LogError(ex, "Status Code: {code}, Message: {message}", ex.StatusCode, ex.Message);
             throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
         }
     }

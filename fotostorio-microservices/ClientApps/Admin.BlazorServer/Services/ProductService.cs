@@ -32,7 +32,7 @@ public class ProductService : IProductService
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex.StatusCode + " " + ex.Message);
+            _logger.LogError(ex, "Status Code: {code}, Message: {message}", ex.StatusCode, ex.Message);
             throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
         }
     }
@@ -48,7 +48,7 @@ public class ProductService : IProductService
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex.StatusCode + " " + ex.Message);
+            _logger.LogError(ex, "Status Code: {code}, Message: {message}", ex.StatusCode, ex.Message);
             throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
         }
     }
@@ -64,7 +64,7 @@ public class ProductService : IProductService
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex.StatusCode + " " + ex.Message);
+            _logger.LogError(ex, "Status Code: {code}, Message: {message}", ex.StatusCode, ex.Message);
             throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
         }
     }
@@ -109,6 +109,7 @@ public class ProductService : IProductService
         }
         catch (HttpRequestException ex)
         {
+            _logger.LogError(ex, "Status Code: {code}, Message: {message}", ex.StatusCode, ex.Message);
             throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
         }
     }
