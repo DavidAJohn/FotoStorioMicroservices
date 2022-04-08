@@ -6,6 +6,7 @@
 @inject IConfiguration config
 @inject IOrderService orderService
 @inject IInventoryService inventoryService
+@inject IHealthService healthService
 
 <AuthGuard RolesAllowed="Administrator" />
 
@@ -19,12 +20,12 @@
 
 <div class="my-10 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
     <div class="mx-auto w-72">
-        <img src="https://i.ibb.co/0Kcr8qN/fotostorio-admin-website.jpg" class="w-full h-56 opacity-90 object-cover object-center shadow-md rounded-md">
+        <img src="https://i.ibb.co/0Kcr8qN/fotostorio-admin-website.jpg" class="w-full h-56 opacity-90 object-cover object-top shadow-md rounded-md">
         <div class="relative px-4 -mt-16 text-center">
             <div class="bg-white p-4 rounded-lg shadow-lg">
                 <h4 class="mt-1 text-xl font-semibold uppercase leading-tight truncate">Website Status</h4>
                 <div class="mt-4">
-                    <span class="text-teal-600 text-lg font-semibold">Healthy</span>
+                    <span class="@healthTextColour text-lg font-semibold">@healthMessage</span>
                 </div>
                 <div class="mt-4">
                     <span class="text-sm text-gray-600">
@@ -95,6 +96,8 @@ else
     string LastUpdated = "";
     bool AzureConfigured = false;
 
+    private string healthMessage = "Checking...";
+    private string healthTextColour = "text-teal-600 ";
     private string ordersMessage = "Checking...";
     private string stockMessage = "Checking...";
 
@@ -109,6 +112,7 @@ else
     {
         await GetRecentOrderCount();
         await GetLowStockProductCount();
+        await GetHealthCheckStatus();
     }
 
     private void CheckAzureConfig()
@@ -175,4 +179,47 @@ else
             stockMessage = "Unknown - try page refresh";
         }
     }
+
+    private async Task GetHealthCheckStatus()
+    {
+        try
+        {
+            var healthChecks = await healthService.GetHealthChecksAsync();
+
+            if (healthChecks != null)
+            {
+                var problemCount = 0;
+
+                foreach (var check in healthChecks)
+                {
+                    if (check.Status != "Healthy")
+                    {
+                        problemCount++; 
+                    }
+                }
+
+                if (problemCount == 0)
+                {
+                    healthTextColour = "text-green-600 ";
+                    healthMessage = "Healthy";
+                }
+                else
+                {
+                    healthTextColour = problemCount > 1 ? "text-red-800 " : "text-yellow-600 ";
+                    healthMessage = problemCount > 1 ? "Possible Issues" : "Possible Issue";
+                }
+            }
+            else
+            {
+                healthMessage = "Unknown - check link below";
+            }
+        }
+        catch (Exception)
+        {
+            stockMessage = "Unknown - check link below";
+        }
+    }
+
+    // TO DO - get TotalCount value from Products API paged list metadata
+
 }

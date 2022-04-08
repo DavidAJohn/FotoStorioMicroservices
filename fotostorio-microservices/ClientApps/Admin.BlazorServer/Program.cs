@@ -27,6 +27,11 @@ builder.Services.AddHttpClient("IdentityAPI", c => c.BaseAddress =
     .AddPolicyHandler(GetRetryPolicy())
     .AddPolicyHandler(GetCircuitBreakerPolicy());
 
+builder.Services.AddHttpClient("ApplicationStatus", c => c.BaseAddress =
+    new Uri(builder.Configuration["ApiSettings:AppStatusUri"]))
+    .AddPolicyHandler(GetRetryPolicy())
+    .AddPolicyHandler(GetCircuitBreakerPolicy());
+
 //builder.Services.AddApiAuthorization(opt => opt.UserOptions.RoleClaim = "role");
 builder.Services.AddAuthorizationCore(config =>
 {
@@ -44,6 +49,7 @@ builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ISkuService, SkuService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IHealthService, HealthService>();
 
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddBlazoredToast();
