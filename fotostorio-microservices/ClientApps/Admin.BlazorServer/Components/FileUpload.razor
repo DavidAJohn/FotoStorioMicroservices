@@ -70,7 +70,7 @@
         }
 
         // check the file type
-        string permittedExtensions = config.GetValue<string>("FileUploadTypesAllowed");
+        string permittedExtensions = config.GetValue<string>("AzureSettings:FileUploadTypesAllowed");
 
         if (!permittedExtensions.Contains(imageFile.ContentType.ToLowerInvariant()))
         {
@@ -80,7 +80,7 @@
         }
 
         // check the file size
-        var fileSizeLimit = config.GetValue<long>("MaxFileUploadSize");
+        var fileSizeLimit = config.GetValue<long>("AzureSettings:MaxFileUploadSize");
 
         if (imageFile.Size > fileSizeLimit)
         {
