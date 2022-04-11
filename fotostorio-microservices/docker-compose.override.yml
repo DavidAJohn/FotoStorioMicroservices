@@ -168,6 +168,19 @@ services:
     ports:
       - "8100:80"
 
+  admin.blazorserver:
+    container_name: admin.blazorserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ApiSettings:AdminGatewayUri=http://admin.gateway"
+      - "ApiSettings:IdentityUri=http://identity.api"
+      - "ApiSettings:AppStatusUri=http://applicationstatus"
+      - "AzureSettings:AssetBaseUrl=${AZURE_STORAGE_BASE_URL}"
+      - "AzureSettings:MaxFileUploadSize=${MAX_FILE_UPLOAD_SIZE}"
+      - "AzureSettings:FileUploadTypesAllowed=${FILE_UPLOAD_TYPES_ALLOWED}"
+    ports:
+      - "8020:80"
+
 volumes:
   fs_mssqldata:
     external: false

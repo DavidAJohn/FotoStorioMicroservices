@@ -119,3 +119,10 @@ services:
     build:
       context: .
       dockerfile: ClientApps/ApplicationStatus/Dockerfile
+
+  admin.blazorserver:
+    image: ${DOCKER_REGISTRY-}adminblazorserver
+    profiles: ["clientapps", "admin"]
+    build:
+      context: .
+      dockerfile: ClientApps/Admin.BlazorServer/Dockerfile
