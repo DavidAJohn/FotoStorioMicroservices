@@ -126,3 +126,10 @@ services:
     build:
       context: .
       dockerfile: ClientApps/Admin.BlazorServer/Dockerfile
+
+  store.blazorwasm:
+    image: ${DOCKER_REGISTRY-}storeblazorwasm
+    profiles: ["clientapps", "store"]
+    build:
+      context: .
+      dockerfile: ClientApps/Store.BlazorWasm/Dockerfile

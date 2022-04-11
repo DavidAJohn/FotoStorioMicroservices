@@ -181,6 +181,15 @@ services:
     ports:
       - "8020:80"
 
+  store.blazorwasm:
+    container_name: store.blazorwasm
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ApiSettings:StoreGatewayUri=http://store.gateway"
+      - "ApiSettings:IdentityUri=http://identity.api"
+    ports:
+      - "8000:80"
+    
 volumes:
   fs_mssqldata:
     external: false
