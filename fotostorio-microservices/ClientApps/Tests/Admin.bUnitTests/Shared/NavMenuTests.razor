@@ -1,0 +1,61 @@
+﻿@using Admin.BlazorServer.Models
+@using Admin.BlazorServer.Shared
+
+@inherits TestContext
+
+@code {
+    [Fact]
+    public void NavMenu_Renders_Correct_Number_Of_NavMenuItems()
+    {
+        List<NavMenuItem> NavMenuItems = new List<NavMenuItem>();
+        NavMenuItems.Add(new NavMenuItem { DisplayName = "Stock Control", Url = "stockcontrol" });
+        NavMenuItems.Add(new NavMenuItem { DisplayName = "Cusomer Orders", Url = "orders" });
+
+        var cut = Render(@<NavMenu navMenuItems=@NavMenuItems />);
+
+        var menuItems = cut.FindAll(".nav-menu-item");
+        Assert.Equal(2, menuItems.Count);
+    }
+
+    [Fact]
+    public void NavMenu_Correctly_Renders_Supplied_Display_Name()
+    {
+        List<NavMenuItem> NavMenuItems = new List<NavMenuItem>();
+        NavMenuItems.Add(new NavMenuItem { DisplayName = "Test Display Name", Url = "/" });
+
+        var cut = Render(@<NavMenu navMenuItems=@NavMenuItems />);
+        var menuItem = cut.Find(".nav-menu-item");
+        var link = menuItem.QuerySelector("a");
+
+        Assert.Equal("Test Display Name", link!.TextContent);
+    }
+
+    [Fact]
+    public void NavMenu_Correctly_Renders_Supplied_Url()
+    {
+        List<NavMenuItem> NavMenuItems = new List<NavMenuItem>();
+        NavMenuItems.Add(new NavMenuItem { DisplayName = "Stock Control", Url = "stockcontrol" });
+
+        var cut = Render(@<NavMenu navMenuItems=@NavMenuItems />);
+        var menuItem = cut.Find(".nav-menu-item");
+        var link = menuItem.QuerySelector("a");
+
+        Assert.Equal("stockcontrol", link!.GetAttribute("href"));
+    }
+
+    [Fact]
+    public void NavMenu_Correctly_Renders_One_NavMenuItem_Link()
+    {
+        List<NavMenuItem> NavMenuItems = new List<NavMenuItem>();
+        NavMenuItems.Add(new NavMenuItem { DisplayName = "Cusomer Orders", Url = "orders" });
+
+        var cut = Render(@<NavMenu navMenuItems=@NavMenuItems />);
+        var menuItem = cut.Find(".nav-menu-item");
+        var link = menuItem.QuerySelector("a");
+
+        link!.MarkupMatches(@<a href="orders" class:ignore="">
+                                Cusomer Orders
+                            </a>
+        );
+    }
+}
