@@ -7,6 +7,7 @@
 @inject IOrderService orderService
 @inject IInventoryService inventoryService
 @inject IHealthService healthService
+@inject IProductService productService
 
 <AuthGuard RolesAllowed="Administrator" />
 
@@ -29,7 +30,7 @@
                 </div>
                 <div class="mt-4">
                     <span class="text-sm text-gray-600">
-                        For full details, see the <a href="http://localhost:8100/hc-ui" target="_blank" class="text-blue-800">Application Status</a> app
+                        For full details, see the <a href="@AppStatusUri" target="_blank" class="text-blue-800">Application Status</a> app
                     </span>
                 </div>  
             </div>
@@ -71,9 +72,12 @@
     </div>
 </div>
 
-<div class="text-xl mt-24 font-semibold text-center">
-    There are currently <span class="text-teal-600">24</span> products listed in the store
-</div>
+@if (showProductCount)
+{
+    <div class="text-xl mt-24 font-semibold text-center">
+        There are currently <span class="text-teal-600">@productCountToDisplay</span> products listed in the store
+    </div>
+}
 
 @if (AzureConfigured)
 {
@@ -95,15 +99,20 @@ else
 @code {
     string LastUpdated = "";
     bool AzureConfigured = false;
+    string AppStatusUri = "";
 
     private string healthMessage = "Checking...";
     private string healthTextColour = "text-teal-600 ";
     private string ordersMessage = "Checking...";
     private string stockMessage = "Checking...";
 
+    private string productCountToDisplay = "";
+    private bool showProductCount = false;
+
     protected override void OnInitialized()
     {
         LastUpdated = DateTime.Now.ToString();
+        AppStatusUri = config["ApiSettings:AppStatusUri"] + "/hc-ui";
 
         CheckAzureConfig();
     }
@@ -113,6 +122,7 @@ else
         await GetRecentOrderCount();
         await GetLowStockProductCount();
         await GetHealthCheckStatus();
+        await GetProductCount();
     }
 
     private void CheckAzureConfig()
@@ -220,6 +230,18 @@ else
         }
     }
 
-    // TO DO - get TotalCount value from Products API paged list metadata
+    private async Task GetProductCount()
+    {
+        var productCount = await productService.GetProductCountAsync();
 
+        if (productCount == 0)
+        {
+            showProductCount = false;
+        }
+        else
+        {
+            productCountToDisplay = productCount.ToString();
+            showProductCount = true;
+        }
+    }
 }

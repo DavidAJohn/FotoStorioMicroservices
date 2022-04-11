@@ -113,4 +113,40 @@ public class ProductService : IProductService
             throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
         }
     }
+
+    public async Task<int> GetProductCountAsync()
+    {
+        try
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, "Admin/Catalog");
+            var client = _httpClient.CreateClient("AdminGateway");
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+                var items = JsonSerializer.Deserialize<List<ProductForCount>>(
+                    content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                );
+
+                var metadata = JsonSerializer.Deserialize<ProductMetadata>(
+                    response.Headers.GetValues("Pagination")
+                    .First(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                );
+
+                if (metadata != null)
+                {
+                    return metadata.TotalCount;
+                }
+            }
+
+            return 0;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError(ex, "Status Code: {code}, Message: {message}", ex.StatusCode, ex.Message);
+            throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
+        }
+    }
 }

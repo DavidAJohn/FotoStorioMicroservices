@@ -9,4 +9,5 @@ public interface IProductService
     Task<List<Category>?> GetProductCategoriesAsync();
     Task<List<Mount>?> GetProductMountsAsync();
     Task<ProductDTO?> CreateProductAsync(ProductCreateDTO productCreateDTO);
+    Task<int> GetProductCountAsync();
 }
