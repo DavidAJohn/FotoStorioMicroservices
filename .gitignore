@@ -351,6 +351,4 @@ MigrationBackup/
 
 # Custom additions
 **/wwwroot/css/tailwind.css
-*.jpg
-*.png
 .env
