@@ -1,9 +1,8 @@
-﻿namespace Identity.API.Models
+﻿namespace Identity.API.Models;
+
+public class LoginResult
 {
-    public class LoginResult
-    {
-        public bool Successful { get; set; }
-        public string Error { get; set; }
-        public string Token { get; set; }
-    }
+    public bool Successful { get; set; }
+    public string Error { get; set; }
+    public string Token { get; set; }
 }
