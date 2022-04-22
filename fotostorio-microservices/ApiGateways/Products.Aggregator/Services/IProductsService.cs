@@ -1,12 +1,8 @@
-﻿using Products.Aggregator.Models;
-using System.Threading.Tasks;
+﻿namespace Products.Aggregator.Services;
 
-namespace Products.Aggregator.Services
+public interface IProductsService
 {
-    public interface IProductsService
-    {
-        Task<PagedList<ProductResponse>> GetProductsAsync(ProductParameters productParams);
-        Task<ProductResponse> GetProductByIdAsync(int id);
-        Task<ProductResponse> GetProductBySkuAsync(string sku);
-    }
+    Task<PagedList<ProductResponse>> GetProductsAsync(ProductParameters productParams);
+    Task<ProductResponse> GetProductByIdAsync(int id);
+    Task<ProductResponse> GetProductBySkuAsync(string sku);
 }

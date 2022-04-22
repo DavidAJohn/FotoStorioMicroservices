@@ -1,56 +1,47 @@
-﻿using Microsoft.Extensions.Logging;
-using Products.Aggregator.Extensions;
-using Products.Aggregator.Models;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿namespace Products.Aggregator.Services;
 
-namespace Products.Aggregator.Services
+public class DiscountService : IDiscountService
 {
-    public class DiscountService : IDiscountService
+    private readonly HttpClient _httpClient;
+    private readonly ILogger<DiscountService> _logger;
+
+    public DiscountService(HttpClient httpClient, ILogger<DiscountService> logger)
     {
-        private readonly HttpClient _httpClient;
-        private readonly ILogger<DiscountService> _logger;
+        _httpClient = httpClient;
+        _logger = logger;
+    }
 
-        public DiscountService(HttpClient httpClient, ILogger<DiscountService> logger)
+    public async Task<DiscountResponse> GetDiscountBySku(string sku)
+    {
+        try
         {
-            _httpClient = httpClient;
-            _logger = logger;
+            var response = await _httpClient.GetAsync($"/api/discounts/sku/{sku}");
+
+            if (response == null) return null;
+
+            return await response.ReadContentAs<DiscountResponse>();
         }
-
-        public async Task<DiscountResponse> GetDiscountBySku(string sku)
+        catch (Exception ex)
         {
-            try
-            {
-                var response = await _httpClient.GetAsync($"/api/discounts/sku/{sku}");
-
-                if (response == null) return null;
-
-                return await response.ReadContentAs<DiscountResponse>();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"DiscountService -> Unable to get discount for sku '{sku}': {ex.Message}");
-                return null;
-            }
+            _logger.LogError($"DiscountService -> Unable to get discount for sku '{sku}': {ex.Message}");
+            return null;
         }
+    }
 
-        public async Task<List<DiscountResponse>> GetCurrentDiscounts()
+    public async Task<List<DiscountResponse>> GetCurrentDiscounts()
+    {
+        try
         {
-            try
-            {
-                var response = await _httpClient.GetAsync("/api/discounts/current");
+            var response = await _httpClient.GetAsync("/api/discounts/current");
 
-                if (response == null) return null;
+            if (response == null) return null;
 
-                return await response.ReadContentAs<List<DiscountResponse>>();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"DiscountService -> Unable to get current discounts from api: {ex.Message}");
-                return null;
-            }
+            return await response.ReadContentAs<List<DiscountResponse>>();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"DiscountService -> Unable to get current discounts from api: {ex.Message}");
+            return null;
         }
     }
 }

@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
-using Products.Aggregator.Models;
 
-namespace Products.API.Helpers
+namespace Products.Aggregator.Helpers;
+
+public class AutoMapperProfiles : Profile
 {
-    public class AutoMapperProfiles : Profile
+    public AutoMapperProfiles()
     {
-        public AutoMapperProfiles()
-        {
-            CreateMap<ProductResponse, AggregatedProduct>();
-        }
+        CreateMap<ProductResponse, AggregatedProduct>();
     }
 }
