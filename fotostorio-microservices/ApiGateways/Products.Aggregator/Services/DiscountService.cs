@@ -23,7 +23,7 @@ public class DiscountService : IDiscountService
         }
         catch (Exception ex)
         {
-            _logger.LogError($"DiscountService -> Unable to get discount for sku '{sku}': {ex.Message}");
+            _logger.LogError(ex, "DiscountService -> Unable to get discount for sku '{sku}': {message}", sku, ex.Message);
             return null;
         }
     }
@@ -40,7 +40,7 @@ public class DiscountService : IDiscountService
         }
         catch (Exception ex)
         {
-            _logger.LogError($"DiscountService -> Unable to get current discounts from api: {ex.Message}");
+            _logger.LogError(ex, "DiscountService -> Unable to get current discounts from api: {message}", ex.Message);
             return null;
         }
     }

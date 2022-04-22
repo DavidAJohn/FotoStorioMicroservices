@@ -119,7 +119,7 @@ public class ProductsService : IProductsService
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError($"Error in Products Service -> GetProductByIdAsync, Id = {id}");
+            _logger.LogError("Error in Products Service -> GetProductByIdAsync, Id = {id}", id);
             throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
         }
     }
@@ -143,7 +143,7 @@ public class ProductsService : IProductsService
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError($"Error in Products Service -> GetProductBySkuAsync, Sku = {sku}");
+            _logger.LogError("Error in Products Service -> GetProductBySkuAsync, Sku = {sku}", sku);
             throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
         }
     }
