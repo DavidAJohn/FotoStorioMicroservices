@@ -1,32 +1,67 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting.Internal;
+using Ocelot.Cache.CacheManager;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
 
-namespace Store.Gateway
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
+                     .AddJsonFile($"ocelot.{builder.Environment.EnvironmentName}.json", true, true);
+
+builder.Services.AddOcelot(builder.Configuration)
+                .AddCacheManager(settings => settings.WithDictionaryHandle());
+
+builder.Services.AddHealthChecks()
+                .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "StoreGateway" });
+
+builder.Services.AddCors(opt =>
 {
-    public class Program
+    opt.AddPolicy("CorsPolicy", policy =>
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+        policy.AllowAnyMethod()
+            .AllowAnyHeader()
+            .WithExposedHeaders("WWW-Authenticate", "Pagination")
+            .SetIsOriginAllowedToAllowWildcardSubdomains()
+            .AllowAnyOrigin();
+    });
+});
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    config.AddJsonFile($"ocelot.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true);
-                })
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
-                .ConfigureLogging((hostingContext, loggingBuilder) =>
-                {
-                    loggingBuilder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                    loggingBuilder.AddConsole();
-                    loggingBuilder.AddDebug();
-                });
-    }
+builder.Logging.AddConsole()
+               .AddDebug()
+               .AddConfiguration(builder.Configuration.GetSection("Logging"));
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 }
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapGet("/", async context =>
+    {
+        await context.Response.WriteAsync("/");
+    });
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
+});
+
+app.UseCors("CorsPolicy");
+
+await app.UseOcelot();
+
+app.Run();
