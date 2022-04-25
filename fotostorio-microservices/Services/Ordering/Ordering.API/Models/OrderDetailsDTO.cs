@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Ordering.API.Models;
 
-namespace Ordering.API.Models
+public class OrderDetailsDTO
 {
-    public class OrderDetailsDTO
-    {
-        public int Id { get; set; }
-        public string BuyerEmail { get; set; }
-        public DateTimeOffset OrderDate { get; set; }
-        public Address SendToAddress { get; set; }
-        public List<OrderItem> Items { get; set; }
-        public decimal Total { get; set; }
-        public string Status { get; set; }
-    }
+    public int Id { get; set; }
+    public string BuyerEmail { get; set; }
+    public DateTimeOffset OrderDate { get; set; }
+    public Address SendToAddress { get; set; }
+    public List<OrderItem> Items { get; set; }
+    public decimal Total { get; set; }
+    public string Status { get; set; }
 }

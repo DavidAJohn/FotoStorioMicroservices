@@ -1,7 +1,6 @@
-﻿namespace Ordering.API.Models
+﻿namespace Ordering.API.Models;
+
+public class BaseEntity
 {
-    public class BaseEntity
-    {
-        public int Id { get; set; }
-    }
+    public int Id { get; set; }
 }

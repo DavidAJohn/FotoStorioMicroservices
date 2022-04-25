@@ -1,8 +1,7 @@
-﻿namespace Ordering.API.Models
+﻿namespace Ordering.API.Models;
+
+public class PaymentIntentResult
 {
-    public class PaymentIntentResult
-    {
-        public string PaymentIntentId { get; set; }
-        public string ClientSecret { get; set; }
-    }
+    public string PaymentIntentId { get; set; }
+    public string ClientSecret { get; set; }
 }

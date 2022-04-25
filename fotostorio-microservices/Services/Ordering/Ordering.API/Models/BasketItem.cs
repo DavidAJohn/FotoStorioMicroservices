@@ -1,18 +1,15 @@
-﻿using Ordering.API.Models;
+﻿namespace Ordering.API.Models;
 
-namespace Ordering.API.Models
+public class BasketItem
 {
-    public class BasketItem
-    {
-        public int Quantity { get; set; }
-        public Product Product { get; set; }
+    public int Quantity { get; set; }
+    public Product Product { get; set; }
 
-        public decimal Total
+    public decimal Total
+    {
+        get
         {
-            get
-            {
-                return (Product.Price * Quantity);
-            }
+            return (Product.Price * Quantity);
         }
     }
 }

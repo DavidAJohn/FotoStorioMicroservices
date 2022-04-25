@@ -1,63 +1,54 @@
-﻿using Ordering.API.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿namespace Ordering.UnitTests.Models;
 
-namespace Ordering.UnitTests.Models
+public class BasketItemTests
 {
-    public class BasketItemTests
+    [Fact]
+    public void Create_new_basket_item_success()
     {
-        [Fact]
-        public void Create_new_basket_item_success()
+        //Arrange
+        var product = new Product
         {
-            //Arrange
-            var product = new Product
-            {
-                Id = 1,
-                Sku = "TEST_SKU",
-                Name = "Product Name",
-                Price = 1,
-                ImageUrl = "image.jpg",
-                Brand = "Product Brand",
-                Category = "Product Category",
-                Mount = "Product Mount"
-            };
+            Id = 1,
+            Sku = "TEST_SKU",
+            Name = "Product Name",
+            Price = 1,
+            ImageUrl = "image.jpg",
+            Brand = "Product Brand",
+            Category = "Product Category",
+            Mount = "Product Mount"
+        };
 
-            //Act
-            var basketItem = new BasketItem
-            {
-                Quantity = 1,
-                Product = product
-            };
-
-            //Assert
-            Assert.NotNull(basketItem);
-        }
-
-        [Fact]
-        public void Total_new_basket_item_correct()
+        //Act
+        var basketItem = new BasketItem
         {
-            //Arrange
-            var product = new Product
-            {
-                Id = 1,
-                Sku = "TEST_SKU",
-                Name = "Product Name",
-                Price = 10
-            };
+            Quantity = 1,
+            Product = product
+        };
 
-            //Act
-            var basketItem = new BasketItem
-            {
-                Quantity = 2,
-                Product = product
-            };
+        //Assert
+        Assert.NotNull(basketItem);
+    }
 
-            //Assert
-            Assert.Equal(20, basketItem.Total);
-        }
+    [Fact]
+    public void Total_new_basket_item_correct()
+    {
+        //Arrange
+        var product = new Product
+        {
+            Id = 1,
+            Sku = "TEST_SKU",
+            Name = "Product Name",
+            Price = 10
+        };
+
+        //Act
+        var basketItem = new BasketItem
+        {
+            Quantity = 2,
+            Product = product
+        };
+
+        //Assert
+        Assert.Equal(20, basketItem.Total);
     }
 }

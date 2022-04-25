@@ -1,10 +1,6 @@
-﻿using Ordering.API.Models;
-using System.Threading.Tasks;
+﻿namespace Ordering.API.Contracts;
 
-namespace Ordering.API.Contracts
+public interface IPaymentService
 {
-    public interface IPaymentService
-    {
-        Task<PaymentIntentResult> CreateOrUpdatePaymentIntent(PaymentIntentCreateDTO paymentIntentCreateDTO);
-    }
+    Task<PaymentIntentResult> CreateOrUpdatePaymentIntent(PaymentIntentCreateDTO paymentIntentCreateDTO);
 }

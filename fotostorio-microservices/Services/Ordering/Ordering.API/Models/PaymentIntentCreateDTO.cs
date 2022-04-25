@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
+﻿namespace Ordering.API.Models;
 
-namespace Ordering.API.Models
+public class PaymentIntentCreateDTO
 {
-    public class PaymentIntentCreateDTO
-    {
-        public List<BasketItem> Items { get; set; }
-        public string PaymentIntentId { get; set; }
-    }
+    public List<BasketItem> Items { get; set; }
+    public string PaymentIntentId { get; set; }
 }

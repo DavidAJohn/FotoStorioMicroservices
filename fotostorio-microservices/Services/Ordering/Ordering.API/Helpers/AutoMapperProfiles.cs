@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
-using Ordering.API.Models;
 
-namespace Ordering.API.Helpers
+namespace Ordering.API.Helpers;
+
+public class AutoMapperProfiles : Profile
 {
-    public class AutoMapperProfiles : Profile
+    public AutoMapperProfiles()
     {
-        public AutoMapperProfiles()
-        {
-            CreateMap<OrderCreateDTO, Order>();
-            CreateMap<Order, OrderDetailsDTO>();
-        }
+        CreateMap<OrderCreateDTO, Order>();
+        CreateMap<Order, OrderDetailsDTO>();
     }
 }
