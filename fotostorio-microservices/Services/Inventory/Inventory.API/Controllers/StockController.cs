@@ -1,121 +1,112 @@
-﻿using Inventory.API.Contracts;
-using Inventory.API.Entities;
-using Inventory.API.Extensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Inventory.API.Controllers
+namespace Inventory.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class StockController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class StockController : ControllerBase
+    private readonly ILogger<StockController> _logger;
+    private readonly IStockRepository _stockRepository;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public StockController(ILogger<StockController> logger, IStockRepository stockRepository, IHttpContextAccessor httpContextAccessor)
     {
-        private readonly ILogger<StockController> _logger;
-        private readonly IStockRepository _stockRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        _logger = logger;
+        _stockRepository = stockRepository;
+        _httpContextAccessor = httpContextAccessor;
+    }
 
-        public StockController(ILogger<StockController> logger, IStockRepository stockRepository, IHttpContextAccessor httpContextAccessor)
+    // GET api/stock
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Stock>>> GetStock()
+    {
+        try
         {
-            _logger = logger;
-            _stockRepository = stockRepository;
-            _httpContextAccessor = httpContextAccessor;
+            var stock = await _stockRepository.ListAllAsync();
+
+            if (stock == null) return NotFound();
+
+            return Ok(stock);
         }
-
-        // GET api/stock
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Stock>>> GetStock()
+        catch (Exception ex)
         {
-            try
-            {
-                var stock = await _stockRepository.ListAllAsync();
+            _logger.LogError("Error in GetStock : {message}", ex.Message);
 
-                if (stock == null) return NotFound();
-
-                return Ok(stock);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error in GetStock : {message}", ex.Message);
-
-                return BadRequest();
-            }
+            return BadRequest();
         }
+    }
 
-        // GET api/stock/{sku}
-        [HttpGet("{sku}", Name = "GetStockBySku")]
-        public async Task<ActionResult<Stock>> GetStockBySku(string sku)
+    // GET api/stock/{sku}
+    [HttpGet("{sku}", Name = "GetStockBySku")]
+    public async Task<ActionResult<Stock>> GetStockBySku(string sku)
+    {
+        if (sku == null) return BadRequest();
+
+        try
         {
-            if (sku == null) return BadRequest();
+            var stock = await _stockRepository.GetBySkuAsync(sku);
 
-            try
-            {
-                var stock = await _stockRepository.GetBySkuAsync(sku);
+            if (stock == null) return NotFound();
 
-                if (stock == null) return NotFound();
-
-                return Ok(stock);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error in GetStockBySku : {message}", ex.Message);
-
-                return BadRequest();
-            }
+            return Ok(stock);
         }
-
-        // GET api/stock/level/{stockLevel:int}
-        [HttpGet("level/{stockLevel:int}")]
-        public async Task<ActionResult<IEnumerable<Stock>>> GetStockAtOrBelowLevel(int stockLevel)
+        catch (Exception ex)
         {
-            try
-            {
-                var stock = await _stockRepository.GetByStockLevelAtOrBelow(stockLevel);
+            _logger.LogError("Error in GetStockBySku : {message}", ex.Message);
 
-                if (stock == null) return NotFound();
-
-                return Ok(stock);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error in GetStockAtOrBelowLevel : {message}", ex.Message);
-
-                return BadRequest();
-            }
+            return BadRequest();
         }
+    }
 
-        // POST api/stock
-        [HttpPost]
-        public async Task<ActionResult<Stock>> CreateNewStockEntry(Stock stock)
+    // GET api/stock/level/{stockLevel:int}
+    [HttpGet("level/{stockLevel:int}")]
+    public async Task<ActionResult<IEnumerable<Stock>>> GetStockAtOrBelowLevel(int stockLevel)
+    {
+        try
         {
-            if (stock == null) return BadRequest();
+            var stock = await _stockRepository.GetByStockLevelAtOrBelow(stockLevel);
 
-            try
+            if (stock == null) return NotFound();
+
+            return Ok(stock);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error in GetStockAtOrBelowLevel : {message}", ex.Message);
+
+            return BadRequest();
+        }
+    }
+
+    // POST api/stock
+    [HttpPost]
+    public async Task<ActionResult<Stock>> CreateNewStockEntry(Stock stock)
+    {
+        if (stock == null) return BadRequest();
+
+        try
+        {
+            var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
+            var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
+
+            if (role != "Administrator")
             {
-                var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-                var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
-
-                if (role != "Administrator")
-                {
-                    _logger.LogWarning("Stock Updates: CreateNewStockEntry called with role: '{role}', NOT 'Administrator'", role);
-                    return Unauthorized();
-                }
-
-                var createdStockEntry = await _stockRepository.Create(stock);
-
-                if (createdStockEntry == null) return BadRequest("There was a problem adding stock for this Sku");
-
-                return Ok(createdStockEntry);
+                _logger.LogWarning("Stock Updates: CreateNewStockEntry called with role: '{role}', NOT 'Administrator'", role);
+                return Unauthorized();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error in CreateNewStockEntry : {message}", ex.Message);
 
-                return BadRequest();
-            }
+            var createdStockEntry = await _stockRepository.Create(stock);
+
+            if (createdStockEntry == null) return BadRequest("There was a problem adding stock for this Sku");
+
+            return Ok(createdStockEntry);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error in CreateNewStockEntry : {message}", ex.Message);
+
+            return BadRequest();
         }
     }
 }

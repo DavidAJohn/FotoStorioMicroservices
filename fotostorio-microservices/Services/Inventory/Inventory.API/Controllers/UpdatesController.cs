@@ -1,119 +1,110 @@
-﻿using Inventory.API.Contracts;
-using Inventory.API.Entities;
-using Inventory.API.Extensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Inventory.API.Controllers
+namespace Inventory.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class UpdatesController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UpdatesController : ControllerBase
+    private readonly ILogger<UpdatesController> _logger;
+    private readonly IInventoryService _inventoryService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public UpdatesController(ILogger<UpdatesController> logger, IInventoryService inventoryService, IHttpContextAccessor httpContextAccessor)
     {
-        private readonly ILogger<UpdatesController> _logger;
-        private readonly IInventoryService _inventoryService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        _logger = logger;
+        _inventoryService = inventoryService;
+        _httpContextAccessor = httpContextAccessor;
+    }
 
-        public UpdatesController(ILogger<UpdatesController> logger, IInventoryService inventoryService, IHttpContextAccessor httpContextAccessor)
+    // GET api/updates
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Update>>> GetUpdates()
+    {
+        try
         {
-            _logger = logger;
-            _inventoryService = inventoryService;
-            _httpContextAccessor = httpContextAccessor;
+            var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
+            var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
+
+            if (role != "Administrator")
+            {
+                _logger.LogWarning("Stock Updates: GetUpdates called with role: '{role}', NOT 'Administrator'", role);
+                return Unauthorized();
+            }
+
+            var updates = await _inventoryService.GetUpdates(token);
+
+            if (updates == null) return NotFound();
+
+            return Ok(updates);
         }
-
-        // GET api/updates
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Update>>> GetUpdates()
+        catch (Exception ex)
         {
-            try
-            {
-                var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-                var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
+            _logger.LogError("Error in GetUpdates : {message}", ex.Message);
 
-                if (role != "Administrator")
-                {
-                    _logger.LogWarning("Stock Updates: GetUpdates called with role: '{role}', NOT 'Administrator'", role);
-                    return Unauthorized();
-                }
-
-                var updates = await _inventoryService.GetUpdates(token);
-
-                if (updates == null) return NotFound();
-
-                return Ok(updates);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error in GetUpdates : {message}", ex.Message);
-
-                return BadRequest();
-            }
+            return BadRequest();
         }
+    }
 
-        // GET api/updates/{sku}
-        [HttpGet("{sku}", Name = "GetUpdatesBySku")]
-        public async Task<ActionResult<IEnumerable<Update>>> GetUpdatesBySku(string sku)
+    // GET api/updates/{sku}
+    [HttpGet("{sku}", Name = "GetUpdatesBySku")]
+    public async Task<ActionResult<IEnumerable<Update>>> GetUpdatesBySku(string sku)
+    {
+        if (sku == null) return BadRequest();
+
+        try
         {
-            if (sku == null) return BadRequest();
+            var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
+            var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
 
-            try
+            if (role != "Administrator")
             {
-                var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-                var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
-
-                if (role != "Administrator")
-                {
-                    _logger.LogWarning("Stock Updates: GetUpdatesBySku called with role: '{role}', NOT 'Administrator'", role);
-                    return Unauthorized();
-                }
-
-                var updates = await _inventoryService.GetUpdatesBySku(sku, token);
-
-                if (updates == null) return NotFound();
-
-                return Ok(updates);
+                _logger.LogWarning("Stock Updates: GetUpdatesBySku called with role: '{role}', NOT 'Administrator'", role);
+                return Unauthorized();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error in GetUpdatesBySku : {message}", ex.Message);
 
-                return BadRequest();
-            }
+            var updates = await _inventoryService.GetUpdatesBySku(sku, token);
+
+            if (updates == null) return NotFound();
+
+            return Ok(updates);
         }
-
-        // POST api/updates
-        [HttpPost]
-        public async Task<ActionResult<Update>> CreateStockUpdate(UpdateCreateDTO update)
+        catch (Exception ex)
         {
-            if (update == null) return BadRequest();
+            _logger.LogError("Error in GetUpdatesBySku : {message}", ex.Message);
 
-            try
+            return BadRequest();
+        }
+    }
+
+    // POST api/updates
+    [HttpPost]
+    public async Task<ActionResult<Update>> CreateStockUpdate(UpdateCreateDTO update)
+    {
+        if (update == null) return BadRequest();
+
+        try
+        {
+            var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
+            var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
+
+            if (role != "Administrator")
             {
-                var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-                var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
-
-                if (role != "Administrator")
-                {
-                    _logger.LogWarning("Stock Updates: CreateStockUpdate called with role: '{role}', NOT 'Administrator'", role);
-                    return Unauthorized();
-                }
-
-                var createdUpdate = await _inventoryService.CreateUpdateFromAdmin(update, token);
-
-                if (createdUpdate == null) return BadRequest("There was a problem updating stock for this Sku");
-
-                return Ok(createdUpdate);
+                _logger.LogWarning("Stock Updates: CreateStockUpdate called with role: '{role}', NOT 'Administrator'", role);
+                return Unauthorized();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error in CreateUpdate : {message}", ex.Message);
 
-                return BadRequest();
-            }
+            var createdUpdate = await _inventoryService.CreateUpdateFromAdmin(update, token);
+
+            if (createdUpdate == null) return BadRequest("There was a problem updating stock for this Sku");
+
+            return Ok(createdUpdate);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error in CreateUpdate : {message}", ex.Message);
+
+            return BadRequest();
         }
     }
 }
