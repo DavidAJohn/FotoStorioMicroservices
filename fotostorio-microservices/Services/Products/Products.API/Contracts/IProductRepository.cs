@@ -1,10 +1,6 @@
-﻿using Products.API.Models;
-using System.Threading.Tasks;
+﻿namespace Products.API.Contracts;
 
-namespace Products.API.Contracts
+public interface IProductRepository : IRepositoryBase<Product>
 {
-    public interface IProductRepository : IRepositoryBase<Product>
-    {
-        Task<Product> GetBySkuAsync(string sku);
-    }
+    Task<Product> GetBySkuAsync(string sku);
 }

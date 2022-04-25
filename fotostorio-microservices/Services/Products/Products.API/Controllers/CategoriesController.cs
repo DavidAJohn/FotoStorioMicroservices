@@ -1,67 +1,60 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Products.API.Contracts;
-using Products.API.Models;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Products.API.Controllers
+namespace Products.API.Controllers;
+
+public class CategoriesController : BaseApiController
 {
-    public class CategoriesController : BaseApiController
+    private readonly ILogger<CategoriesController> _logger;
+    private readonly ICategoryRepository _categoryRepository;
+
+    public CategoriesController(ILogger<CategoriesController> logger, ICategoryRepository categoryRepository)
     {
-        private readonly ILogger<CategoriesController> _logger;
-        private readonly ICategoryRepository _categoryRepository;
+        _logger = logger;
+        _categoryRepository = categoryRepository;
+    }
 
-        public CategoriesController(ILogger<CategoriesController> logger, ICategoryRepository categoryRepository)
+    // GET api/categories
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+    {
+        try
         {
-            _logger = logger;
-            _categoryRepository = categoryRepository;
+            var categories = await _categoryRepository.ListAllAsync();
+
+            return Ok(categories);
         }
-
-        // GET api/categories
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        catch (Exception ex)
         {
-            try
-            {
-                var categories = await _categoryRepository.ListAllAsync();
+            _logger.LogError("Error in GetCategories : {message}", ex.Message);
 
-                return Ok(categories);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    // GET api/categories/{id}
+    [HttpGet("{id}")]
+    public async Task<ActionResult> GetCategoryById(int id)
+    {
+        try
+        {
+            var category = await _categoryRepository.GetByIdAsync(id);
+
+            if (category == null)
+            {
+                _logger.LogError("Category with id: {id}, not found", id);
+
+                return NotFound();
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError("Error in GetCategories : {message}", ex.Message);
-
-                return StatusCode(500, "Internal server error");
+                return Ok(category);
             }
         }
-
-        // GET api/categories/{id}
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetCategoryById(int id)
+        catch (Exception ex)
         {
-            try
-            {
-                var category = await _categoryRepository.GetByIdAsync(id);
+            _logger.LogError("Error in GetCategoryById : {message}", ex.Message);
 
-                if (category == null)
-                {
-                    _logger.LogError("Category with id: {id}, not found", id);
-
-                    return NotFound();
-                }
-                else
-                {
-                    return Ok(category);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error in GetCategoryById : {message}", ex.Message);
-
-                return StatusCode(500, "Internal server error");
-            }
+            return StatusCode(500, "Internal server error");
         }
     }
 }

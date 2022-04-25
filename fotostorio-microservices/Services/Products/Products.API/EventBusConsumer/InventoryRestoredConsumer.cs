@@ -1,35 +1,31 @@
 ﻿using EventBus.Messages.Events;
 using MassTransit;
-using Microsoft.Extensions.Logging;
-using Products.API.Contracts;
-using System.Threading.Tasks;
 
-namespace Products.API.EventBusConsumer
+namespace Products.API.EventBusConsumer;
+
+public class InventoryRestoredConsumer : IConsumer<InventoryRestoredEvent>
 {
-    public class InventoryRestoredConsumer : IConsumer<InventoryRestoredEvent>
+    private readonly ILogger<InventoryRestoredConsumer> _logger;
+    private readonly IProductsService _productsService;
+    private readonly IProductRepository _productRepository;
+
+    public InventoryRestoredConsumer(ILogger<InventoryRestoredConsumer> logger, IProductsService productsService, IProductRepository productRepository)
     {
-        private readonly ILogger<InventoryRestoredConsumer> _logger;
-        private readonly IProductsService _productsService;
-        private readonly IProductRepository _productRepository;
+        _logger = logger;
+        _productsService = productsService;
+        _productRepository = productRepository;
+    }
 
-        public InventoryRestoredConsumer(ILogger<InventoryRestoredConsumer> logger, IProductsService productsService, IProductRepository productRepository)
+    public async Task Consume(ConsumeContext<InventoryRestoredEvent> context)
+    {
+        var message = context.Message;
+        var productToUpdate = await _productRepository.GetBySkuAsync(message.Sku);
+
+        if (productToUpdate != null)
         {
-            _logger = logger;
-            _productsService = productsService;
-            _productRepository = productRepository;
-        }
+            await _productsService.UpdateProductAvailability(productToUpdate.Sku, true);
 
-        public async Task Consume(ConsumeContext<InventoryRestoredEvent> context)
-        {
-            var message = context.Message;
-            var productToUpdate = await _productRepository.GetBySkuAsync(message.Sku);
-
-            if (productToUpdate != null)
-            {
-                await _productsService.UpdateProductAvailability(productToUpdate.Sku, true);
-
-                _logger.LogInformation("InventoryRestoredEvent consumed successfully -> Sku: {sku}", productToUpdate.Sku);
-            }
+            _logger.LogInformation("InventoryRestoredEvent consumed successfully -> Sku: {sku}", productToUpdate.Sku);
         }
     }
 }

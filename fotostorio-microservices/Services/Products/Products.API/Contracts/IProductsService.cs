@@ -1,9 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿namespace Products.API.Contracts;
 
-namespace Products.API.Contracts
+public interface IProductsService
 {
-    public interface IProductsService
-    {
-        Task UpdateProductAvailability(string sku, bool status);
-    }
+    Task UpdateProductAvailability(string sku, bool status);
 }

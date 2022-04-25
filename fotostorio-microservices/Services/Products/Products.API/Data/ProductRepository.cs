@@ -1,26 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Products.API.Contracts;
-using Products.API.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Products.API.Data
+namespace Products.API.Data;
+
+public class ProductRepository : RepositoryBase<Product>, IProductRepository
 {
-    public class ProductRepository : RepositoryBase<Product>, IProductRepository
+    private readonly ApplicationDbContext _repositoryContext;
+
+    public ProductRepository(ApplicationDbContext repositoryContext) : base(repositoryContext)
     {
-        private readonly ApplicationDbContext _repositoryContext;
+        _repositoryContext = repositoryContext;
+    }
 
-        public ProductRepository(ApplicationDbContext repositoryContext) : base(repositoryContext)
-        {
-            _repositoryContext = repositoryContext;
-        }
-
-        public async Task<Product> GetBySkuAsync(string sku)
-        {
-            return await _repositoryContext.Set<Product>()
-                .AsNoTracking()
-                .FirstOrDefaultAsync(p => p.Sku == sku);
-        }
+    public async Task<Product> GetBySkuAsync(string sku)
+    {
+        return await _repositoryContext.Set<Product>()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Sku == sku);
     }
 }

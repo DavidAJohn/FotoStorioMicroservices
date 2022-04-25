@@ -1,67 +1,60 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Products.API.Contracts;
-using Products.API.Models;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Products.API.Controllers
+namespace Products.API.Controllers;
+
+public class BrandsController : BaseApiController
 {
-    public class BrandsController : BaseApiController
+    private readonly ILogger<BrandsController> _logger;
+    private readonly IBrandRepository _brandRepository;
+
+    public BrandsController(ILogger<BrandsController> logger, IBrandRepository brandRepository)
     {
-        private readonly ILogger<BrandsController> _logger;
-        private readonly IBrandRepository _brandRepository;
+        _logger = logger;
+        _brandRepository = brandRepository;
+    }
 
-        public BrandsController(ILogger<BrandsController> logger, IBrandRepository brandRepository)
+    // GET api/brands
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Brand>>> GetBrands()
+    {
+        try
         {
-            _logger = logger;
-            _brandRepository = brandRepository;
+            var brands = await _brandRepository.ListAllAsync();
+
+            return Ok(brands);
         }
-
-        // GET api/brands
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Brand>>> GetBrands()
+        catch (Exception ex)
         {
-            try
-            {
-                var brands = await _brandRepository.ListAllAsync();
+            _logger.LogError("Error in GetBrands : {message}", ex.Message);
 
-                return Ok(brands);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    // GET api/brands/{id}
+    [HttpGet("{id}")]
+    public async Task<ActionResult> GetBrandById(int id)
+    {
+        try
+        {
+            var brand = await _brandRepository.GetByIdAsync(id);
+
+            if (brand == null)
+            {
+                _logger.LogError("Brand with id: {id}, not found", id);
+
+                return NotFound();
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError("Error in GetBrands : {message}", ex.Message);
-
-                return StatusCode(500, "Internal server error");
+                return Ok(brand);
             }
         }
-
-        // GET api/brands/{id}
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetBrandById(int id)
+        catch (Exception ex)
         {
-            try
-            {
-                var brand = await _brandRepository.GetByIdAsync(id);
+            _logger.LogError("Error in GetBrandById : {message}", ex.Message);
 
-                if (brand == null)
-                {
-                    _logger.LogError("Brand with id: {id}, not found", id);
-
-                    return NotFound();
-                }
-                else
-                {
-                    return Ok(brand);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error in GetBrandById : {message}", ex.Message);
-
-                return StatusCode(500, "Internal server error");
-            }
+            return StatusCode(500, "Internal server error");
         }
     }
 }

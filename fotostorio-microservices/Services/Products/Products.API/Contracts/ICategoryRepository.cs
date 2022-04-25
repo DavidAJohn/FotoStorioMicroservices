@@ -1,8 +1,5 @@
-﻿using Products.API.Models;
+﻿namespace Products.API.Contracts;
 
-namespace Products.API.Contracts
+public interface ICategoryRepository : IRepositoryBase<Category>
 {
-    public interface ICategoryRepository : IRepositoryBase<Category>
-    {
-    }
 }

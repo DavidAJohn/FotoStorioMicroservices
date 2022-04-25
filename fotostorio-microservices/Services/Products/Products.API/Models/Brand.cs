@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Products.API.Models
+namespace Products.API.Models;
+
+public class Brand : BaseEntity
 {
-    public class Brand : BaseEntity
-    {
-        [Required]
-        public string Name { get; set; }
-    }
+    [Required]
+    public string Name { get; set; }
 }
