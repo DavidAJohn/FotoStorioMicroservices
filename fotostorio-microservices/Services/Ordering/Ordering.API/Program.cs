@@ -34,6 +34,8 @@ builder.Services.AddMassTransit(config =>
     });
 });
 
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
 builder.Services.AddHttpContextAccessor();
 
 // Access the Identity API via a named HttpClient, also using Polly for more resilience
