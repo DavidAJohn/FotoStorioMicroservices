@@ -5,22 +5,48 @@ public static class ApiEndpoints
     public static void ConfigureApiEndpoints(this WebApplication app)
     {
         // Discount endpoints
-        app.MapGet("api/Discounts/sku/{sku:maxlength(9)}", GetCurrentDiscountBySku);
-        app.MapGet("api/Discounts/id/{id:int}", GetCurrentDiscountById);
-        app.MapGet("api/Discounts/currentfuture", GetCurrentAndFutureDiscounts);
-        app.MapGet("api/Discounts/current", GetCurrentDiscounts);
-        app.MapGet("api/Discounts", GetAllDiscounts);
-        app.MapPost("api/Discounts", CreateDiscount);
-        app.MapPut("api/Discounts", UpdateDiscount);
-        app.MapDelete("api/Discounts/{id:int}", DeleteDiscount);
+        var discounts = app.MapGroup("api/Discounts")
+            .AddEndpointFilterFactory((handlerContext, next) =>
+            {
+                var loggerFactory = handlerContext.ApplicationServices.GetService<ILoggerFactory>();
+                var logger = loggerFactory.CreateLogger("RequestAuditor");
+
+                return (invocationContext) =>
+                {
+                    logger.LogInformation("Discounts endpoint - received a request for {path}", invocationContext.HttpContext.Request.Path);
+                    return next(invocationContext);
+                };
+            });
+
+        discounts.MapGet("/sku/{sku:maxlength(9)}", GetCurrentDiscountBySku);
+        discounts.MapGet("/id/{id:int}", GetCurrentDiscountById);
+        discounts.MapGet("/currentfuture", GetCurrentAndFutureDiscounts);
+        discounts.MapGet("/current", GetCurrentDiscounts);
+        discounts.MapGet("", GetAllDiscounts);
+        discounts.MapPost("", CreateDiscount);
+        discounts.MapPut("", UpdateDiscount);
+        discounts.MapDelete("/{id:int}", DeleteDiscount);
 
         // Campaign endpoints
-        app.MapGet("api/Campaigns/id/{id:int}", GetCampaignById);
-        app.MapGet("api/Campaigns/current", GetCurrentCampaigns);
-        app.MapGet("api/Campaigns", GetAllCampaigns);
-        app.MapPost("api/Campaigns", CreateCampaign);
-        app.MapPut("api/Campaigns", UpdateCampaign);
-        app.MapDelete("api/Campaigns/{id:int}", DeleteCampaign);
+        var campaigns = app.MapGroup("api/Campaigns")
+            .AddEndpointFilterFactory((handlerContext, next) =>
+            {
+                var loggerFactory = handlerContext.ApplicationServices.GetService<ILoggerFactory>();
+                var logger = loggerFactory.CreateLogger("RequestAuditor");
+
+                return (invocationContext) =>
+                {
+                    logger.LogInformation("Campaigns endpoint - received a request for {path}", invocationContext.HttpContext.Request.Path);
+                    return next(invocationContext);
+                };
+            });
+
+        campaigns.MapGet("/id/{id:int}", GetCampaignById);
+        campaigns.MapGet("/current", GetCurrentCampaigns);
+        campaigns.MapGet("", GetAllCampaigns);
+        campaigns.MapPost("", CreateCampaign);
+        campaigns.MapPut("", UpdateCampaign);
+        campaigns.MapDelete("/{id:int}", DeleteCampaign);
     }
 
     private static async Task<IResult> GetAllDiscounts(IDiscountData data)
