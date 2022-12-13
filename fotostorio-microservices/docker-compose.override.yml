@@ -63,7 +63,7 @@ services:
     container_name: discount.grpc
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:DiscountConnectionString=Server=mssqldata;Database=DiscountDb;User Id=sa;Password=aDmin1234!;"
+      - "ConnectionStrings:DiscountConnectionString=Server=mssqldata;Database=DiscountDb;User Id=sa;Password=aDmin1234!;Trust Server Certificate=true;"
     ports:
       - "8003:80"
 
