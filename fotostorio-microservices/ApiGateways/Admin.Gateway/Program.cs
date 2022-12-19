@@ -8,10 +8,12 @@ using Ocelot.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
-                     .AddJsonFile($"ocelot.{builder.Environment.EnvironmentName}.json", true, true);
+ConfigurationManager configuration = builder.Configuration;
 
-builder.Services.AddOcelot(builder.Configuration)
+configuration.SetBasePath(builder.Environment.ContentRootPath)
+             .AddJsonFile($"ocelot.{builder.Environment.EnvironmentName}.json", true, true);
+
+builder.Services.AddOcelot(configuration)
                 .AddCacheManager(settings => settings.WithDictionaryHandle());
 
 builder.Services.AddHealthChecks()
@@ -19,7 +21,7 @@ builder.Services.AddHealthChecks()
 
 builder.Logging.AddConsole()
                .AddDebug()
-               .AddConfiguration(builder.Configuration.GetSection("Logging"));
+               .AddConfiguration(configuration.GetSection("Logging"));
 
 var app = builder.Build();
 
@@ -29,23 +31,21 @@ if (app.Environment.IsDevelopment())
 }
 app.UseRouting();
 
-app.UseEndpoints(endpoints =>
+// Endpoints
+app.MapGet("/", async context =>
 {
-    endpoints.MapGet("/", async context =>
-    {
-        await context.Response.WriteAsync("/");
-    });
+    await context.Response.WriteAsync("/");
+});
 
-    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-    {
-        Predicate = _ => true,
-        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-    });
+app.MapHealthChecks("/liveness", new HealthCheckOptions
+{
+    Predicate = r => r.Name.Contains("self")
+});
 
-    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
-    {
-        Predicate = r => r.Name.Contains("self")
-    });
+app.UseHealthChecks("/hc", new HealthCheckOptions()
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
 await app.UseOcelot();
