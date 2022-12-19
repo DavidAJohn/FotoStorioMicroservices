@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using System;
 using System.Net;
 using System.Text.Json;
 
@@ -6,10 +7,10 @@ namespace Products.Aggregator.Services;
 
 public class ProductsService : IProductsService
 {
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClient;
     private readonly ILogger<ProductsService> _logger;
 
-    public ProductsService(HttpClient httpClient, ILogger<ProductsService> logger)
+    public ProductsService(IHttpClientFactory httpClient, ILogger<ProductsService> logger)
     {
         _httpClient = httpClient;
         _logger = logger;
@@ -71,7 +72,8 @@ public class ProductsService : IProductsService
                 request = new HttpRequestMessage(HttpMethod.Get, "/api/products");
             }
 
-            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            var client = _httpClient.CreateClient("Products");
+            HttpResponseMessage response = await client.SendAsync(request);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -104,7 +106,10 @@ public class ProductsService : IProductsService
     {
         try
         {
-            var response = await _httpClient.GetAsync($"/api/products/{id}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/products/{id}");
+
+            var client = _httpClient.CreateClient("Products");
+            HttpResponseMessage response = await client.SendAsync(request);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -128,7 +133,10 @@ public class ProductsService : IProductsService
     {
         try
         {
-            var response = await _httpClient.GetAsync($"/api/products/sku/{sku}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/products/sku/{sku}");
+
+            var client = _httpClient.CreateClient("Products");
+            HttpResponseMessage response = await client.SendAsync(request);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {

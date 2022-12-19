@@ -8,15 +8,18 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHttpClient<IProductsService, ProductsService>(c =>
+builder.Services.AddHttpClient("Products", c =>
                 c.BaseAddress = new Uri(builder.Configuration["ApiSettings:ProductsUrl"]))
                 .AddPolicyHandler(GetRetryPolicy())
                 .AddPolicyHandler(GetCircuitBreakerPolicy());
 
-builder.Services.AddHttpClient<IDiscountService, DiscountService>(c =>
+builder.Services.AddHttpClient("Discounts", c =>
                 c.BaseAddress = new Uri(builder.Configuration["ApiSettings:DiscountUrl"]))
                 .AddPolicyHandler(GetRetryPolicy())
                 .AddPolicyHandler(GetCircuitBreakerPolicy());
+
+builder.Services.AddScoped<IProductsService, ProductsService>();
+builder.Services.AddScoped<IDiscountService, DiscountService>();
 
 builder.Services.AddHttpContextAccessor();
 

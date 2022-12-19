@@ -2,10 +2,10 @@
 
 public class DiscountService : IDiscountService
 {
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClient;
     private readonly ILogger<DiscountService> _logger;
 
-    public DiscountService(HttpClient httpClient, ILogger<DiscountService> logger)
+    public DiscountService(IHttpClientFactory httpClient, ILogger<DiscountService> logger)
     {
         _httpClient = httpClient;
         _logger = logger;
@@ -15,7 +15,10 @@ public class DiscountService : IDiscountService
     {
         try
         {
-            var response = await _httpClient.GetAsync($"/api/discounts/sku/{sku}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/discounts/sku/{sku}");
+
+            var client = _httpClient.CreateClient("Discounts");
+            HttpResponseMessage response = await client.SendAsync(request);
 
             if (response == null) return null;
 
@@ -32,7 +35,10 @@ public class DiscountService : IDiscountService
     {
         try
         {
-            var response = await _httpClient.GetAsync("/api/discounts/current");
+            var request = new HttpRequestMessage(HttpMethod.Get, "/api/discounts/current");
+
+            var client = _httpClient.CreateClient("Discounts");
+            HttpResponseMessage response = await client.SendAsync(request);
 
             if (response == null) return null;
 
