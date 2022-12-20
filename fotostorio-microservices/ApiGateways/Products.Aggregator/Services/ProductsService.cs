@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using SerilogTimings;
 using System;
 using System.Net;
 using System.Text.Json;
@@ -72,34 +73,39 @@ public class ProductsService : IProductsService
                 request = new HttpRequestMessage(HttpMethod.Get, "/api/products");
             }
 
-            var client = _httpClient.CreateClient("Products");
-            HttpResponseMessage response = await client.SendAsync(request);
-
-            if (response.StatusCode == HttpStatusCode.OK)
+            using (var op = Operation.Begin("SerilogTimings : Retrieving products (from HttpClient creation to deserialisation)")) // SerilogTimings
             {
-                var content = await response.Content.ReadAsStringAsync();
+                var client = _httpClient.CreateClient("Products");
+                HttpResponseMessage response = await client.SendAsync(request);
 
-                var pagedResponse = new PagedList<ProductResponse>
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    Items = JsonSerializer.Deserialize<List<ProductResponse>>(
-                        content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-                    ),
-                    Metadata = JsonSerializer.Deserialize<PagingMetadata>(
-                        response.Headers.GetValues("Pagination")
-                        .First(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-                    )
-                };
+                    var content = await response.Content.ReadAsStringAsync();
 
-                _logger.LogInformation("Products Service -> Successfully retrieved products");
-                return pagedResponse;
+                    var pagedResponse = new PagedList<ProductResponse>
+                    {
+                        Items = JsonSerializer.Deserialize<List<ProductResponse>>(
+                            content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                        ),
+                        Metadata = JsonSerializer.Deserialize<PagingMetadata>(
+                            response.Headers.GetValues("Pagination")
+                            .First(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                        )
+                    };
+
+                    op.Complete();
+                    _logger.LogInformation("Products Service -> Successfully retrieved products");
+                    return pagedResponse;
+                }
+
+                op.Complete();
+                _logger.LogWarning("Products Service -> Response when attempting to GET products was '{statuscode}', rather than OK", response.StatusCode.ToString());
+                return null;
             }
-
-            _logger.LogWarning("Products Service -> Response when attempting to GET products was '{statuscode}', rather than OK", response.StatusCode.ToString());
-            return null;
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError("Error in Products Service -> GetProductsAsync");
+            _logger.LogError("Error in Products Service -> GetProductsAsync, with productParams: {@ProductParams}", productParams);
             throw new HttpRequestException(ex.Message, ex.InnerException, ex.StatusCode);
         }
     }

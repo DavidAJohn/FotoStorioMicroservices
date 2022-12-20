@@ -5,70 +5,88 @@ using Microsoft.OpenApi.Models;
 using Polly;
 using Polly.Extensions.Http;
 using Serilog;
+using Serilog.Events;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+        .WriteTo.Console()
+        .CreateLogger();
 
-builder.Services.AddHttpClient("Products", c =>
-                c.BaseAddress = new Uri(builder.Configuration["ApiSettings:ProductsUrl"]))
-                .AddPolicyHandler(GetRetryPolicy())
-                .AddPolicyHandler(GetCircuitBreakerPolicy());
-
-builder.Services.AddHttpClient("Discounts", c =>
-                c.BaseAddress = new Uri(builder.Configuration["ApiSettings:DiscountUrl"]))
-                .AddPolicyHandler(GetRetryPolicy())
-                .AddPolicyHandler(GetCircuitBreakerPolicy());
-
-builder.Services.AddScoped<IProductsService, ProductsService>();
-builder.Services.AddScoped<IDiscountService, DiscountService>();
-
-builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddSwaggerGen(c =>
+try
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Products.Aggregator", Version = "v1" });
-});
+    Log.Information("Starting application");
 
-builder.Services.AddHealthChecks()
-                .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "ProductsAggregator" });
+    var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+    builder.Host.UseSerilog();
 
-builder.Services.AddControllers();
+    builder.Services.AddHttpClient("Products", c =>
+                    c.BaseAddress = new Uri(builder.Configuration["ApiSettings:ProductsUrl"]))
+                    .AddPolicyHandler(GetRetryPolicy())
+                    .AddPolicyHandler(GetCircuitBreakerPolicy());
 
-builder.Logging.AddConsole()
-               .AddDebug()
-               .AddConfiguration(builder.Configuration.GetSection("Logging"));
+    builder.Services.AddHttpClient("Discounts", c =>
+                    c.BaseAddress = new Uri(builder.Configuration["ApiSettings:DiscountUrl"]))
+                    .AddPolicyHandler(GetRetryPolicy())
+                    .AddPolicyHandler(GetCircuitBreakerPolicy());
 
-var app = builder.Build();
+    builder.Services.AddScoped<IProductsService, ProductsService>();
+    builder.Services.AddScoped<IDiscountService, DiscountService>();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Products.Aggregator v1"));
+    builder.Services.AddHttpContextAccessor();
+
+    builder.Services.AddSwaggerGen(c =>
+    {
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Products.Aggregator", Version = "v1" });
+    });
+
+    builder.Services.AddHealthChecks()
+                    .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "ProductsAggregator" });
+
+    builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+    builder.Services.AddControllers();
+
+    var app = builder.Build();
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
+        app.UseSwagger();
+        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Products.Aggregator v1"));
+    }
+
+    app.UseSerilogRequestLogging();
+
+    app.UseRouting();
+
+    app.UseAuthorization();
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers();
+
+        endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+        {
+            Predicate = _ => true,
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
+
+        endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+        {
+            Predicate = r => r.Name.Contains("self")
+        });
+    });
+
+    app.Run();
 }
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.UseEndpoints(endpoints =>
+catch (Exception ex)
 {
-    endpoints.MapControllers();
-
-    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-    {
-        Predicate = _ => true,
-        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-    });
-
-    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
-    {
-        Predicate = r => r.Name.Contains("self")
-    });
-});
-
-app.Run();
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
 
 static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
 {
