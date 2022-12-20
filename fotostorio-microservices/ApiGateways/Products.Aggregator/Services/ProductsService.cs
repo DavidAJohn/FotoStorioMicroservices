@@ -90,9 +90,11 @@ public class ProductsService : IProductsService
                     )
                 };
 
+                _logger.LogInformation("Products Service -> Successfully retrieved products");
                 return pagedResponse;
             }
 
+            _logger.LogWarning("Products Service -> Response when attempting to GET products was '{statuscode}', rather than OK", response.StatusCode.ToString());
             return null;
         }
         catch (HttpRequestException ex)
@@ -117,9 +119,11 @@ public class ProductsService : IProductsService
                 var product = JsonSerializer.Deserialize<ProductResponse>
                     (content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
+                _logger.LogInformation("Products Service -> Successfully retrieved product id '{id}'", id);
                 return product;
             }
 
+            _logger.LogWarning("Products Service -> Response when attempting to GET product id '{id}' was '{statuscode}', rather than OK", id, response.StatusCode.ToString());
             return null;
         }
         catch (HttpRequestException ex)
@@ -144,9 +148,11 @@ public class ProductsService : IProductsService
                 var product = JsonSerializer.Deserialize<ProductResponse>
                     (content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
+                _logger.LogInformation("Products Service -> Successfully retrieved product sku '{sku}'", sku);
                 return product;
             }
 
+            _logger.LogWarning("Products Service -> Response when attempting to GET product sku '{sku}' was '{statuscode}', rather than OK", sku, response.StatusCode.ToString());
             return null;
         }
         catch (HttpRequestException ex)

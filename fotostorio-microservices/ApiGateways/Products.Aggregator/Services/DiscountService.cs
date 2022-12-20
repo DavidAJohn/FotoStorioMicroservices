@@ -20,13 +20,18 @@ public class DiscountService : IDiscountService
             var client = _httpClient.CreateClient("Discounts");
             HttpResponseMessage response = await client.SendAsync(request);
 
-            if (response == null) return null;
-
+            if (response == null)
+            {
+                _logger.LogWarning("Discount Service -> Response when attempting to GET discount for {sku} was NULL", sku);
+                return null;
+            }
+            
+            _logger.LogInformation("Discount Service -> Successfully retrieved discount for sku '{sku}'", sku);
             return await response.ReadContentAs<DiscountResponse>();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "DiscountService -> Unable to get discount for sku '{sku}': {message}", sku, ex.Message);
+            _logger.LogError(ex, "Discount Service -> Unable to get discount for sku '{sku}': {message}", sku, ex.Message);
             return null;
         }
     }
@@ -40,13 +45,18 @@ public class DiscountService : IDiscountService
             var client = _httpClient.CreateClient("Discounts");
             HttpResponseMessage response = await client.SendAsync(request);
 
-            if (response == null) return null;
+            if (response == null)
+            {
+                _logger.LogWarning("Discount Service -> Response when attempting to GET current discounts was NULL");
+                return null;
+            }
 
+            _logger.LogInformation("Discount Service -> Successfully retrieved current discounts");
             return await response.ReadContentAs<List<DiscountResponse>>();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "DiscountService -> Unable to get current discounts from api: {message}", ex.Message);
+            _logger.LogError(ex, "Discount Service -> Unable to get current discounts from api: {message}", ex.Message);
             return null;
         }
     }
