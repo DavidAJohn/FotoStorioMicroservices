@@ -9,6 +9,7 @@ using Serilog.Events;
 
 Log.Logger = new LoggerConfiguration()
         .WriteTo.Console()
+        .WriteTo.Seq("http://seq:5341") // http://<Seq container name>:<default Seq ingestion port>
         .CreateLogger();
 
 try
