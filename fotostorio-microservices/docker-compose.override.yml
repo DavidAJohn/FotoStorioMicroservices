@@ -36,6 +36,22 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+  seq:
+    container_name: seq
+    environment:
+      ACCEPT_EULA: "Y"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 500mb
+        reservations:
+          memory: 500mb
+    ports:
+      - "8200:80"
+      - "5341:5341"
+    volumes: 
+      - seq_data:/data
 
   products.api:
     container_name: products.api
@@ -194,4 +210,6 @@ volumes:
   fs_mssqldata:
     external: false
   postgres_data:
+    external: false
+  seq_data:
     external: false
