@@ -9,12 +9,13 @@
 
 - Blazor WebAssembly e-commerce store with a responsive layout created using Tailwind CSS 3
 - Basket functionality using a Redis database
-- PCI DSS-compliant payment integration with Stripe, using JSInterop
+- PCI DSS-compliant payment integration using Stripe Elements and JSInterop
 - Authentication and authorisation using .NET Core Identity
 - API Gateways for the store and admin sites using Ocelot
 - Discount pricing database using gRPC
 - Async messaging using RabbitMQ and MassTransit
 - Inventory management using PostgreSQL and async messaging
+- Centralised, structured logging using Seq
 
 ## Getting Started
 
@@ -28,9 +29,15 @@ This may take a few minutes, depending on whether or not you already have some o
 
 The application features a SQL Server with four databases which involves a 1.4Gb download just for the image itself.
 
-With all application services running, Docker will need at least 4Gb RAM.
+With all application services running, Docker will need at least 4Gb RAM, preferably 6-8Gb if you can spare it.
 
 Once all of the containers are up and running, visit [http://localhost:8000](http://localhost:8000) in your browser to view the store.
+
+The Blazor Server Admin site will be available at [http://localhost:8020](http://localhost:8020).
+
+The Health Checks/Application Status site will be available at [http://localhost:8100](http://localhost:8100).
+
+The [Seq](https://datalust.co/seq) logging site will be available at [http://localhost:8200](http://localhost:8200).
 
 ## Application Architecture
 
