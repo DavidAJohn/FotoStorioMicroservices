@@ -71,7 +71,7 @@ builder.Services.AddControllers();
 
 builder.Logging.AddConsole()
                .AddDebug()
-               .AddConfiguration(builder.Configuration.GetSection("Logging"));
+               .AddConfiguration(configuration.GetSection("Logging"));
 
 var app = builder.Build();
 
@@ -88,20 +88,17 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
+app.MapControllers();
+
+app.MapHealthChecks("/liveness", new HealthCheckOptions
 {
-    endpoints.MapControllers();
+    Predicate = r => r.Name.Contains("self")
+});
 
-    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
-    {
-        Predicate = _ => true,
-        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-    });
-
-    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
-    {
-        Predicate = r => r.Name.Contains("self")
-    });
+app.UseHealthChecks("/hc", new HealthCheckOptions()
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
 app.Run();
