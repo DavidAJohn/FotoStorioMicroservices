@@ -107,7 +107,7 @@ services:
     container_name: ordering.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:OrdersConnectionString=Server=mssqldata;Database=OrdersDb;User Id=sa;Password=aDmin1234!;"
+      - "ConnectionStrings:OrdersConnectionString=Server=mssqldata;Database=OrdersDb;User Id=sa;Password=aDmin1234!;Trust Server Certificate=true;"
       - "ApiSettings:IdentityUri=http://identity.api"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
       - "Stripe:WhSecret=${STRIPE_WHSECRET}"
