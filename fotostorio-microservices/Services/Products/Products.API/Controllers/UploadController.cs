@@ -25,32 +25,23 @@ public class UploadController : BaseApiController
         var permittedFileExtensions = _config["AzureUploadSettings:FileUploadTypesAllowed"];
         var fileSizeLimit = _config.GetValue<long>("AzureUploadSettings:MaxFileUploadSize");
 
+        // check that the Azure Storage connection string is available
+        if (string.IsNullOrEmpty(azureConnectionString))
+        {
+            _logger.LogError("Azure Storage connection string is empty or has not been set in config/env variables");
+            return BadRequest("Azure Storage connection string is empty or unavailable");
+        }
+
+        // check that the Azure Storage container names is available
+        if (string.IsNullOrEmpty(azureContainersAllowed))
+        {
+            _logger.LogError("Azure Storage container names was empty or has not been set in config/env variables");
+            return BadRequest("Azure Storage container names was empty or unavailable");
+        }
+
         var formCollection = await Request.ReadFormAsync();
-        var file = formCollection.Files[0];
 
         var requestedContainer = formCollection["container"].ToString();
-        var fileExtension = Path.GetExtension(file.FileName.ToLowerInvariant());
-
-        // check the file type is allowed
-        if (!permittedFileExtensions.Contains(fileExtension) && fileExtension != "")
-        {
-            _logger.LogError("The file type '" + fileExtension + "' is not allowed");
-            return BadRequest("The file type '" + fileExtension + "' is not allowed");
-        }
-
-        // check the file size (in bytes)
-        if (file.Length > fileSizeLimit)
-        {
-            _logger.LogError("The file size of " + file.Length + " bytes was too large");
-            return BadRequest("The file size of " + file.Length + " bytes was too large");
-        }
-
-        // check the file name length isn't excessive
-        if (file.FileName.Length > 75)
-        {
-            _logger.LogError("The file name is too long: " + file.FileName.Length + " characters");
-            return BadRequest("The file name is too long: " + file.FileName.Length + " characters");
-        }
 
         // check container name isn't empty
         if (requestedContainer.Length == 0)
@@ -62,11 +53,18 @@ public class UploadController : BaseApiController
         // check requested container name is in an allowed set of names
         if (!azureContainersAllowed.Contains(requestedContainer.ToLowerInvariant()))
         {
-            _logger.LogError("Invalid Azure container name supplied: " + requestedContainer);
-            return BadRequest("Invalid Azure container name supplied: " + requestedContainer);
+            _logger.LogError("Invalid Azure container name supplied: {requestedContainer}", requestedContainer);
+            return BadRequest($"Invalid Azure container name supplied: '{requestedContainer}'");
         }
 
-        if (file.Length > 0)
+        var file = formCollection.Files[0];
+
+        var fileExtension = Path.GetExtension(file.FileName.ToLowerInvariant());
+        var fileNameLengthLimit = 75;
+
+        List<string> basicFileChecks = BasicFileChecks(file, permittedFileExtensions, fileSizeLimit, fileNameLengthLimit, fileExtension);
+
+        if (basicFileChecks is null)
         {
             try
             {
@@ -120,12 +118,58 @@ public class UploadController : BaseApiController
             }
             catch (Exception ex)
             {
-                _logger.LogError("The file could not be uploaded: {message}", ex.Message);
-                return BadRequest("The file could not be uploaded");
+                _logger.LogError("The file '{fileName}' could not be uploaded: {message}", file.FileName, ex.Message);
+                return BadRequest($"The file '{file.FileName}' could not be uploaded");
             }
         }
+        else
+        {
+            _logger.LogError("The file '{fileName}' failed basic file checks and could not be uploaded", file.FileName);
+            return BadRequest($"The file '{file.FileName}' could not be uploaded");
+        }
+    }
 
-        _logger.LogError("The file '" + file.FileName + "' could not be uploaded");
-        return BadRequest("The file could not be uploaded");
+    private List<string> BasicFileChecks(IFormFile file, string permittedFileExtensions, long fileSizeLimit, int fileNameLengthLimit = 75, string fileExtension = "unknown")
+    {
+        var filecheckErrors = new List<string>();
+
+        // check the file has an extension
+        if (string.IsNullOrWhiteSpace(fileExtension))
+        {
+            _logger.LogError("'{fileName}' does not appear to have a file extension", file.FileName);
+            filecheckErrors.Add($"'{file.FileName}' does not appear to have a file extension");
+        }
+
+        // check the file type is allowed
+        if (!permittedFileExtensions.Contains(fileExtension))
+        {
+            _logger.LogError("Upload of '{fileName}' with file type '{fileExtension}' was not allowed", file.FileName, fileExtension);
+            filecheckErrors.Add($"Upload of '{file.FileName}' with file type '{fileExtension}' is not allowed");
+        }
+
+        // check file isn't 0 bytes
+        if (file.Length < 1)
+        {
+            _logger.LogError("The file '{fileName}' had a file size of 0 bytes", file.FileName);
+            filecheckErrors.Add($"'{file.FileName}' has a file size of 0 bytes");
+        }
+
+        // check the file size (in bytes) isn't above the limit
+        if (file.Length > fileSizeLimit)
+        {
+            _logger.LogError("The size of '{fileName}' ({fileSize} bytes) was larger than the current file size limit ({sizeLimit} bytes)", file.FileName, file.Length, fileSizeLimit);
+            filecheckErrors.Add($"The size of '{file.FileName}' ({file.Length} bytes) is larger than the current file size limit");
+        }
+
+        // check the file name length isn't above the limit
+        if (file.FileName.Length > fileNameLengthLimit)
+        {
+            _logger.LogError("The name of '{fileName}' was too long at {fileNameLength} characters. The current limit is {fileNameLengthLimit} characters", file.FileName, file.FileName.Length, fileNameLengthLimit);
+            filecheckErrors.Add($"The name of '{file.FileName}' was too long: {file.FileName.Length}  characters");
+        }
+
+        if (filecheckErrors.Count == 0) return null!;
+
+        return filecheckErrors;
     }
 }
