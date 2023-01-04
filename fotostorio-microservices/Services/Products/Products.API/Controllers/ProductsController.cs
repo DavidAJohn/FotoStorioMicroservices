@@ -69,7 +69,7 @@ public class ProductsController : BaseApiController
 
             if (product == null)
             {
-                _logger.LogError("Product with id: {id}, not found", id);
+                _logger.LogWarning("Product with id: {id}, not found", id);
                 return NotFound();
             }
             else
@@ -103,7 +103,7 @@ public class ProductsController : BaseApiController
 
             if (product == null)
             {
-                _logger.LogError("Product with sku: {sku}, not found", sku);
+                _logger.LogWarning("Product with sku: {sku}, not found", sku);
                 return NotFound();
             }
             else
@@ -130,6 +130,7 @@ public class ProductsController : BaseApiController
     {
         if (productCreateDTO == null)
         {
+            _logger.LogWarning("Bad Request: Attempt to create a product when supplied ProductCreateDTO was null");
             return BadRequest();
         }
 
@@ -139,12 +140,12 @@ public class ProductsController : BaseApiController
             await _productRepository.Create(product);
             var productDTO = _mapper.Map<Product, ProductDTO>(product);
 
+            _logger.LogInformation("Product created: {@ProductDTO}", productDTO);
             return CreatedAtRoute(nameof(GetProductById), new { Id = productDTO.Id }, productDTO);
         }
         catch (Exception ex)
         {
             _logger.LogError("Error in CreateProduct : {message}", ex.Message);
-
             return BadRequest();
         }
     }
@@ -164,6 +165,7 @@ public class ProductsController : BaseApiController
 
         if (product == null)
         {
+            _logger.LogWarning("Product Updated Failed: Supplied product could not be found. Id: {id}, ProductUpdateDTO: {@ProductUpdateDTO}", id, productUpdateDTO);
             return NotFound();
         }
 
@@ -172,12 +174,12 @@ public class ProductsController : BaseApiController
             _mapper.Map(productUpdateDTO, product);
             await _productRepository.Update(product);
 
+            _logger.LogInformation("Product Update Succeeded -> Product: {@Product}", product);
             return NoContent();
         }
         catch (Exception ex)
         {
             _logger.LogError("Error in UpdateProduct : {message}", ex.Message);
-
             return BadRequest();
         }
     }
@@ -197,6 +199,7 @@ public class ProductsController : BaseApiController
 
         if (product == null)
         {
+            _logger.LogWarning("Product Deletion Failed: Supplied product could not be found. Id: {id}", id);
             return NotFound();
         }
 
@@ -204,12 +207,12 @@ public class ProductsController : BaseApiController
         {
             await _productRepository.Delete(product);
 
+            _logger.LogInformation("Product Deletion Succeeded -> Product: {@Product}", product);
             return NoContent();
         }
         catch (Exception ex)
         {
             _logger.LogError("Error in DeleteProduct : {message}", ex.Message);
-
             return BadRequest();
         }
     }
