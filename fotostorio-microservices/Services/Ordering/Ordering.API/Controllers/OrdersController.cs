@@ -35,6 +35,7 @@ public class OrdersController : ControllerBase
     {
         if (orderToCreate == null)
         {
+            _logger.LogWarning("Attempt to create new order failed: OrderCreateDTO object was null");
             return BadRequest();
         }
 
@@ -46,6 +47,7 @@ public class OrdersController : ControllerBase
             string.IsNullOrWhiteSpace(orderToCreate.SendToAddress.LastName)
             )
         {
+            _logger.LogWarning("Attempt to create new order failed: {@OrderCreateDTO} object failed validation", orderToCreate);
             return BadRequest();
         }
 
@@ -59,13 +61,17 @@ public class OrdersController : ControllerBase
 
             var createdOrder = await _orderRepository.CreateOrderAsync(order, token);
 
-            if (createdOrder == null) return BadRequest();
+            if (createdOrder == null)
+            {
+                _logger.LogError("Order creation failed : {@OrderCreateDTO}", orderToCreate);
+                return BadRequest();
+            }
 
             return Ok(createdOrder);
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error in CreateOrder : {message}", ex.Message);
+            _logger.LogError("Error in CreateOrder : {message}. Order to create: {@OrderCreateDTO}", ex.Message, orderToCreate);
 
             return BadRequest();
         }

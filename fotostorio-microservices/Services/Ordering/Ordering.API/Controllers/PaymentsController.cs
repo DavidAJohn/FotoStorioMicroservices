@@ -27,8 +27,12 @@ public class PaymentsController : ControllerBase
     {
         var result = await _paymentService.CreateOrUpdatePaymentIntent(paymentIntentCreateDTO);
 
-        if (result == null) return BadRequest();
-
+        if (result == null)
+        {
+            _logger.LogWarning("Stripe Payment Intent Failed: Attempt to get a payment intent from Stripe returned null");
+            return BadRequest();
+        }
+        
         return Ok(result);
     }
 
