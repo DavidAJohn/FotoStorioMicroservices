@@ -5,116 +5,140 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using Polly;
+using Serilog;
+using Serilog.Events;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+        .WriteTo.Console()
+        .WriteTo.Seq("http://seq:5341") // http://<Seq container name>:<default Seq ingestion port>
+        .CreateLogger();
 
-ConfigurationManager configuration = builder.Configuration;
-
-builder.Services.AddDbContext<OrderDbContext>(options => {
-    options.UseSqlServer(configuration.GetConnectionString("OrdersConnectionString"),
-        sqlServerOptionsAction: sqlOptions =>
-        {
-            sqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 5,
-            maxRetryDelay: TimeSpan.FromSeconds(15),
-            errorNumbersToAdd: null);
-        });
-});
-
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<IPaymentService, PaymentService>();
-builder.Services.AddScoped<IHttpContextService, HttpContextService>();
-
-// Mass Transit and RabbitMQ config
-builder.Services.AddMassTransit(config =>
+try
 {
-    config.UsingRabbitMq((ctx, cfg) =>
+    Log.Information("Starting application");
+
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Host.UseSerilog();
+
+    ConfigurationManager configuration = builder.Configuration;
+
+    builder.Services.AddDbContext<OrderDbContext>(options =>
     {
-        cfg.Host(configuration["EventBusSettings:HostAddress"]);
+        options.UseSqlServer(configuration.GetConnectionString("OrdersConnectionString"),
+            sqlServerOptionsAction: sqlOptions =>
+            {
+                sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(15),
+                errorNumbersToAdd: null);
+            });
     });
-});
 
-builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+    builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+    builder.Services.AddScoped<IPaymentService, PaymentService>();
+    builder.Services.AddScoped<IHttpContextService, HttpContextService>();
 
-builder.Services.AddHttpContextAccessor();
-
-// Access the Identity API via a named HttpClient, also using Polly for more resilience
-builder.Services
-    .AddHttpClient("IdentityAPI", client =>
+    // Mass Transit and RabbitMQ config
+    builder.Services.AddMassTransit(config =>
     {
-        client.BaseAddress = new Uri(configuration["ApiSettings:IdentityUri"]);
-    })
-    .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new[]
-    {
+        config.UsingRabbitMq((ctx, cfg) =>
+        {
+            cfg.Host(configuration["EventBusSettings:HostAddress"]);
+        });
+    });
+
+    builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+    builder.Services.AddHttpContextAccessor();
+
+    // Access the Identity API via a named HttpClient, also using Polly for more resilience
+    builder.Services
+        .AddHttpClient("IdentityAPI", client =>
+        {
+            client.BaseAddress = new Uri(configuration["ApiSettings:IdentityUri"]);
+        })
+        .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new[]
+        {
                     TimeSpan.FromSeconds(1),
                     TimeSpan.FromSeconds(5),
                     TimeSpan.FromSeconds(10)
-    }))
-    .AddTransientHttpErrorPolicy(builder => builder.CircuitBreakerAsync(
-        handledEventsAllowedBeforeBreaking: 3,
-        durationOfBreak: TimeSpan.FromSeconds(30)
-    ));
+        }))
+        .AddTransientHttpErrorPolicy(builder => builder.CircuitBreakerAsync(
+            handledEventsAllowedBeforeBreaking: 3,
+            durationOfBreak: TimeSpan.FromSeconds(30)
+        ));
 
-builder.Services.AddHealthChecks()
-                .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "OrderingAPI" })
-                .AddCheck("OrderingDB-check", new SqlConnectionHealthCheck(
-                            configuration.GetConnectionString("OrdersConnectionString")),
-                            HealthStatus.Unhealthy, new string[] { "OrderingDB" });
+    builder.Services.AddHealthChecks()
+                    .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "OrderingAPI" })
+                    .AddCheck("OrderingDB-check", new SqlConnectionHealthCheck(
+                                configuration.GetConnectionString("OrdersConnectionString")),
+                                HealthStatus.Unhealthy, new string[] { "OrderingDB" });
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Ordering.API", Version = "v1" });
-});
+    builder.Services.AddSwaggerGen(c =>
+    {
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Ordering.API", Version = "v1" });
+    });
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("CorsPolicy",
-        builder => builder
-        .SetIsOriginAllowed((host) => true)
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials());
-});
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("CorsPolicy",
+            builder => builder
+            .SetIsOriginAllowed((host) => true)
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
+    });
 
-builder.Services.AddControllers();
+    builder.Services.AddControllers();
 
-builder.Logging.AddConsole()
-               .AddDebug()
-               .AddConfiguration(builder.Configuration.GetSection("Logging"));
+    builder.Logging.AddConsole()
+                   .AddDebug()
+                   .AddConfiguration(builder.Configuration.GetSection("Logging"));
 
-var app = builder.Build();
+    var app = builder.Build();
 
-await MigrateDatabase(app);
+    await MigrateDatabase(app);
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ordering.API v1"));
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
+        app.UseSwagger();
+        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ordering.API v1"));
+    }
+
+    app.UseSerilogRequestLogging();
+
+    app.UseRouting();
+
+    app.UseCors("CorsPolicy");
+
+    app.UseAuthentication();
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
+
+    app.UseHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    app.Run();
 }
-
-app.UseRouting();
-
-app.UseCors("CorsPolicy");
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.MapHealthChecks("/liveness", new HealthCheckOptions
+catch (Exception ex)
 {
-    Predicate = r => r.Name.Contains("self")
-});
-
-app.UseHealthChecks("/hc", new HealthCheckOptions()
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
 {
-    Predicate = _ => true,
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
-
-app.Run();
-
+    Log.CloseAndFlush();
+}
 
 async Task MigrateDatabase(IHost app)
 {
