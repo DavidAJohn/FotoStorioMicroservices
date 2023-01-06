@@ -35,7 +35,7 @@ Once all of the containers are up and running, visit [http://localhost:8000](htt
 
 The Blazor Server Admin site will be available at [http://localhost:8020](http://localhost:8020).
 
-The Health Checks/Application Status site will be available at [http://localhost:8100](http://localhost:8100).
+The Health Checks/Application Status site will be available at [http://localhost:8100/hc-ui](http://localhost:8100/hc-ui).
 
 The [Seq](https://datalust.co/seq) logging site will be available at [http://localhost:8200](http://localhost:8200).
 
