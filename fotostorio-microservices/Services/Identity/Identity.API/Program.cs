@@ -66,6 +66,8 @@ builder.Logging.AddConsole()
                .AddDebug()
                .AddConfiguration(builder.Configuration.GetSection("Logging"));
 
+builder.Services.AddTransient<SeedIdentity>();
+
 var app = builder.Build();
 
 await SeedIdentityData(app);
