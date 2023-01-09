@@ -57,6 +57,7 @@ services:
       dockerfile: Services/Identity/Identity.API/Dockerfile
     depends_on:
       - mssqldata
+      - basketdb
 
   ordering.api:
     image: ${DOCKER_REGISTRY-}orderingapi
