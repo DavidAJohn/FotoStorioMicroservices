@@ -95,7 +95,7 @@ services:
     container_name: identity.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:IdentityConnection=Server=mssqldata;Database=IdentityDb;User Id=sa;Password=aDmin1234!;"
+      - "ConnectionStrings:IdentityConnection=Server=mssqldata;Database=IdentityDb;User Id=sa;Password=aDmin1234!;Trust Server Certificate=true;"
       - "JwtKey=${JWT_KEY}"
       - "JwtIssuer=http://identity.api"
       - "JwtAudience=http://identity.api"
