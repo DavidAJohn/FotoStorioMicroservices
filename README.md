@@ -1,6 +1,8 @@
 ## Foto Storio Microservices
 **Foto Storio Microservices** is a .NET e-commerce application built with a microservice architecture using Docker containers.
 
+A 'monolithic' version of the application can be found here: [https://github.com/DavidAJohn/FotoStorio](https://github.com/DavidAJohn/FotoStorio)
+
 ---
 
 ![Screenshot](https://github.com/DavidAJohn/FotoStorioMicroservices/blob/main/images/fotostorio_store_screenshot.jpg?raw=true "Screenshot")
@@ -15,7 +17,7 @@
 - Discount pricing database using gRPC
 - Async messaging using RabbitMQ and MassTransit
 - Inventory management using PostgreSQL and async messaging
-- Centralised, structured logging using Seq
+- Centralised, structured logging using Serilog and Seq
 
 ## Getting Started
 
