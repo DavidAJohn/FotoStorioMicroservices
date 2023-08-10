@@ -30,8 +30,7 @@ public class OrdersController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<Order>> CreateOrder(OrderCreateDTO orderToCreate)
+    public async Task<IActionResult> CreateOrder(OrderCreateDTO orderToCreate)
     {
         if (orderToCreate == null)
         {
@@ -87,7 +86,7 @@ public class OrdersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<OrderDetailsDTO>> GetOrderByIdForUser(int id)
+    public async Task<IActionResult> GetOrderByIdForUser(int id)
     {
         try
         {
@@ -115,7 +114,7 @@ public class OrdersController : ControllerBase
             else
             {
                 var orderToReturn = _mapper.Map<Order, OrderDetailsDTO>(order);
-                return orderToReturn;
+                return Ok(orderToReturn);
             }
         }
         catch (Exception ex)
@@ -135,7 +134,7 @@ public class OrdersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<IEnumerable<OrderDetailsDTO>>> GetOrdersForUser()
+    public async Task<IActionResult> GetOrdersForUser()
     {
         try
         {
@@ -172,7 +171,7 @@ public class OrdersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<IEnumerable<OrderDetailsDTO>>> GetLatestOrders(int days)
+    public async Task<IActionResult> GetLatestOrders(int days)
     {
         try
         {
