@@ -17,44 +17,26 @@ public class CategoriesController : BaseApiController
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
     {
-        try
-        {
-            var categories = await _categoryRepository.ListAllAsync();
+        var categories = await _categoryRepository.ListAllAsync();
 
-            return Ok(categories);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error in GetCategories : {message}", ex.Message);
-
-            return StatusCode(500, "Internal server error");
-        }
+        return Ok(categories);
     }
 
     // GET api/categories/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult> GetCategoryById(int id)
     {
-        try
+        var category = await _categoryRepository.GetByIdAsync(id);
+
+        if (category == null)
         {
-            var category = await _categoryRepository.GetByIdAsync(id);
+            _logger.LogError("Category with id: {id}, not found", id);
 
-            if (category == null)
-            {
-                _logger.LogError("Category with id: {id}, not found", id);
-
-                return NotFound();
-            }
-            else
-            {
-                return Ok(category);
-            }
+            return NotFound();
         }
-        catch (Exception ex)
+        else
         {
-            _logger.LogError("Error in GetCategoryById : {message}", ex.Message);
-
-            return StatusCode(500, "Internal server error");
+            return Ok(category);
         }
     }
 }

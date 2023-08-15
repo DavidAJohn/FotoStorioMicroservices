@@ -17,44 +17,26 @@ public class BrandsController : BaseApiController
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Brand>>> GetBrands()
     {
-        try
-        {
-            var brands = await _brandRepository.ListAllAsync();
+        var brands = await _brandRepository.ListAllAsync();
 
-            return Ok(brands);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error in GetBrands : {message}", ex.Message);
-
-            return StatusCode(500, "Internal server error");
-        }
+        return Ok(brands);
     }
 
     // GET api/brands/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult> GetBrandById(int id)
     {
-        try
+        var brand = await _brandRepository.GetByIdAsync(id);
+
+        if (brand == null)
         {
-            var brand = await _brandRepository.GetByIdAsync(id);
+            _logger.LogError("Brand with id: {id}, not found", id);
 
-            if (brand == null)
-            {
-                _logger.LogError("Brand with id: {id}, not found", id);
-
-                return NotFound();
-            }
-            else
-            {
-                return Ok(brand);
-            }
+            return NotFound();
         }
-        catch (Exception ex)
+        else
         {
-            _logger.LogError("Error in GetBrandById : {message}", ex.Message);
-
-            return StatusCode(500, "Internal server error");
+            return Ok(brand);
         }
     }
 }

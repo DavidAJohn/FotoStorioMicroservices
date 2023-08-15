@@ -17,44 +17,26 @@ public class MountsController : BaseApiController
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Mount>>> GetMounts()
     {
-        try
-        {
-            var mounts = await _mountRepository.ListAllAsync();
+        var mounts = await _mountRepository.ListAllAsync();
 
-            return Ok(mounts);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error in GetMounts : {message}", ex.Message);
-
-            return StatusCode(500, "Internal server error");
-        }
+        return Ok(mounts);
     }
 
     // GET api/mounts/{id}
     [HttpGet("{id}")]
     public async Task<ActionResult> GetMountById(int id)
     {
-        try
+        var mount = await _mountRepository.GetByIdAsync(id);
+
+        if (mount == null)
         {
-            var mount = await _mountRepository.GetByIdAsync(id);
+            _logger.LogError("Mount with id: {id}, not found", id);
 
-            if (mount == null)
-            {
-                _logger.LogError("Mount with id: {id}, not found", id);
-
-                return NotFound();
-            }
-            else
-            {
-                return Ok(mount);
-            }
+            return NotFound();
         }
-        catch (Exception ex)
+        else
         {
-            _logger.LogError("Error in GetMountById : {message}", ex.Message);
-
-            return StatusCode(500, "Internal server error");
+            return Ok(mount);
         }
     }
 }
