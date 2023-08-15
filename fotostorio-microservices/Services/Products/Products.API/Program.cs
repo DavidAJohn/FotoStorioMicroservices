@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
+using Products.API.Middleware;
 using Serilog;
 using Serilog.Events;
 
@@ -99,6 +100,8 @@ try
     app.UseRouting();
 
     app.UseAuthorization();
+
+    app.UseMiddleware<ExceptionMiddleware>(); // global exception handler
 
     app.MapControllers();
 
