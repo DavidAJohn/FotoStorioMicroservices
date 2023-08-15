@@ -119,7 +119,7 @@ public class UploadController : BaseApiController
             catch (Exception ex)
             {
                 _logger.LogError("The file '{fileName}' could not be uploaded: {message}", file.FileName, ex.Message);
-                return BadRequest($"The file '{file.FileName}' could not be uploaded");
+                throw new AppException($"The file '{file.FileName}' could not be uploaded: {ex.Message}");
             }
         }
         else
