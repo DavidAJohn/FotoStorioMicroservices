@@ -28,26 +28,17 @@ public class ProductsController : BaseApiController
     /// <returns>List of ProductDTO</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts([FromQuery] ProductSpecificationParams productParams)
     {
-        try
-        {
-            var spec = new ProductsWithDetailsSpecification(productParams);
-            var countSpec = new ProductsWithFiltersForCountSpecification(productParams); // gets a count after filtering
-            var totalItems = await _productRepository.CountAsync(countSpec);
+        var spec = new ProductsWithDetailsSpecification(productParams);
+        var countSpec = new ProductsWithFiltersForCountSpecification(productParams); // gets a count after filtering
+        var totalItems = await _productRepository.CountAsync(countSpec);
 
-            // add pagination response headers
-            _httpContextAccessor.HttpContext.AddPaginationResponseHeaders(totalItems, productParams.PageSize, productParams.PageIndex);
-            var products = await _productRepository.ListWithSpecificationAsync(spec);
+        // add pagination response headers
+        _httpContextAccessor.HttpContext.AddPaginationResponseHeaders(totalItems, productParams.PageSize, productParams.PageIndex);
+        var products = await _productRepository.ListWithSpecificationAsync(spec);
 
-            return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products));
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error in GetProducts : {message}", ex.Message);
-            return StatusCode(500, "Internal server error");
-        }
+        return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products));
     }
 
     // GET api/products/{id}
@@ -59,28 +50,19 @@ public class ProductsController : BaseApiController
     [HttpGet("{id}", Name = "GetProductById")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ProductDTO>> GetProductById(int id)
     {
-        try
-        {
-            var spec = new ProductsWithDetailsSpecification(id);
-            var product = await _productRepository.GetEntityWithSpecification(spec);
+        var spec = new ProductsWithDetailsSpecification(id);
+        var product = await _productRepository.GetEntityWithSpecification(spec);
 
-            if (product == null)
-            {
-                _logger.LogWarning("Product with id: {id}, not found", id);
-                return NotFound();
-            }
-            else
-            {
-                return _mapper.Map<Product, ProductDTO>(product);
-            }
-        }
-        catch (Exception ex)
+        if (product == null)
         {
-            _logger.LogError("Error in GetProductById, from id {id} : {message}", id, ex.Message);
-            return StatusCode(500, "Internal server error");
+            _logger.LogWarning("Product with id: {id}, not found", id);
+            return NotFound();
+        }
+        else
+        {
+            return Ok(_mapper.Map<Product, ProductDTO>(product));
         }
     }
 
@@ -93,28 +75,19 @@ public class ProductsController : BaseApiController
     [HttpGet("sku/{sku}", Name = "GetProductBySku")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ProductDTO>> GetProductBySku(string sku)
     {
-        try
-        {
-            var spec = new ProductsWithDetailsSpecification(sku);
-            var product = await _productRepository.GetEntityWithSpecification(spec);
+        var spec = new ProductsWithDetailsSpecification(sku);
+        var product = await _productRepository.GetEntityWithSpecification(spec);
 
-            if (product == null)
-            {
-                _logger.LogWarning("Product with sku: {sku}, not found", sku);
-                return NotFound();
-            }
-            else
-            {
-                return _mapper.Map<Product, ProductDTO>(product);
-            }
-        }
-        catch (Exception ex)
+        if (product == null)
         {
-            _logger.LogError("Error in GetProductBySku, from sku {sku} : {message}", sku, ex.Message);
-            return StatusCode(500, "Internal server error");
+            _logger.LogWarning("Product with sku: {sku}, not found", sku);
+            return NotFound();
+        }
+        else
+        {
+            return Ok(_mapper.Map<Product, ProductDTO>(product));
         }
     }
 
@@ -134,20 +107,12 @@ public class ProductsController : BaseApiController
             return BadRequest();
         }
 
-        try
-        {
-            var product = _mapper.Map<Product>(productCreateDTO);
-            await _productRepository.Create(product);
-            var productDTO = _mapper.Map<Product, ProductDTO>(product);
+        var product = _mapper.Map<Product>(productCreateDTO);
+        await _productRepository.Create(product);
+        var productDTO = _mapper.Map<Product, ProductDTO>(product);
 
-            _logger.LogInformation("Product created: {@ProductDTO}", productDTO);
-            return CreatedAtRoute(nameof(GetProductById), new { Id = productDTO.Id }, productDTO);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error in CreateProduct : {message}", ex.Message);
-            return BadRequest();
-        }
+        _logger.LogInformation("Product created: {@ProductDTO}", productDTO);
+        return CreatedAtRoute(nameof(GetProductById), new { Id = productDTO.Id }, productDTO);
     }
 
     // PUT api/products/{id}
@@ -169,19 +134,17 @@ public class ProductsController : BaseApiController
             return NotFound();
         }
 
-        try
-        {
-            _mapper.Map(productUpdateDTO, product);
-            await _productRepository.Update(product);
+        _mapper.Map(productUpdateDTO, product);
 
-            _logger.LogInformation("Product Update Succeeded -> Product: {@Product}", product);
-            return NoContent();
-        }
-        catch (Exception ex)
+        var updated = await _productRepository.Update(product);
+        if (!updated)
         {
-            _logger.LogError("Error in UpdateProduct : {message}", ex.Message);
+            _logger.LogWarning("Product Update Failed: Supplied product could not be updated. Id: {id}, ProductUpdateDTO: {@ProductUpdateDTO}", id, productUpdateDTO);
             return BadRequest();
         }
+
+        _logger.LogInformation("Product Update Succeeded -> Product: {@Product}", product);
+        return NoContent();
     }
 
     // DELETE api/products/{id}
@@ -203,17 +166,14 @@ public class ProductsController : BaseApiController
             return NotFound();
         }
 
-        try
+        var deleted = await _productRepository.Delete(product);
+        if (!deleted)
         {
-            await _productRepository.Delete(product);
-
-            _logger.LogInformation("Product Deletion Succeeded -> Product: {@Product}", product);
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error in DeleteProduct : {message}", ex.Message);
+            _logger.LogWarning("Product Deletion Failed: Supplied product could not be deleted. Id: {id}", id);
             return BadRequest();
         }
+
+        _logger.LogInformation("Product Deletion Succeeded -> Product: {@Product}", product);
+        return NoContent();
     }
 }
