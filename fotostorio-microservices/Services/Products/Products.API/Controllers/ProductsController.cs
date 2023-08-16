@@ -28,7 +28,7 @@ public class ProductsController : BaseApiController
     /// <returns>List of ProductDTO</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts([FromQuery] ProductSpecificationParams productParams)
+    public async Task<IActionResult> GetProducts([FromQuery] ProductSpecificationParams productParams)
     {
         var spec = new ProductsWithDetailsSpecification(productParams);
         var countSpec = new ProductsWithFiltersForCountSpecification(productParams); // gets a count after filtering
@@ -50,7 +50,7 @@ public class ProductsController : BaseApiController
     [HttpGet("{id}", Name = "GetProductById")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ProductDTO>> GetProductById(int id)
+    public async Task<IActionResult> GetProductById(int id)
     {
         var spec = new ProductsWithDetailsSpecification(id);
         var product = await _productRepository.GetEntityWithSpecification(spec);
@@ -75,7 +75,7 @@ public class ProductsController : BaseApiController
     [HttpGet("sku/{sku}", Name = "GetProductBySku")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ProductDTO>> GetProductBySku(string sku)
+    public async Task<IActionResult> GetProductBySku(string sku)
     {
         var spec = new ProductsWithDetailsSpecification(sku);
         var product = await _productRepository.GetEntityWithSpecification(spec);
@@ -99,7 +99,7 @@ public class ProductsController : BaseApiController
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<ProductDTO>> CreateProduct([FromBody] ProductCreateDTO productCreateDTO)
+    public async Task<IActionResult> CreateProduct([FromBody] ProductCreateDTO productCreateDTO)
     {
         if (productCreateDTO == null)
         {
@@ -108,11 +108,18 @@ public class ProductsController : BaseApiController
         }
 
         var product = _mapper.Map<Product>(productCreateDTO);
-        await _productRepository.Create(product);
+        var createdProduct = await _productRepository.Create(product);
+
+        if (createdProduct == null)
+        {
+            _logger.LogWarning("Product creation failed: Supplied product could not be created. ProductCreateDTO: {@ProductCreateDTO}", productCreateDTO);
+            return BadRequest();
+        }
+
         var productDTO = _mapper.Map<Product, ProductDTO>(product);
 
         _logger.LogInformation("Product created: {@ProductDTO}", productDTO);
-        return CreatedAtRoute(nameof(GetProductById), new { Id = productDTO.Id }, productDTO);
+        return CreatedAtAction(nameof(GetProductById), new { Id = productDTO.Id }, productDTO);
     }
 
     // PUT api/products/{id}
@@ -124,8 +131,14 @@ public class ProductsController : BaseApiController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> UpdateProduct(int id, [FromBody] ProductUpdateDTO productUpdateDTO)
+    public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductUpdateDTO productUpdateDTO)
     {
+        if (productUpdateDTO == null)
+        {
+            _logger.LogWarning("Product Updated Failed: Attempt to update a product when supplied ProductUpdateDTO was null");
+            return BadRequest();
+        }
+
         var product = await _productRepository.GetByIdAsync(id);
 
         if (product == null)
@@ -156,7 +169,7 @@ public class ProductsController : BaseApiController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> DeleteProduct(int id)
+    public async Task<IActionResult> DeleteProduct(int id)
     {
         var product = await _productRepository.GetByIdAsync(id);
 
