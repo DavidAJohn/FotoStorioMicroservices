@@ -52,28 +52,19 @@ public class OrdersController : ControllerBase
 
         var order = _mapper.Map<Order>(orderToCreate);
 
-        try
+        var token = _contextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
+        var email = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "email");
+        order.BuyerEmail = email;
+
+        var createdOrder = await _orderRepository.CreateOrderAsync(order, token);
+
+        if (createdOrder == null)
         {
-            var token = _contextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
-            var email = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "email");
-            order.BuyerEmail = email;
-
-            var createdOrder = await _orderRepository.CreateOrderAsync(order, token);
-
-            if (createdOrder == null)
-            {
-                _logger.LogError("Order creation failed : {@OrderCreateDTO}", orderToCreate);
-                return BadRequest();
-            }
-
-            return Ok(createdOrder);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error in CreateOrder : {message}. Order to create: {@OrderCreateDTO}", ex.Message, orderToCreate);
-
+            _logger.LogError("Order creation failed : {@OrderCreateDTO}", orderToCreate);
             return BadRequest();
         }
+
+        return Ok(createdOrder);
     }
 
     /// GET api/orders/{id}
@@ -85,43 +76,33 @@ public class OrdersController : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetOrderByIdForUser(int id)
     {
-        try
+        var token = _contextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
+        var email = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "email");
+        var role = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "role");
+
+        Order order = new Order {};
+
+        if (role == "Administrator")
         {
-            var token = _contextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
-            var email = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "email");
-            var role = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "role");
-
-            Order order = new Order {};
-
-            if (role == "Administrator")
-            {
-                order = await _orderRepository.GetOrderByIdForAdminAsync(id, token);
-            }
-            else
-            {
-                order = await _orderRepository.GetOrderByIdAsync(id, email, token);
-            }
-            
-            if (order == null)
-            {
-                _logger.LogError("Order with id: {orderId}, not found", id);
-
-                return NotFound();
-            }
-            else
-            {
-                var orderToReturn = _mapper.Map<Order, OrderDetailsDTO>(order);
-                return Ok(orderToReturn);
-            }
+            order = await _orderRepository.GetOrderByIdForAdminAsync(id, token);
         }
-        catch (Exception ex)
+        else
         {
-            _logger.LogError("Error in GetOrderById, from id {orderId} : {message}", id, ex.Message);
+            order = await _orderRepository.GetOrderByIdAsync(id, email, token);
+        }
+            
+        if (order == null)
+        {
+            _logger.LogError("Order with id: {orderId}, not found", id);
 
-            return StatusCode(500, "Internal server error");
+            return NotFound();
+        }
+        else
+        {
+            var orderToReturn = _mapper.Map<Order, OrderDetailsDTO>(order);
+            return Ok(orderToReturn);
         }
     }
 
@@ -133,32 +114,22 @@ public class OrdersController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetOrdersForUser()
     {
-        try
+        var token = _contextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
+        var email = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "email");
+
+        var orders = await _orderRepository.GetOrdersForUserAsync(token, email);
+
+        if (orders == null)
         {
-            var token = _contextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
-            var email = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "email");
+            _logger.LogError("Orders for user: {email}, not found", email);
 
-            var orders = await _orderRepository.GetOrdersForUserAsync(token, email);
-
-            if (orders == null)
-            {
-                _logger.LogError("Orders for user: {email}, not found", email);
-
-                return NotFound();
-            }
-            else
-            {
-                return Ok(_mapper.Map<IEnumerable<Order>, IEnumerable<OrderDetailsDTO>>(orders));
-            }
+            return NotFound();
         }
-        catch (Exception ex)
+        else
         {
-            _logger.LogError("Error in GetOrdersForUser: {message}", ex.Message);
-
-            return StatusCode(500, "Internal server error");
+            return Ok(_mapper.Map<IEnumerable<Order>, IEnumerable<OrderDetailsDTO>>(orders));
         }
     }
 
@@ -170,32 +141,22 @@ public class OrdersController : ControllerBase
     [HttpGet("latest/{days:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetLatestOrders(int days)
     {
-        try
+        var token = _contextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
+        var email = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "email");
+
+        var orders = await _orderRepository.GetLatestOrdersAsync(token, days);
+
+        if (orders == null)
         {
-            var token = _contextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
-            var email = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "email");
+            _logger.LogError("Orders for user: {email}, not found", email);
 
-            var orders = await _orderRepository.GetLatestOrdersAsync(token, days);
-
-            if (orders == null)
-            {
-                _logger.LogError("Orders for user: {email}, not found", email);
-
-                return NotFound();
-            }
-            else
-            {
-                return Ok(_mapper.Map<IEnumerable<Order>, IEnumerable<OrderDetailsDTO>>(orders));
-            }
+            return NotFound();
         }
-        catch (Exception ex)
+        else
         {
-            _logger.LogError(ex, "Error in GetRecentOrders: {message}", ex.Message);
-
-            return StatusCode(500, "Internal server error");
+            return Ok(_mapper.Map<IEnumerable<Order>, IEnumerable<OrderDetailsDTO>>(orders));
         }
     }
 }
