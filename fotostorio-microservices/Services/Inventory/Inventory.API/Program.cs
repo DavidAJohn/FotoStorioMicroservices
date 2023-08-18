@@ -19,6 +19,7 @@ builder.Services.AddDbContext<InventoryDbContext>(options => {
 builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<IUpdateRepository, UpdateRepository>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<IHttpContextService, HttpContextService>();
 
 // Mass Transit and RabbitMQ config
 builder.Services.AddMassTransit(config =>
