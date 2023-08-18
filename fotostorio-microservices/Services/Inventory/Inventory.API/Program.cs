@@ -1,5 +1,6 @@
 using EventBus.Messages.Common;
 using HealthChecks.UI.Client;
+using Inventory.API.Middleware;
 using MassTransit;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
@@ -47,9 +48,9 @@ builder.Services
     })
     .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new[]
     {
-                    TimeSpan.FromSeconds(1),
-                    TimeSpan.FromSeconds(5),
-                    TimeSpan.FromSeconds(10)
+        TimeSpan.FromSeconds(1),
+        TimeSpan.FromSeconds(5),
+        TimeSpan.FromSeconds(10)
     }))
     .AddTransientHttpErrorPolicy(builder => builder.CircuitBreakerAsync(
         handledEventsAllowedBeforeBreaking: 3,
@@ -86,6 +87,8 @@ if (app.Environment.IsDevelopment())
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionMiddleware>(); // global exception handler
 
 app.MapControllers();
 
