@@ -9,17 +9,19 @@ public class StockController : ControllerBase
     private readonly ILogger<StockController> _logger;
     private readonly IStockRepository _stockRepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IHttpContextService _httpContextService;
 
-    public StockController(ILogger<StockController> logger, IStockRepository stockRepository, IHttpContextAccessor httpContextAccessor)
+    public StockController(ILogger<StockController> logger, IStockRepository stockRepository, IHttpContextAccessor httpContextAccessor, IHttpContextService httpContextService)
     {
         _logger = logger;
         _stockRepository = stockRepository;
         _httpContextAccessor = httpContextAccessor;
+        _httpContextService = httpContextService;
     }
 
     // GET api/stock
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Stock>>> GetStock()
+    public async Task<IActionResult> GetStock()
     {
         var stock = await _stockRepository.ListAllAsync();
 
@@ -30,7 +32,7 @@ public class StockController : ControllerBase
 
     // GET api/stock/{sku}
     [HttpGet("{sku}", Name = "GetStockBySku")]
-    public async Task<ActionResult<Stock>> GetStockBySku(string sku)
+    public async Task<IActionResult> GetStockBySku(string sku)
     {
         if (sku == null) return BadRequest();
 
@@ -43,23 +45,23 @@ public class StockController : ControllerBase
 
     // GET api/stock/level/{stockLevel:int}
     [HttpGet("level/{stockLevel:int}")]
-    public async Task<ActionResult<IEnumerable<Stock>>> GetStockAtOrBelowLevel(int stockLevel)
+    public async Task<IActionResult> GetStockAtOrBelowLevel(int stockLevel)
     {
         var stock = await _stockRepository.GetByStockLevelAtOrBelow(stockLevel);
 
-        if (stock == null) return NotFound();
+        if (stock is null || !stock.Any()) return NotFound();
 
         return Ok(stock);
     }
 
     // POST api/stock
     [HttpPost]
-    public async Task<ActionResult<Stock>> CreateNewStockEntry(Stock stock)
+    public async Task<IActionResult> CreateNewStockEntry(Stock stock)
     {
         if (stock == null) return BadRequest();
 
-        var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-        var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
+        var token = _httpContextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
+        var role = _httpContextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "role");
 
         if (role != "Administrator")
         {
