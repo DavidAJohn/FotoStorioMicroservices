@@ -21,29 +21,20 @@ public class UpdatesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Update>>> GetUpdates()
     {
-        try
+        var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
+        var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
+
+        if (role != "Administrator")
         {
-            var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-            var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
-
-            if (role != "Administrator")
-            {
-                _logger.LogWarning("Stock Updates: GetUpdates called with role: '{role}', NOT 'Administrator'", role);
-                return Unauthorized();
-            }
-
-            var updates = await _inventoryService.GetUpdates(token);
-
-            if (updates == null) return NotFound();
-
-            return Ok(updates);
+            _logger.LogWarning("Stock Updates: GetUpdates called with role: '{role}', NOT 'Administrator'", role);
+            return Unauthorized();
         }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error in GetUpdates : {message}", ex.Message);
 
-            return BadRequest();
-        }
+        var updates = await _inventoryService.GetUpdates(token);
+
+        if (updates == null) return NotFound();
+
+        return Ok(updates);
     }
 
     // GET api/updates/{sku}
@@ -52,29 +43,20 @@ public class UpdatesController : ControllerBase
     {
         if (sku == null) return BadRequest();
 
-        try
+        var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
+        var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
+
+        if (role != "Administrator")
         {
-            var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-            var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
-
-            if (role != "Administrator")
-            {
-                _logger.LogWarning("Stock Updates: GetUpdatesBySku called with role: '{role}', NOT 'Administrator'", role);
-                return Unauthorized();
-            }
-
-            var updates = await _inventoryService.GetUpdatesBySku(sku, token);
-
-            if (updates == null) return NotFound();
-
-            return Ok(updates);
+            _logger.LogWarning("Stock Updates: GetUpdatesBySku called with role: '{role}', NOT 'Administrator'", role);
+            return Unauthorized();
         }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error in GetUpdatesBySku : {message}", ex.Message);
 
-            return BadRequest();
-        }
+        var updates = await _inventoryService.GetUpdatesBySku(sku, token);
+
+        if (updates == null) return NotFound();
+
+        return Ok(updates);
     }
 
     // POST api/updates
@@ -83,28 +65,19 @@ public class UpdatesController : ControllerBase
     {
         if (update == null) return BadRequest();
 
-        try
+        var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
+        var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
+
+        if (role != "Administrator")
         {
-            var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-            var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
-
-            if (role != "Administrator")
-            {
-                _logger.LogWarning("Stock Updates: CreateStockUpdate called with role: '{role}', NOT 'Administrator'", role);
-                return Unauthorized();
-            }
-
-            var createdUpdate = await _inventoryService.CreateUpdateFromAdmin(update, token);
-
-            if (createdUpdate == null) return BadRequest("There was a problem updating stock for this Sku");
-
-            return Ok(createdUpdate);
+            _logger.LogWarning("Stock Updates: CreateStockUpdate called with role: '{role}', NOT 'Administrator'", role);
+            return Unauthorized();
         }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error in CreateUpdate : {message}", ex.Message);
 
-            return BadRequest();
-        }
+        var createdUpdate = await _inventoryService.CreateUpdateFromAdmin(update, token);
+
+        if (createdUpdate == null) return BadRequest("There was a problem updating stock for this Sku");
+
+        return Ok(createdUpdate);
     }
 }
