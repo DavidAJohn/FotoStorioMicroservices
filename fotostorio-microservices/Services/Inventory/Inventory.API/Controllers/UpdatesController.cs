@@ -9,20 +9,22 @@ public class UpdatesController : ControllerBase
     private readonly ILogger<UpdatesController> _logger;
     private readonly IInventoryService _inventoryService;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IHttpContextService _httpContextService;
 
-    public UpdatesController(ILogger<UpdatesController> logger, IInventoryService inventoryService, IHttpContextAccessor httpContextAccessor)
+    public UpdatesController(ILogger<UpdatesController> logger, IInventoryService inventoryService, IHttpContextAccessor httpContextAccessor, IHttpContextService httpContextService)
     {
         _logger = logger;
         _inventoryService = inventoryService;
         _httpContextAccessor = httpContextAccessor;
+        _httpContextService = httpContextService;
     }
 
     // GET api/updates
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Update>>> GetUpdates()
+    public async Task<IActionResult> GetUpdates()
     {
-        var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-        var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
+        var token = _httpContextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
+        var role = _httpContextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "role");
 
         if (role != "Administrator")
         {
@@ -39,12 +41,12 @@ public class UpdatesController : ControllerBase
 
     // GET api/updates/{sku}
     [HttpGet("{sku}", Name = "GetUpdatesBySku")]
-    public async Task<ActionResult<IEnumerable<Update>>> GetUpdatesBySku(string sku)
+    public async Task<IActionResult> GetUpdatesBySku(string sku)
     {
         if (sku == null) return BadRequest();
 
-        var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-        var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
+        var token = _httpContextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
+        var role = _httpContextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "role");
 
         if (role != "Administrator")
         {
@@ -61,12 +63,12 @@ public class UpdatesController : ControllerBase
 
     // POST api/updates
     [HttpPost]
-    public async Task<ActionResult<Update>> CreateStockUpdate(UpdateCreateDTO update)
+    public async Task<IActionResult> CreateStockUpdate(UpdateCreateDTO update)
     {
         if (update == null) return BadRequest();
 
-        var token = _httpContextAccessor.HttpContext.GetJwtFromContext();
-        var role = _httpContextAccessor.HttpContext.GetClaimValueByType("role");
+        var token = _httpContextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
+        var role = _httpContextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "role");
 
         if (role != "Administrator")
         {
