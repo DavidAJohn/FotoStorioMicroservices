@@ -15,7 +15,7 @@ public class CategoriesController : BaseApiController
 
     // GET api/categories
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+    public async Task<IActionResult> GetCategories()
     {
         var categories = await _categoryRepository.ListAllAsync();
 
@@ -24,7 +24,7 @@ public class CategoriesController : BaseApiController
 
     // GET api/categories/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult> GetCategoryById(int id)
+    public async Task<IActionResult> GetCategoryById(int id)
     {
         var category = await _categoryRepository.GetByIdAsync(id);
 

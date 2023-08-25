@@ -15,7 +15,7 @@ public class MountsController : BaseApiController
 
     // GET api/mounts
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Mount>>> GetMounts()
+    public async Task<IActionResult> GetMounts()
     {
         var mounts = await _mountRepository.ListAllAsync();
 
@@ -24,7 +24,7 @@ public class MountsController : BaseApiController
 
     // GET api/mounts/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult> GetMountById(int id)
+    public async Task<IActionResult> GetMountById(int id)
     {
         var mount = await _mountRepository.GetByIdAsync(id);
 

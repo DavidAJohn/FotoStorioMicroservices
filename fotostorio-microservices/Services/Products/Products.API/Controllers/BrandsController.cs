@@ -15,7 +15,7 @@ public class BrandsController : BaseApiController
 
     // GET api/brands
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Brand>>> GetBrands()
+    public async Task<IActionResult> GetBrands()
     {
         var brands = await _brandRepository.ListAllAsync();
 
@@ -24,7 +24,7 @@ public class BrandsController : BaseApiController
 
     // GET api/brands/{id}
     [HttpGet("{id}")]
-    public async Task<ActionResult> GetBrandById(int id)
+    public async Task<IActionResult> GetBrandById(int id)
     {
         var brand = await _brandRepository.GetByIdAsync(id);
 
