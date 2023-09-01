@@ -34,4 +34,7 @@
     <ProjectReference Include="..\..\..\AsyncMessaging\EventBus.Messages\EventBus.Messages.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+	<InternalsVisibleTo Include="Products.IntegrationTests" />
+  </ItemGroup>
 </Project>
