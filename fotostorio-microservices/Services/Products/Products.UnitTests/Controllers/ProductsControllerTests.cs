@@ -7,20 +7,26 @@ using Product = Products.API.Models.Product;
 
 namespace Products.UnitTests.Controllers;
 
-public class ProductsControllerTests : ControllerBase
+public class ProductsControllerTests : TestBase
 {
     private readonly ILogger<ProductsController> _logger;
     private readonly IProductRepository _productRepository;
+    private readonly IMapper _mapper;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly DefaultHttpContext _context;
+    private ProductsController _sut;
 
     public ProductsControllerTests()
     {
         _productRepository = Substitute.For<IProductRepository>();
         _logger = Substitute.For<ILogger<ProductsController>>();
+        _mapper = BuildMapper();
+
         _httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         _context = new DefaultHttpContext();
         _httpContextAccessor.HttpContext = _context;
+
+        _sut = new ProductsController(_logger, _productRepository, _mapper, _httpContextAccessor);
     }
 
     [Fact]
@@ -36,12 +42,8 @@ public class ProductsControllerTests : ControllerBase
 
         var _productSpecificationParams = fixture.Create<ProductSpecificationParams>();
 
-        var mapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>());
-        var mapper = mapperConfig.CreateMapper();
-
         //Act
-        var sut = new ProductsController(_logger, _productRepository, mapper, _httpContextAccessor);
-        var result = (OkObjectResult)await sut.GetProducts(_productSpecificationParams);
+        var result = (OkObjectResult)await _sut.GetProducts(_productSpecificationParams);
 
         //Assert
         result.StatusCode.Should().Be(200);
@@ -59,12 +61,8 @@ public class ProductsControllerTests : ControllerBase
             .GetEntityWithSpecification(Arg.Any<ProductsWithDetailsSpecification>())
             .Returns(product);
 
-        var mapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>());
-        var mapper = mapperConfig.CreateMapper();
-
         //Act
-        var sut = new ProductsController(_logger, _productRepository, mapper, _httpContextAccessor);
-        var result = (OkObjectResult)await sut.GetProductById(product.Id);
+        var result = (OkObjectResult)await _sut.GetProductById(product.Id);
 
         //Assert
         result.StatusCode.Should().Be(200);
@@ -79,12 +77,8 @@ public class ProductsControllerTests : ControllerBase
             .GetEntityWithSpecification(Arg.Any<ProductsWithDetailsSpecification>())
             .ReturnsNull();
 
-        var mapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>());
-        var mapper = mapperConfig.CreateMapper();
-
         //Act
-        var sut = new ProductsController(_logger, _productRepository, mapper, _httpContextAccessor);
-        var result = (NotFoundResult)await sut.GetProductById(int.MinValue);
+        var result = (NotFoundResult)await _sut.GetProductById(int.MinValue);
 
         //Assert
         result.StatusCode.Should().Be(404);
@@ -101,12 +95,8 @@ public class ProductsControllerTests : ControllerBase
             .GetEntityWithSpecification(Arg.Any<ProductsWithDetailsSpecification>())
             .Returns(product);
 
-        var mapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>());
-        var mapper = mapperConfig.CreateMapper();
-
         //Act
-        var sut = new ProductsController(_logger, _productRepository, mapper, _httpContextAccessor);
-        var result = (OkObjectResult)await sut.GetProductBySku(product.Sku);
+        var result = (OkObjectResult)await _sut.GetProductBySku(product.Sku);
 
         //Assert
         result.StatusCode.Should().Be(200);
@@ -121,12 +111,10 @@ public class ProductsControllerTests : ControllerBase
             .GetEntityWithSpecification(Arg.Any<ProductsWithDetailsSpecification>())
             .ReturnsNull();
 
-        var mapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>());
-        var mapper = mapperConfig.CreateMapper();
+        string testSku = "Test_Sku";
 
         //Act
-        var sut = new ProductsController(_logger, _productRepository, mapper, _httpContextAccessor);
-        var result = (NotFoundResult)await sut.GetProductBySku("Test_Sku");
+        var result = (NotFoundResult)await _sut.GetProductBySku(testSku);
 
         //Assert
         result.StatusCode.Should().Be(404);
@@ -146,16 +134,8 @@ public class ProductsControllerTests : ControllerBase
 
         var productCreateDTO = fixture.Create<ProductCreateDTO>();
 
-        var mapperConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<ProductCreateDTO, Product>();
-            cfg.CreateMap<Product, ProductDTO>();
-        });
-        var mapper = mapperConfig.CreateMapper();
-
         //Act
-        var sut = new ProductsController(_logger, _productRepository, mapper, _httpContextAccessor);
-        var result = (CreatedAtActionResult)await sut.CreateProduct(productCreateDTO);
+        var result = (CreatedAtActionResult)await _sut.CreateProduct(productCreateDTO);
 
         //Assert
         result.StatusCode.Should().Be(201);
@@ -169,16 +149,8 @@ public class ProductsControllerTests : ControllerBase
         //Arrange
         var productCreateDTO = null as ProductCreateDTO;
 
-        var mapperConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<ProductCreateDTO, Product>();
-            cfg.CreateMap<Product, ProductDTO>();
-        });
-        var mapper = mapperConfig.CreateMapper();
-
         //Act
-        var sut = new ProductsController(_logger, _productRepository, mapper, _httpContextAccessor);
-        var result = (BadRequestResult)await sut.CreateProduct(productCreateDTO);
+        var result = (BadRequestResult)await _sut.CreateProduct(productCreateDTO);
 
         //Assert
         result.StatusCode.Should().Be(400);
@@ -198,16 +170,8 @@ public class ProductsControllerTests : ControllerBase
 
         var productCreateDTO = fixture.Create<ProductCreateDTO>();
 
-        var mapperConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<ProductCreateDTO, Product>();
-            cfg.CreateMap<Product, ProductDTO>();
-        });
-        var mapper = mapperConfig.CreateMapper();
-
         //Act
-        var sut = new ProductsController(_logger, _productRepository, mapper, _httpContextAccessor);
-        var result = (BadRequestResult)await sut.CreateProduct(productCreateDTO);
+        var result = (BadRequestResult)await _sut.CreateProduct(productCreateDTO);
 
         //Assert
         result.StatusCode.Should().Be(400);
@@ -231,16 +195,8 @@ public class ProductsControllerTests : ControllerBase
 
         var productUpdateDTO = fixture.Create<ProductUpdateDTO>();
 
-        var mapperConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<ProductUpdateDTO, Product>();
-            cfg.CreateMap<Product, ProductDTO>();
-        });
-        var mapper = mapperConfig.CreateMapper();
-
         //Act
-        var sut = new ProductsController(_logger, _productRepository, mapper, _httpContextAccessor);
-        var result = (NoContentResult)await sut.UpdateProduct(product.Id, productUpdateDTO);
+        var result = (NoContentResult)await _sut.UpdateProduct(product.Id, productUpdateDTO);
 
         //Assert
         result.StatusCode.Should().Be(204);
@@ -256,16 +212,8 @@ public class ProductsControllerTests : ControllerBase
 
         var productUpdateDTO = null! as ProductUpdateDTO;
 
-        var mapperConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<ProductUpdateDTO, Product>();
-            cfg.CreateMap<Product, ProductDTO>();
-        });
-        var mapper = mapperConfig.CreateMapper();
-
         //Act
-        var sut = new ProductsController(_logger, _productRepository, mapper, _httpContextAccessor);
-        var result = (BadRequestResult)await sut.UpdateProduct(product.Id, productUpdateDTO);
+        var result = (BadRequestResult)await _sut.UpdateProduct(product.Id, productUpdateDTO);
 
         //Assert
         result.StatusCode.Should().Be(400);
@@ -285,16 +233,8 @@ public class ProductsControllerTests : ControllerBase
 
         var productUpdateDTO = fixture.Create<ProductUpdateDTO>();
 
-        var mapperConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<ProductUpdateDTO, Product>();
-            cfg.CreateMap<Product, ProductDTO>();
-        });
-        var mapper = mapperConfig.CreateMapper();
-
         //Act
-        var sut = new ProductsController(_logger, _productRepository, mapper, _httpContextAccessor);
-        var result = (NotFoundResult)await sut.UpdateProduct(product.Id, productUpdateDTO);
+        var result = (NotFoundResult)await _sut.UpdateProduct(product.Id, productUpdateDTO);
 
         //Assert
         result.StatusCode.Should().Be(404);
@@ -318,16 +258,8 @@ public class ProductsControllerTests : ControllerBase
 
         var productUpdateDTO = fixture.Create<ProductUpdateDTO>();
 
-        var mapperConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<ProductUpdateDTO, Product>();
-            cfg.CreateMap<Product, ProductDTO>();
-        });
-        var mapper = mapperConfig.CreateMapper();
-
         //Act
-        var sut = new ProductsController(_logger, _productRepository, mapper, _httpContextAccessor);
-        var result = (BadRequestResult)await sut.UpdateProduct(product.Id, productUpdateDTO);
+        var result = (BadRequestResult)await _sut.UpdateProduct(product.Id, productUpdateDTO);
 
         //Assert
         result.StatusCode.Should().Be(400);
@@ -349,16 +281,8 @@ public class ProductsControllerTests : ControllerBase
             .Delete(Arg.Do<Product>(p => product = p))
             .Returns(true);
 
-        var mapperConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<ProductUpdateDTO, Product>();
-            cfg.CreateMap<Product, ProductDTO>();
-        });
-        var mapper = mapperConfig.CreateMapper();
-
         //Act
-        var sut = new ProductsController(_logger, _productRepository, mapper, _httpContextAccessor);
-        var result = (NoContentResult)await sut.DeleteProduct(product.Id);
+        var result = (NoContentResult)await _sut.DeleteProduct(product.Id);
 
         //Assert
         result.StatusCode.Should().Be(204);
@@ -376,16 +300,8 @@ public class ProductsControllerTests : ControllerBase
             .GetByIdAsync(Arg.Any<int>())
             .ReturnsNull();
 
-        var mapperConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<ProductUpdateDTO, Product>();
-            cfg.CreateMap<Product, ProductDTO>();
-        });
-        var mapper = mapperConfig.CreateMapper();
-
         //Act
-        var sut = new ProductsController(_logger, _productRepository, mapper, _httpContextAccessor);
-        var result = (NotFoundResult)await sut.DeleteProduct(product.Id);
+        var result = (NotFoundResult)await _sut.DeleteProduct(product.Id);
 
         //Assert
         result.StatusCode.Should().Be(404);
@@ -407,16 +323,8 @@ public class ProductsControllerTests : ControllerBase
             .Delete(Arg.Do<Product>(p => product = p))
             .Returns(false);
 
-        var mapperConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<ProductUpdateDTO, Product>();
-            cfg.CreateMap<Product, ProductDTO>();
-        });
-        var mapper = mapperConfig.CreateMapper();
-
         //Act
-        var sut = new ProductsController(_logger, _productRepository, mapper, _httpContextAccessor);
-        var result = (BadRequestResult)await sut.DeleteProduct(product.Id);
+        var result = (BadRequestResult)await _sut.DeleteProduct(product.Id);
 
         //Assert
         result.StatusCode.Should().Be(400);
