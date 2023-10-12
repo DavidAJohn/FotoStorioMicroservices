@@ -54,8 +54,7 @@ public class ProductsControllerTests : TestBase
     public async Task GetProductById_ShouldReturnProductDTO_WhenProductExists()
     {
         //Arrange
-        Fixture fixture = new Fixture();
-        var product = fixture.Create<Product>();
+        var product = CreateProductFixture();
 
         _productRepository
             .GetEntityWithSpecification(Arg.Any<ProductsWithDetailsSpecification>())
@@ -88,8 +87,7 @@ public class ProductsControllerTests : TestBase
     public async Task GetProductBySku_ShouldReturnProductDTO_WhenProductExists()
     {
         //Arrange
-        Fixture fixture = new Fixture();
-        var product = fixture.Create<Product>();
+        var product = CreateProductFixture();
 
         _productRepository
             .GetEntityWithSpecification(Arg.Any<ProductsWithDetailsSpecification>())
@@ -206,9 +204,7 @@ public class ProductsControllerTests : TestBase
     public async Task UpdateProduct_ShouldReturnBadRequest_WhenProductUpdateDTOIsNull()
     {
         //Arrange
-        Fixture fixture = new Fixture();
-        var product = fixture.Create<Product>();
-        product.Id = 1;
+        var product = CreateProductFixture();
 
         var productUpdateDTO = null! as ProductUpdateDTO;
 
@@ -269,9 +265,7 @@ public class ProductsControllerTests : TestBase
     public async Task DeleteProduct_ShouldReturnNoContent_WhenProductIsDeleted()
     {
         //Arrange
-        Fixture fixture = new Fixture();
-        var product = fixture.Create<Product>();
-        product.Id = 1;
+        var product = CreateProductFixture();
 
         _productRepository
             .GetByIdAsync(Arg.Any<int>())
@@ -292,9 +286,7 @@ public class ProductsControllerTests : TestBase
     public async Task DeleteProduct_ShouldReturnNotFound_WhenProductIdDoesNotExist()
     {
         //Arrange
-        Fixture fixture = new Fixture();
-        var product = fixture.Create<Product>();
-        product.Id = 1;
+        var product = CreateProductFixture();
 
         _productRepository
             .GetByIdAsync(Arg.Any<int>())
@@ -311,9 +303,7 @@ public class ProductsControllerTests : TestBase
     public async Task DeleteProduct_ShouldReturnBadRequest_WhenProductIdDoesNotExist()
     {
         //Arrange
-        Fixture fixture = new Fixture();
-        var product = fixture.Create<Product>();
-        product.Id = 1;
+        var product = CreateProductFixture();
 
         _productRepository
             .GetByIdAsync(Arg.Any<int>())
