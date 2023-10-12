@@ -1,8 +1,8 @@
 ﻿namespace Products.API.Specifications;
 
-public class ProductsUnavilableSpecification : BaseSpecification<Product>
+public class ProductsUnavailableSpecification : BaseSpecification<Product>
 {
-    public ProductsUnavilableSpecification(ProductSpecificationParams productParams)
+    public ProductsUnavailableSpecification(ProductSpecificationParams productParams)
         : base(p =>
             (string.IsNullOrEmpty(productParams.Search) || p.Name.ToLower().Contains(productParams.Search)) &&
             (!productParams.BrandId.HasValue || p.BrandId == productParams.BrandId) &&
@@ -56,11 +56,10 @@ public class ProductsUnavilableSpecification : BaseSpecification<Product>
         }
     }
 
-    public ProductsUnavilableSpecification(int id) : base(p => p.Id == id)
+    public ProductsUnavailableSpecification(int id) : base(p => p.Id == id)
     {
         AddInclude(p => p.Brand);
         AddInclude(p => p.Category);
         AddInclude(p => p.Mount);
     }
 }
-
