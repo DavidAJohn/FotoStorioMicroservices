@@ -138,7 +138,7 @@ public class AccountsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error in AccountsController.GetUserAddress: {ex.Message}");
+            _logger.LogError("Error in AccountsController.GetUserAddress: {message}", ex.Message);
 
             return new AddressDTO { };
         }
@@ -172,7 +172,7 @@ public class AccountsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error in AccountsController.UpdateUserAddress for user '{user.Id}': {ex.Message}");
+            _logger.LogError("Error in AccountsController.UpdateUserAddress for user '{userId}': {message}", user.Id, ex.Message);
 
             return new AddressDTO { };
         }
