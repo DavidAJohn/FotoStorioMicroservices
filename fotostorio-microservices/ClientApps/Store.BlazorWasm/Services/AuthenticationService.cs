@@ -26,6 +26,11 @@ public class AuthenticationService : IAuthenticationService
     {
         var client = _httpClient.CreateClient("IdentityAPI");
         var response = await client.PostAsJsonAsync("accounts/register", registerModel);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var registerResult = JsonSerializer.Deserialize<RegisterResult>(
+                responseContent,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            );
 
         if (response.IsSuccessStatusCode)
         {
@@ -38,7 +43,7 @@ public class AuthenticationService : IAuthenticationService
         return new RegisterResult
         {
             Successful = false,
-            Errors = new[] { "Registration failed" }
+            Error = registerResult.Error
         };
     }
 

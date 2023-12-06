@@ -69,13 +69,13 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Register(RegisterModel register)
     {
-        if (CheckEmailExistsAsync(register.Email).Result.Value)
+        if (await CheckEmailExistsAsync(register.Email))
         {
             return new BadRequestObjectResult(
                 new RegisterResult
                 {
                     Successful = false,
-                    Errors = new[] { "The email address is already in use" }
+                    Error = "The email address is already in use"
                 }
             );
         }
@@ -109,8 +109,7 @@ public class AccountsController : ControllerBase
         );
     }
 
-    [HttpGet("emailexists")]
-    public async Task<ActionResult<bool>> CheckEmailExistsAsync([FromQuery] string email)
+    private async Task<bool> CheckEmailExistsAsync(string email)
     {
         return await _userManager.FindByEmailAsync(email) != null;
     }
