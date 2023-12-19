@@ -93,6 +93,11 @@ try
         app.UseDeveloperExceptionPage();
         app.UseSwagger();
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Products.API v1"));
+
+        if (configuration.GetValue<bool>("InitialDataSeeding"))
+        {
+            await SeedProductData(app);
+        }
     }
 
     app.UseSerilogRequestLogging();
