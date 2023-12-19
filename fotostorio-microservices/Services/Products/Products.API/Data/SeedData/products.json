@@ -1,5 +1,6 @@
 [
     {
+        "Id": 1,
         "Sku":  "NIK7500C",
         "Name": "Nikon D7500",
         "Description": "The search for the perfect image can take you anywhere. Go there with the powerful, nimble, and fully connected D7500. Catch the beauty you find with flagship DX image quality inherited from Nikon’s D500.",
@@ -10,6 +11,7 @@
         "MountId": 1
     },
     {
+        "Id": 2,
         "Sku": "NIK850C",
         "Name": "Nikon D850",
         "Description": "When you’ve got the ultimate combination of resolution, speed, and light sensitivity to work with, you don’t just execute incredible work. You show your mastery.",
@@ -20,6 +22,7 @@
         "MountId": 1
     },
     {
+        "Id": 3,
         "Sku": "NIKZ62C",
         "Name": "Nikon Z6 II",
         "Description": "Run with your ideas. Follow your intuition. Whatever your next project demands, the versatile Z 6II full-frame mirrorless camera gives you the imaging power to create faster, sharper, and more fluidly. Meet opportunity with excellence, whether you express yourself best in stills—or video.",
@@ -30,6 +33,7 @@
         "MountId": 2
     },
     {
+        "Id": 4,
         "Sku": "NIKZ72C",
         "Name": "Nikon Z7 II",
         "Description": "Scrupulous attention to detail. A fearless work ethic. The skill to adapt. Meet the full-frame mirrorless camera that will match your passion for detail every step of the way. However you want to create with the light, the Nikon Z 7II gives you the power to realise your ideas perfectly.",
@@ -40,6 +44,7 @@
         "MountId": 2
     },
     {
+        "Id": 5,
         "Sku": "FUJXT4C",
         "Name": "Fujifilm X-T4",
         "Description": "Making a camera that suitable for both photography and videography is no simple task. The X-T4 is our most powerful X Series camera to date with no compromises for stills or video. Using the 4th generation X-Trans CMOS 4 sensor, X-Processor 4, a newly developed compact in-body image stabilization (IBIS) system, new Film Simulation mode “ETERNA Bleach Bypass” and various other features that have evolved based on user feedback, this camera delivers image quality that can satisfy the demands of professional photographers and videographers.",
@@ -50,6 +55,7 @@
         "MountId": 5
     },
     {
+        "Id": 6,
         "Sku": "FUJXT3C",
         "Name": "Fujifilm X-T3",
         "Description": "The X-T3 is a high performance premium camera that will become an inseparable partner in your artistic journey. Everything about this camera has been designed to completely satisfy all your photography and videography needs…dials for adjusting exposure settings, high resolution EVF and a robust magnesium alloy body that is ready for the toughest of conditions.",
@@ -60,6 +66,7 @@
         "MountId": 5
     },
     {
+        "Id": 7,
         "Sku": "FUJXT30C",
         "Name": "Fujifilm X-T30",
         "Description": "The new FUJIFILM X-T30, offers similar performance to the FUJIFILM X-T3, in a smaller and lighter body. It has the same phase-detection AF system with almost 100% frame coverage, blackout-free high-speed continuous shooting of up to 30fps, monochrome adjustment function, Color Chrome effect and Sports Viewfinder mode while also offering functions that cater to the less professional photographer, such as the Advanced SR Auto function.",
@@ -70,6 +77,7 @@
         "MountId": 5
     },
     {
+        "Id": 8,
         "Sku": "FUJXE3C",
         "Name": "Fujifilm X-E3",
         "Description": "The FUJIFILM X-E3 is a rangefinder style, ultra-compact mirror less camera which boasts outstanding image quality and enhanced handling. Utilising the X-Processor pro for best in class colour reproduction in both stills and 4K movies, it’s made for photographers who want to seamlessly upload photos directly to their smartphone or tablet.",
@@ -80,6 +88,7 @@
         "MountId": 5
     },
     {
+        "Id": 9,
         "Sku": "SON6600C",
         "Name": "Sony a6600",
         "Description": "Introducing the Sony a6600 Digital Camera - With this body, it is all about incorporating beautiful detail and high resolution images combined with super-fast and powerful processing, all in a compact shell. The A6600 hits the brief with ease. This system caters to the needs to enthusiasts and professional alike, and in both photography and videography because of the pure quality of its capture. Its compact nature makes it perfect for travel documentaries as well as vlogging.",
@@ -90,6 +99,7 @@
         "MountId": 6
     },
     {
+        "Id": 10,
         "Sku": "SONA73C",
         "Name": "Sony a7 III",
         "Description": "The Sony a7 III Digital Camera Body is the third iteration in the game-changing Sony A7 range. It comes upgraded with a back-illuminated 24.2-megapixel Full-Frame Exmor R CMOS imaging sensor, and the reinvented BIONZ X processing engine. The camera facilitates 4K HDR video capture and comes with 15-stops of dynamic range. Furthermore, it is capable of shooting 10fps, offers a fantastic ISO from 100-51200 as well as 5-axis image stabilisation all in a stylish, compact mirrorless system camera body.",
@@ -100,6 +110,7 @@
         "MountId": 6
     },
     {
+        "Id": 11,
         "Sku": "SONA7R3C",
         "Name": "Sony a7R III",
         "Description": "Тhе Ѕоnу a7R ІІІ іѕ thе thіrd іtеrаtіоn frоm thе Ѕоnу'ѕ А7R ѕеrіеѕ оf mіrrоrlеѕѕ соmрасt ѕуѕtеm саmеrаѕ. Тhе саmеrаѕ оffеr іmрrоvеd ѕрееd аnd іmаgе quаlіtу thаnkѕ tо іtѕ 42.4МР full frаmе Ехmоr R СМОЅ Ѕеnѕоr аnd іmрrеѕѕіvе рrосеѕѕіng ѕуѕtеm. А hugе 399-роіnt fосаl-рlаnе рhаѕе-dеtесtіоn АF ѕуѕtеm аnd hіgh-ѕрееd соntіnuоuѕ ѕhооtіng оf uр tо 10fрѕ mаkе thіѕ саmеrа іnсrеdіblу vеrѕаtіlе аnd wіll саtеr fоr а wіdе rаngе оf аррlісаtіоnѕ.",
@@ -110,6 +121,7 @@
         "MountId": 6
     },
     {
+        "Id": 12,
         "Sku": "SONA92C",
         "Name": "Sony a9 II",
         "Description": "The Sony a9 Mark II is the successor to the widely popular and well-received Sony A9. It is a Full-Frame Mirrorless-System camera offering 35mm Full-Frame stacked 24.2 MP Exmor RS CMOS sensor, and built-in 1000BASE-T Ethernet terminal. All of this has been packed into an extremely compact, stylish, and portable body. The A9II is undoubtedly a marvel of digital camera technology and a worthy addition to the Sony Alpha Mirrorless-System camera line-up.",
@@ -120,6 +132,7 @@
         "MountId": 6
     },
     {
+        "Id": 13,
         "Sku": "CAN850DC",
         "Name": "Canon EOS 850D",
         "Description": "Take the next step in creative control and enjoy the world of the Canon EOS system. Capture beautifully detailed photos and stunning 4K movies with this lightweight and connected DSLR. The EOS 850D is the perfect DSLR for anyone seeking next-level control, offering an optical viewfinder to see through the lens, a rear control and top dial to fine tune settings and 7-fps continuous shooting for capturing action. With a 24.1 MP sensor using Dual Pixel CMOS AF and a refined 45-point all cross-type AF sensor plus iTR AF for precise focus and tracking, the EOS 850D will react instantly to capture the perfect moment. This kit comes with the versatile EF-S 18-135mm f/3.5-5.6 IS USM that’s built-in Image Stabilizer reduces image blur from camera shake for impressive low light performance.",
@@ -130,6 +143,7 @@
         "MountId": 3
     },
     {
+        "Id": 14,
         "Sku": "CAN5DM4C",
         "Name": "Canon EOS 5D Mark IV",
         "Description": "Enjoy superb image quality, whatever you are photographing. From street reportage to location portraiture and landscapes in the evening light, the EOS 5D Mark IV captures incredible detail, even in extreme contrast. 4K video delivers new levels of performance. Continuous 7fps shooting helps when chasing the perfect moment, while GPS keeps a record of your movements. Wi-Fi and NFC make wireless control and photo sharing quick and easy. Increase flexibility in video post-production with the included Canon Log upgrade. Canon Log provides extra wide dynamic range, enabling you to retain natural-looking detail. It also allows easy colour grading to reduce noise in video post-production and bring to life that polished film footage you’ve been striving for.",
@@ -140,6 +154,7 @@
         "MountId": 3
     },
     {
+        "Id": 15,
         "Sku": "CANEOSRC",
         "Name": "Canon EOS R",
         "Description": "With over 30 years of EOS innovation and design in its wake, the EOS R system’s pioneering lens mount sets the new standard for the cameras of the future. Offering the fastest autofocus in the world, this EOS R body brings new levels of operability to advanced EOS users, with faster communication between lens and camera, redefining photo and video capability. Incredible low light performance with -6EV autofocus, the camera also boasts 4K video, Vari-Angle touchscreen and intuitive controls for responsive handling - perfect for photographers and filmmakers alike.",
@@ -150,6 +165,7 @@
         "MountId": 4
     },
     {
+        "Id": 16,
         "Sku": "CANEOSR6C",
         "Name": "Canon EOS R6",
         "Description": "Fall in love with photography all over again with a camera that lets you be creative in new and exciting ways. The EOS R6 is a full-frame mirrorless camera that’s so advanced it can shoot silently at up to 20 fps¹ with electronic shutter or at 12 fps with a mechanical shutter, capture 4K 60p video and is sensitive up to ISO 102,400 for amazing low-light photography. Next-generation image stabilisation allows hand-held photography at shutter speeds up to 8 stops longer than normal without camera shake. The Canon EOS R6 excels in all areas but will particularly appeal to photographers capturing action photography and videographers working on the move. Those shooting wedding photography, event photography and documentary projects will love its lightning-fast AF that recognises heads, eyes and bodies – not just in human subjects but also in cats, dogs and birds too.",
@@ -160,6 +176,7 @@
         "MountId": 4
     },
     {
+        "Id": 17,
         "Sku": "NIK5018L",
         "Name": "Nikon 50mm f/1.8",
         "Description": "Special edition of the popular 50mm f/1.8 NIKKOR lens. Boasts a compact and lightweight body with a retro-look and feel. With a fast maximum aperture of f/1.8, this is a great lens for low-light situations or when shallow depth of field is required. An aspherical lens element reduces aberrations and increases resolution, and Nikon’s exclusive Silent Wave Motor (SWM) delivers whisper-quiet operation.",
@@ -170,6 +187,7 @@
         "MountId": 1
     },
     {
+        "Id": 18,
         "Sku": "NIK2470L",
         "Name": "Nikon 24-70mm f/4",
         "Description": "Find the perfect angle, keep the perfect angle. This compact NIKKOR Z 24-70mm f/4 S zoom lens delivers true full-frame images. Whether you’re shooting stills or movies with your Nikon Z camera, you’ll capture incredible detail. All the way to the edge.",
@@ -180,6 +198,7 @@
         "MountId": 2
     },
     {
+        "Id": 19,
         "Sku": "CANEF50L",
         "Name": "Canon EF 50mm f/1.8 STM",
         "Description": "Тhе Саnоn ЕF 50mm f1.8 ЅТМ lеnѕ іѕ thе ѕuссеѕѕоr tо thе іnсrеdіblу рорulаr 50mm f1.8 ІІ. Ехtrеmеlу соmрасt аnd lіghtwеіght (160g), thе lеnѕ fеаturеѕ аn іmрrоvеd орtісаl dеѕіgn аnd ѕtерріng mоtоr (ЅТМ) tесhnоlоgу. Іtѕ wіdе f/1.8 mахіmum ареrturе аnd ѕtаndаrd 50mm fосаl lеngth mаkеѕ іt іdеаl fоr а wіdе vаrіеtу оf рhоtоgrарhіс gеnrеѕ, іnсludіng trаvеl, роrtrаіturе, аnd еvеrуdау сrеаtіvе ѕnарѕhоtѕ.",
@@ -190,6 +209,7 @@
         "MountId": 3
     },
     {
+        "Id": 20,
         "Sku": "CANEF24L",
         "Name": "Canon EF 24-70mm f/2.8L",
         "Description": "Тhе аll-рurроѕе Саnоn ЕF 24-70mm f/2.8L ІІ UЅМ lеnѕ іѕ а fаѕt ареrturе zооm ѕuіtаblе fоr аll аrеаѕ оf рhоtоgrарhу, whісh fеаturеѕ аn орtісаl ѕуѕtеm thаt іnсludеѕ 2 ultrа-lоw dіѕреrѕіоn (UD) аnd ѕuреr UD аѕрhеrіс еlеmеntѕ tо mіnіmіѕе соlоur аbеrrаtіоn аnd еnѕurе ехсерtіоnаl ѕhаrрnеѕѕ. f/2.8 ареrturе аnd UЅМ (Ultrаѕоnіс Моtоr) аllоwѕ fоr fаѕt, lоw lіght ѕhооtіng аnd nеаr-ѕіlеnt fосuѕіng.",
@@ -200,6 +220,7 @@
         "MountId": 3
     },
     {
+        "Id": 21,
         "Sku": "FUJ1855L",
         "Name": "Fujifilm 18-55m f/2.8-4",
         "Description": "With this single versatile zoom featuring a maximum aperture of F2.8 and a broad focal length range from 27mm (35mm equiv) wide angle to 84mm (35mm equiv) telephoto, the photographer can respond to a variety of scenes. Superbly portable thanks to its compact size, the fast linear motor-driven autofocus and the built-in functionality of four stops of image stabilisation ensure comfortable, confident shooting even in challenging situations.",
@@ -210,6 +231,7 @@
         "MountId": 5
     },
     {
+        "Id": 22,
         "Sku": "FUJ55200L",
         "Name": "Fujifilm 55-200mm f/3.5-4.8",
         "Description": "Built with optical design that offers a large maximum aperture, and a linear motor that delivers high-speed AF performance, while featuring the image stabilization function that allows the use of shutter speeds 5.0 stops slower. This is a lens you can trust even in the toughest of shooting conditions.",
@@ -220,6 +242,7 @@
         "MountId": 5
     },
     {
+        "Id": 23,
         "Sku": "SON8518L",
         "Name": "Sony 85mm f/1.8 FE",
         "Description": "This compact, easy-to-handle lens offers fine prime lens performance with high corner-to-corner resolution. A precision optical design includes one ED (Extra-low Dispersion) glass element to effectively minimise chromatic aberration, while spherical aberration is tightly controlled for high overall sharpness with smooth bokeh when required.",
@@ -230,6 +253,7 @@
         "MountId": 6
     },
     {
+        "Id": 24,
         "Sku": "SON2470L",
         "Name": "Sony FE 24-70mm f/2.8 GM",
         "Description": "Robust design and technology result in a reliable F2.8 zoom lens that can fully utilise current and future high-resolution camera bodies. This peerless standard zoom covers a 24mm to 70mm range, making it ideal for portraits, scenery, snapshots and any time ultimate image quality is required.",
