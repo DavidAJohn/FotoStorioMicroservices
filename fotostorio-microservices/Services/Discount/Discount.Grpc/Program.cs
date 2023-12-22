@@ -30,7 +30,13 @@ builder.Services.AddTransient<SeedData>();
 
 var app = builder.Build();
 
-await SeedData(app);
+if (app.Environment.IsDevelopment())
+{
+    if (configuration.GetValue<bool>("InitialDataSeeding"))
+    {
+        await SeedData(app);
+    }
+}
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<DiscountService>();
