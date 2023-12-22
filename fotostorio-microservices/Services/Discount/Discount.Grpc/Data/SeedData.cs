@@ -25,34 +25,39 @@ public class SeedData
         var campaignsData = await File.ReadAllTextAsync("./Data/SeedData/campaigns.json");
         var campaigns = JsonSerializer.Deserialize<List<Campaign>>(campaignsData);
 
-        using (var transaction = _context.Database.BeginTransaction())
+        var strategy = _context.Database.CreateExecutionStrategy();
+
+        strategy.Execute(() =>
         {
-            foreach (var campaign in campaigns)
+            using (var transaction = _context.Database.BeginTransaction())
             {
-                switch (campaign.Name)
+                foreach (var campaign in campaigns)
                 {
-                    case "Previous Month Discount":
-                        campaign.StartDate = DateTime.Today.AddDays(-31);
-                        campaign.EndDate = DateTime.Today.AddDays(-1);
-                        break;
-                    case "Next Month Discount":
-                        campaign.StartDate = DateTime.Today.AddDays(30);
-                        campaign.EndDate = DateTime.Today.AddDays(60);
-                        break;
-                    default:
-                        campaign.StartDate = DateTime.Today;
-                        campaign.EndDate = DateTime.Today.AddDays(28);
-                        break;
-                };
+                    switch (campaign.Name)
+                    {
+                        case "Previous Month Discount":
+                            campaign.StartDate = DateTime.Today.AddDays(-31);
+                            campaign.EndDate = DateTime.Today.AddDays(-1);
+                            break;
+                        case "Next Month Discount":
+                            campaign.StartDate = DateTime.Today.AddDays(30);
+                            campaign.EndDate = DateTime.Today.AddDays(60);
+                            break;
+                        default:
+                            campaign.StartDate = DateTime.Today;
+                            campaign.EndDate = DateTime.Today.AddDays(28);
+                            break;
+                    };
 
-                _context.Campaigns.Add(campaign);
+                    _context.Campaigns.Add(campaign);
+                }
+
+                _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Campaigns ON");
+                _context.SaveChanges();
+                _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Campaigns OFF");
+                transaction.Commit();
             }
-
-            _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Campaigns ON");
-            _context.SaveChanges();
-            _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Campaigns OFF");
-            transaction.Commit();
-        }
+        });
     }
 
     public async Task SeedProductDiscountDataAsync()
