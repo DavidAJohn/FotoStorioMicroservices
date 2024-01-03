@@ -69,7 +69,7 @@ public class ProductsController : ControllerBase
             HasNextPage = productsMetadata.HasNextPage
         };
 
-        _httpContextAccessor.HttpContext.Response.Headers.Add("Pagination", JsonSerializer.Serialize(paginationHeader));
+        _httpContextAccessor.HttpContext.Response.Headers.Append("Pagination", JsonSerializer.Serialize(paginationHeader));
 
         return Ok(aggregatedProducts);
     }
