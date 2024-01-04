@@ -7,7 +7,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.aggregator",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Catalog?{querystring}",
@@ -27,7 +27,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.aggregator",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Catalog/SpecialOffers",
@@ -47,7 +47,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.aggregator",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Catalog/SpecialOffers?{querystring}",
@@ -67,7 +67,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.aggregator",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Catalog",
@@ -87,7 +87,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.aggregator",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Catalog/{value}",

@@ -83,7 +83,7 @@ services:
       - "ConnectionStrings:DiscountConnectionString=Server=mssqldata;Database=DiscountDb;User Id=sa;Password=aDmin1234!;Trust Server Certificate=true;"
       - "InitialDataSeeding=true"
     ports:
-      - "8003:80"
+      - "8003:8080"
 
   discount.minapi:
     container_name: discount.minapi
@@ -91,7 +91,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ConnectionStrings:DiscountConnectionString=Server=mssqldata;Database=DiscountDb;User Id=sa;Password=aDmin1234!;"
     ports:
-      - "8004:80"
+      - "8004:8080"
 
   identity.api:
     container_name: identity.api
@@ -137,7 +137,7 @@ services:
       - "ApiSettings:DiscountUrl=http://discount.minapi"
       - "ApiSettings:InventoryUrl=http://inventory.api"
     ports:
-      - "8015:80"  
+      - "8015:8080"  
 
   store.gateway:
     container_name: store.gateway
@@ -145,7 +145,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "Cors_Url=http://store.gateway"
     ports:
-      - "8010:80"
+      - "8010:8080"
 
   marketing.gateway:
     container_name: marketing.gateway

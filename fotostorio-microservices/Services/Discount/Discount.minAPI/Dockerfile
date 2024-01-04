@@ -1,17 +1,20 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER app
 WORKDIR /app
-EXPOSE 80
+EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Services/Discount/Discount.minAPI/Discount.minAPI.csproj", "Services/Discount/Discount.minAPI/"]
 RUN dotnet restore "Services/Discount/Discount.minAPI/Discount.minAPI.csproj"
 COPY . .
 WORKDIR "/src/Services/Discount/Discount.minAPI"
-RUN dotnet build "Discount.minAPI.csproj" -c Release -o /app/build
+RUN dotnet build "Discount.minAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Discount.minAPI.csproj" -c Release -o /app/publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "Discount.minAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
