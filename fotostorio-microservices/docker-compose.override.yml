@@ -135,6 +135,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ApiSettings:ProductsUrl=http://products.api"
       - "ApiSettings:DiscountUrl=http://discount.minapi"
+      - "ApiSettings:InventoryUrl=http://inventory.api"
     ports:
       - "8015:80"  
 

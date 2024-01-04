@@ -30,8 +30,14 @@ try
                     .AddPolicyHandler(GetRetryPolicy())
                     .AddPolicyHandler(GetCircuitBreakerPolicy());
 
+    builder.Services.AddHttpClient("Inventory", c =>
+                    c.BaseAddress = new Uri(builder.Configuration["ApiSettings:InventoryUrl"]))
+                    .AddPolicyHandler(GetRetryPolicy())
+                    .AddPolicyHandler(GetCircuitBreakerPolicy());
+
     builder.Services.AddScoped<IProductsService, ProductsService>();
     builder.Services.AddScoped<IDiscountService, DiscountService>();
+    builder.Services.AddScoped<IInventoryService, InventoryService>();
 
     builder.Services.AddHttpContextAccessor();
 

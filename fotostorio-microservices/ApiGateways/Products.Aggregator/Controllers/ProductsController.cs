@@ -10,13 +10,15 @@ public class ProductsController : ControllerBase
 {
     private readonly IProductsService _productsService;
     private readonly IDiscountService _discountService;
+    private readonly IInventoryService _inventoryService;
     private readonly IMapper _mapper;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ProductsController(IProductsService productsService, IDiscountService discountService, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+    public ProductsController(IProductsService productsService, IDiscountService discountService, IInventoryService inventoryService, IMapper mapper, IHttpContextAccessor httpContextAccessor)
     {
         _productsService = productsService;
         _discountService = discountService;
+        _inventoryService = inventoryService;
         _mapper = mapper;
         _httpContextAccessor = httpContextAccessor;
     }
@@ -91,6 +93,17 @@ public class ProductsController : ControllerBase
         {
             aggregatedProduct.SalePrice = discount.SalePrice != 0 && discount.SalePrice < product.Price
                 ? discount.SalePrice : product.Price;
+        }
+
+        // get the stock level if the product is available
+        if (product.IsAvailable)
+        {
+            var stock = await _inventoryService.GetStockBySkuAsync(product.Sku);
+
+            if (stock != null)
+            {
+                aggregatedProduct.StockLevel = stock.CurrentStock;
+            }
         }
         
         return Ok(aggregatedProduct);

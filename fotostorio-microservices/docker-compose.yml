@@ -87,6 +87,7 @@ services:
     depends_on:
       - products.api
       - discount.minapi
+      - inventory.api
 
   store.gateway:
     image: ${DOCKER_REGISTRY-}storegateway
