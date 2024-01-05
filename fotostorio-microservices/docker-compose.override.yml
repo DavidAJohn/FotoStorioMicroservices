@@ -186,7 +186,7 @@ services:
       - HealthChecksUI__HealthChecks__9__Name=Products Aggregator
       - HealthChecksUI__HealthChecks__9__Uri=http://products.aggregator/hc
     ports:
-      - "8100:80"
+      - "8100:8080"
 
   admin.blazorserver:
     container_name: admin.blazorserver
