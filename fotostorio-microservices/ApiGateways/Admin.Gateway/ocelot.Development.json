@@ -7,7 +7,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.aggregator",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Admin/Catalog?{querystring}",

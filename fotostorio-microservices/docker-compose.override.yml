@@ -159,7 +159,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "8012:80"
+      - "8012:8080"
 
   applicationstatus:
     container_name: applicationstatus
