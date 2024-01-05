@@ -152,7 +152,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "8011:80"
+      - "8011:8080"
 
   admin.gateway:
     container_name: admin.gateway

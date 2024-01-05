@@ -7,7 +7,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "discount.minapi",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Marketing/Discounts",
@@ -19,7 +19,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "discount.minapi",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Marketing/Discounts/{url}",
@@ -31,7 +31,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "discount.minapi",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Marketing/Campaigns",
@@ -43,7 +43,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "discount.minapi",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Marketing/Campaigns/{url}",
@@ -56,7 +56,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.aggregator",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Marketing/Catalog?{querystring}",
@@ -70,7 +70,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.aggregator",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Marketing/Catalog/{value}",
