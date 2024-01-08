@@ -170,7 +170,7 @@ services:
       - HealthChecksUI__HealthChecks__1__Name=Basket API
       - HealthChecksUI__HealthChecks__1__Uri=http://basket.api/hc
       - HealthChecksUI__HealthChecks__2__Name=Discount minAPI
-      - HealthChecksUI__HealthChecks__2__Uri=http://discount.minapi/hc
+      - HealthChecksUI__HealthChecks__2__Uri=http://discount.minapi:8080/hc
       - HealthChecksUI__HealthChecks__3__Name=Identity API
       - HealthChecksUI__HealthChecks__3__Uri=http://identity.api/hc
       - HealthChecksUI__HealthChecks__4__Name=Ordering API
@@ -178,13 +178,13 @@ services:
       - HealthChecksUI__HealthChecks__5__Name=Inventory API
       - HealthChecksUI__HealthChecks__5__Uri=http://inventory.api/hc
       - HealthChecksUI__HealthChecks__6__Name=Store Gateway
-      - HealthChecksUI__HealthChecks__6__Uri=http://store.gateway/hc
+      - HealthChecksUI__HealthChecks__6__Uri=http://store.gateway:8080/hc
       - HealthChecksUI__HealthChecks__7__Name=Admin Gateway
-      - HealthChecksUI__HealthChecks__7__Uri=http://admin.gateway/hc
+      - HealthChecksUI__HealthChecks__7__Uri=http://admin.gateway:8080/hc
       - HealthChecksUI__HealthChecks__8__Name=Marketing Gateway
-      - HealthChecksUI__HealthChecks__8__Uri=http://marketing.gateway/hc
+      - HealthChecksUI__HealthChecks__8__Uri=http://marketing.gateway:8080/hc
       - HealthChecksUI__HealthChecks__9__Name=Products Aggregator
-      - HealthChecksUI__HealthChecks__9__Uri=http://products.aggregator/hc
+      - HealthChecksUI__HealthChecks__9__Uri=http://products.aggregator:8080/hc
     ports:
       - "8100:8080"
 
