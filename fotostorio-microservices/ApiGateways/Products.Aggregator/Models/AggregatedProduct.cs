@@ -30,5 +30,20 @@ public class AggregatedProduct
 
     public bool IsAvailable { get; set; }
 
-    public int StockLevel { get; set; } = 0;
+    const int scarcityLevel = 3; // threshold for low stock level
+    private int _stockLevel;
+
+    public int StockLevel {
+        get {
+            return _stockLevel;
+        }
+        set {
+            _stockLevel = value;
+
+            if (_stockLevel >= scarcityLevel)
+            {
+                _stockLevel = scarcityLevel;
+            }
+        }
+    }
 }
