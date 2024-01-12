@@ -17,6 +17,7 @@ public partial class Details
     private Product product;
     private string errorMessage = "";
     private int itemQuantity = 1;
+    private int scarcityLevel = 3;
 
     [CascadingParameter]
     public AppState appState { get; set; }
@@ -38,21 +39,6 @@ public partial class Details
         {
             Error.ProcessError(ex, "Pages/Products/Details.GetProductById()");
             errorMessage = "Could not retrieve details for this product";
-        }
-    }
-
-    private void ChangeQuantity(bool increase)
-    {
-        if (increase)
-        {
-            if (itemQuantity <= 4) // limit to 5
-            {
-                itemQuantity++;
-            }
-        }
-        else
-        {
-            if (itemQuantity >= 2) itemQuantity--;
         }
     }
 

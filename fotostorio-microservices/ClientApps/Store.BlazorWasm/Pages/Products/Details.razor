@@ -52,31 +52,32 @@
                         <span class="block text-gray-500 text-lg font-semibold">£@product.Price</span>
                     </div>
                 }
-                <div class="font-bold text-base text-green-700 mb-4">In Stock</div>
-                <div class="font-bold text-base mb-4 flex flex-row justify-items-start items-center h-2 w-2">
-                    <div class="font-bold text-base mr-3">Quantity:</div>
-                    <button type="button" class="border-1 border-solid border-gray-300 rounded p-2 hover:bg-fotofuchsia hover:text-gray-50" @onclick="() => ChangeQuantity(false)">
-                        <!-- heroicons: minus-sm icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
-                        </svg>
+
+                @if (product.StockLevel == 0 || product.IsAvailable == false)
+                {
+                    <div class="font-bold text-base text-red-700 mb-2">Currently Out Of Stock</div>
+                }
+                else
+                {
+                    if (product.StockLevel < scarcityLevel)
+                    {
+                        <div class="font-bold text-base text-green-700 mb-2">Only @product.StockLevel Left In Stock!</div>
+                    }
+                    else
+                    {
+                        <div class="font-bold text-base text-green-700 mb-2">In Stock</div>
+                    }
+
+                    <button class="flex flex-row justify-start items-center bg-fotofuchsia p-2 rounded-sm mt-10 mb-4 sm:w-1/2 sm:text-center xl:w-1/3 hover:opacity-90 fotofuchsia-ripple">
+                        <span class=" text-gray-50 ml-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-50 text-base ml-3" @onclick="AddItemToBasket">Add to Basket</span>
                     </button>
-                    <input type="text" class="font-bold mx-2 border-none focus:outline-none w-6 text-center " value="@itemQuantity" readonly />
-                    <button type="button" class="border-1 border-solid border-gray-300 rounded p-2 hover:bg-fotofuchsia hover:text-gray-50" @onclick="() => ChangeQuantity(true)">
-                        <!-- heroicons: plus icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                    </button>
-                </div>
-                <button class="flex flex-row justify-start items-center bg-fotofuchsia p-2 rounded-sm mt-10 mb-4 sm:w-1/2 sm:text-center xl:w-1/3 hover:opacity-90 fotofuchsia-ripple">
-                    <span class=" text-gray-50 ml-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                    </span>
-                    <span class="text-gray-50 text-base ml-3" @onclick="AddItemToBasket">Add to Basket</span>
-                </button>
+                }
+
                 <div class="text-base mb-4 text-justify">@product.Description</div>
             </div>
         </div>

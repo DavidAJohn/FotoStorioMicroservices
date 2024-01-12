@@ -27,5 +27,7 @@
         public string Mount { get; set; }
 
         public bool IsAvailable { get; set; }
+
+        public int StockLevel { get; set; }
     }
 }
