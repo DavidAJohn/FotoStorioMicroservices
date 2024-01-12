@@ -4330,7 +4330,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"Sku\": \"FUJ1855L\",\r\n    \"Added\": 0,\r\n    \"Removed\": 4\r\n}",
+							"raw": "{\r\n    \"Sku\": \"NIKZ62C\",\r\n    \"Added\": 0,\r\n    \"Removed\": 3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
