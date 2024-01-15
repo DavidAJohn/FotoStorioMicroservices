@@ -27,7 +27,7 @@ public class BasketService : IBasketService
         try
         {
             HttpClient client = _httpClient.CreateClient();
-            HttpResponseMessage response = await client.GetAsync(_config["ApiSettings:StoreGatewayUri"] + "/Basket?id=" + id);
+            HttpResponseMessage response = await client.GetAsync(_config["ApiSettings:StoreGatewayUri"] + "/Basket?Id=" + id);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -80,7 +80,7 @@ public class BasketService : IBasketService
         try
         {
             HttpClient client = _httpClient.CreateClient();
-            HttpResponseMessage response = await client.DeleteAsync(_config["ApiSettings:StoreGatewayUri"] + "/Basket?id=" + id);
+            HttpResponseMessage response = await client.DeleteAsync(_config["ApiSettings:StoreGatewayUri"] + "/Basket?Id=" + id);
 
             if (!response.IsSuccessStatusCode)
             {

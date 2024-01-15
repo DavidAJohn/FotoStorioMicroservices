@@ -72,9 +72,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "CacheSettings:ConnectionString=basketdb:6379"
-      - "GrpcSettings:DiscountUri=http://discount.grpc"
+      - "GrpcSettings:DiscountUri=http://discount.grpc:8080"
     ports:
-      - "8002:80"
+      - "8002:8080"
 
   discount.grpc:
     container_name: discount.grpc
@@ -168,7 +168,7 @@ services:
       - HealthChecksUI__HealthChecks__0__Name=Products API
       - HealthChecksUI__HealthChecks__0__Uri=http://products.api/hc
       - HealthChecksUI__HealthChecks__1__Name=Basket API
-      - HealthChecksUI__HealthChecks__1__Uri=http://basket.api/hc
+      - HealthChecksUI__HealthChecks__1__Uri=http://basket.api:8080/hc
       - HealthChecksUI__HealthChecks__2__Name=Discount minAPI
       - HealthChecksUI__HealthChecks__2__Uri=http://discount.minapi:8080/hc
       - HealthChecksUI__HealthChecks__3__Name=Identity API
@@ -205,7 +205,7 @@ services:
     container_name: store.blazorwasm
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ApiSettings:StoreGatewayUri=http://store.gateway"
+      - "ApiSettings:StoreGatewayUri=http://store.gateway:8080"
       - "ApiSettings:IdentityUri=http://identity.api"
     ports:
       - "8000:80"

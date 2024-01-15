@@ -224,15 +224,15 @@
     },
     //Basket API
     {
-      "DownstreamPathTemplate": "/api/Basket?id={id}",
+      "DownstreamPathTemplate": "/api/Basket?Id={id}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "basket.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
-      "UpstreamPathTemplate": "/Basket?id={id}",
+      "UpstreamPathTemplate": "/Basket?Id={id}",
       "UpstreamHttpMethod": [ "GET", "DELETE" ],
       "RateLimitOptions": {
         "ClientWhitelist": [],
@@ -248,7 +248,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "basket.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Basket",
