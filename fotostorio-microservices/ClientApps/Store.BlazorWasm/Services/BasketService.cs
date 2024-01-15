@@ -41,12 +41,19 @@ public class BasketService : IBasketService
                 return basket;
             }
 
+            _logger.LogWarning("Non 200-OK response received when attempting to retrieve basket {id}", id);
+
             return new Basket { };
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError($"Basket could not be retrieved: {id}");
+            _logger.LogError("HttpRequest error when retrieving basket {id} : {status_code} - {message}", id, ex.StatusCode, ex.Message);
             throw new HttpRequestException(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Basket could not be retrieved: {id}", id);
+            throw new Exception(ex.Message);
         }
     }
 
@@ -62,7 +69,7 @@ public class BasketService : IBasketService
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError($"Basket could not be updated: {basket.Id}");
+                _logger.LogWarning("Basket could not be updated: {id}", basket.Id);
                 return null;
             }
 
@@ -70,8 +77,13 @@ public class BasketService : IBasketService
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex.StatusCode + " " + ex.Message);
+            _logger.LogError("HttpRequest error when updating basket {id} : {status_code} - {message}", basket.Id, ex.StatusCode, ex.Message);
             throw new HttpRequestException(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Basket could not be updated: {id} ", basket.Id);
+            throw new Exception(ex.Message);
         }
     }
 
@@ -84,13 +96,18 @@ public class BasketService : IBasketService
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError($"Basket could not be deleted: {id}");
+                _logger.LogWarning("Basket could not be deleted: {id}", id);
             }
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex.StatusCode + " " + ex.Message);
+            _logger.LogError("HttpRequest error when deleting basket {id} : {status_code} - {message}", id, ex.StatusCode, ex.Message);
             throw new HttpRequestException(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Basket could not be deleted: {id} ", id);
+            throw new Exception(ex.Message);
         }
     }
 }
