@@ -9,9 +9,9 @@ public class BasketController : ControllerBase
 {
     private readonly IBasketRepository _basketRepository;
     private readonly IMapper _mapper;
-    private readonly DiscountGrpcService _discountGrpcService;
+    private readonly IDiscountGrpcService _discountGrpcService;
 
-    public BasketController(IBasketRepository basketRepository, IMapper mapper, DiscountGrpcService discountGrpcService)
+    public BasketController(IBasketRepository basketRepository, IMapper mapper, IDiscountGrpcService discountGrpcService)
     {
         _mapper = mapper;
         _discountGrpcService = discountGrpcService;
@@ -19,7 +19,7 @@ public class BasketController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<CustomerBasket>> GetBasketById(string id)
+    public async Task<IActionResult> GetBasketById(string id)
     {
         var basket = await _basketRepository.GetBasketAsync(id);
 
@@ -27,7 +27,7 @@ public class BasketController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CustomerBasket>> UpdateBasket([FromBody] CustomerBasketDTO basket)
+    public async Task<IActionResult> UpdateBasket([FromBody] CustomerBasketDTO basket)
     {
         // for each basket item, check if there is a discounted price from the Discount.Grpc service
         foreach (var item in basket.BasketItems)
