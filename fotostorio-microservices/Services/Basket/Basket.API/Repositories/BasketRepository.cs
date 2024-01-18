@@ -35,6 +35,6 @@ public class BasketRepository : IBasketRepository
 
     public async Task DeleteBasketAsync(string basketId)
     {
-            await _redisCache.RemoveAsync(basketId);
+        await _redisCache.RemoveAsync(basketId);
     }
 }
