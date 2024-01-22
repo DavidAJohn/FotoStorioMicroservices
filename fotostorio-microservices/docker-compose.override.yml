@@ -103,6 +103,7 @@ services:
       - "JwtAudience=http://identity.api"
       - "JwtExpiryInDays=${JWT_EXPIRY_IN_DAYS}"
       - "RedisURI=basketdb:6379"
+      - "InitialDataSeeding=${IDENTITY_DATA_SEEDING}"
     ports:
       - "8005:8080"
 

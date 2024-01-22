@@ -93,6 +93,11 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity.API v1"));
+
+    if (configuration.GetValue<bool>("InitialDataSeeding"))
+    {
+        await SeedIdentityData(app);
+    }
 }
 
 app.UseRouting();
