@@ -128,7 +128,7 @@ services:
       - "ApiSettings:IdentityUri=http://identity.api:8080"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     ports:
-      - "8007:80"
+      - "8007:8080"
 
   products.aggregator:
     container_name: products.aggregator
@@ -136,7 +136,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - "ApiSettings:ProductsUrl=http://products.api"
       - "ApiSettings:DiscountUrl=http://discount.minapi:8080"
-      - "ApiSettings:InventoryUrl=http://inventory.api"
+      - "ApiSettings:InventoryUrl=http://inventory.api:8080"
     ports:
       - "8015:8080"  
 
@@ -177,7 +177,7 @@ services:
       - HealthChecksUI__HealthChecks__4__Name=Ordering API
       - HealthChecksUI__HealthChecks__4__Uri=http://ordering.api/hc
       - HealthChecksUI__HealthChecks__5__Name=Inventory API
-      - HealthChecksUI__HealthChecks__5__Uri=http://inventory.api/hc
+      - HealthChecksUI__HealthChecks__5__Uri=http://inventory.api:8080/hc
       - HealthChecksUI__HealthChecks__6__Name=Store Gateway
       - HealthChecksUI__HealthChecks__6__Uri=http://store.gateway:8080/hc
       - HealthChecksUI__HealthChecks__7__Name=Admin Gateway
