@@ -118,7 +118,7 @@ services:
       - "Stripe:SecretKey=${STRIPE_SECRET_KEY}"
       - "Stripe:PublishableKey=${STRIPE_PUBLISHABLE_KEY}"
     ports:
-      - "8006:80"
+      - "8006:8080"
 
   inventory.api:
     container_name: inventory.api
@@ -175,7 +175,7 @@ services:
       - HealthChecksUI__HealthChecks__3__Name=Identity API
       - HealthChecksUI__HealthChecks__3__Uri=http://identity.api:8080/hc
       - HealthChecksUI__HealthChecks__4__Name=Ordering API
-      - HealthChecksUI__HealthChecks__4__Uri=http://ordering.api/hc
+      - HealthChecksUI__HealthChecks__4__Uri=http://ordering.api:8080/hc
       - HealthChecksUI__HealthChecks__5__Name=Inventory API
       - HealthChecksUI__HealthChecks__5__Uri=http://inventory.api:8080/hc
       - HealthChecksUI__HealthChecks__6__Name=Store Gateway
