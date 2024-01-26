@@ -11,10 +11,7 @@ public static class HttpContextExtensions
             int pageIndex
         )
     {
-        if (httpContext == null)
-        {
-            throw new ArgumentNullException(nameof(httpContext));
-        }
+        ArgumentNullException.ThrowIfNull(httpContext);
 
         // calculate total number of pages
         int totalPages = (int)Math.Ceiling(recordCount / (double)pageSize);
@@ -33,6 +30,6 @@ public static class HttpContextExtensions
             HasNextPage = hasNext
         };
 
-        httpContext.Response.Headers.Add("Pagination", JsonSerializer.Serialize(paginationHeader));
+        httpContext.Response.Headers.Append("Pagination", JsonSerializer.Serialize(paginationHeader));
     }
 }
