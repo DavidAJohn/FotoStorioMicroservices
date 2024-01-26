@@ -65,7 +65,7 @@ services:
       - "AzureUploadSettings:MaxFileUploadSize=${MAX_FILE_UPLOAD_SIZE}"
       - "InitialDataSeeding=true"
     ports:
-      - "8001:80"
+      - "8001:8080"
 
   basket.api:
     container_name: basket.api
@@ -134,7 +134,7 @@ services:
     container_name: products.aggregator
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ApiSettings:ProductsUrl=http://products.api"
+      - "ApiSettings:ProductsUrl=http://products.api:8080"
       - "ApiSettings:DiscountUrl=http://discount.minapi:8080"
       - "ApiSettings:InventoryUrl=http://inventory.api:8080"
     ports:
@@ -167,7 +167,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - HealthChecksUI__HealthChecks__0__Name=Products API
-      - HealthChecksUI__HealthChecks__0__Uri=http://products.api/hc
+      - HealthChecksUI__HealthChecks__0__Uri=http://products.api:8080/hc
       - HealthChecksUI__HealthChecks__1__Name=Basket API
       - HealthChecksUI__HealthChecks__1__Uri=http://basket.api:8080/hc
       - HealthChecksUI__HealthChecks__2__Name=Discount minAPI

@@ -108,7 +108,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Brands",
@@ -128,7 +128,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Brands/{id}",
@@ -148,7 +148,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Categories",
@@ -168,7 +168,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Categories/{id}",
@@ -188,7 +188,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Mounts",
@@ -208,7 +208,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Mounts/{id}",
