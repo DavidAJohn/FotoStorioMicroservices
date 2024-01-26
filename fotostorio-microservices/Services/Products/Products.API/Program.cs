@@ -86,8 +86,6 @@ try
 
     var app = builder.Build();
 
-    await SeedProductData(app);
-
     if (app.Environment.IsDevelopment())
     {
         app.UseDeveloperExceptionPage();
