@@ -63,7 +63,7 @@ services:
       - "AzureUploadSettings:AzureContainersAllowed=${AZURE_CONTAINERS_ALLOWED}"
       - "AzureUploadSettings:FileUploadTypesAllowed=${FILE_EXTENSION_TYPES_ALLOWED}"
       - "AzureUploadSettings:MaxFileUploadSize=${MAX_FILE_UPLOAD_SIZE}"
-      - "InitialDataSeeding=true"
+      - "InitialDataSeeding=${PRODUCT_DATA_SEEDING}"
     ports:
       - "8001:8080"
 
