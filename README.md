@@ -23,7 +23,9 @@ A 'monolithic' version of the application can be found here: [https://github.com
 
 To run the application locally, make sure you have Docker Desktop [installed](https://docs.docker.com/desktop/windows/install/) and running on your system.
 
-After downloading or cloning the repository, open a terminal inside the application's source folder **'fotostorio-microservices'**  and run the following command:
+After downloading or cloning the repository, you'll need to rename the '.env.sample' file in the **'fotostorio-microservices'** folder to '.env' and update the placeholder values with your own values.
+
+Once the .env file configuration is complete, open a terminal inside the application's source folder (**'fotostorio-microservices'**)  and run the following command:
 
 `docker-compose --profile clientapps up -d`
 
