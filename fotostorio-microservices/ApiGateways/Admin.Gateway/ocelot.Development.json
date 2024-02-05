@@ -20,7 +20,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Admin/Catalog",
@@ -32,7 +32,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Admin/Catalog/{value}",
@@ -44,7 +44,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Upload",
@@ -57,7 +57,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Brands",
@@ -77,7 +77,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Brands/{id}",
@@ -97,7 +97,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Categories",
@@ -117,7 +117,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Categories/{id}",
@@ -137,7 +137,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Mounts",
@@ -157,7 +157,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Mounts/{id}",
@@ -178,7 +178,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "inventory.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Stock",
@@ -191,7 +191,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "inventory.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Stock/{value}",
@@ -203,7 +203,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "inventory.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Updates",
@@ -215,7 +215,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "inventory.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Stock",
@@ -228,7 +228,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "ordering.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Orders/Latest/{value}",
@@ -240,7 +240,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "ordering.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Orders/{value}",
