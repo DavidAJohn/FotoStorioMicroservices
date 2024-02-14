@@ -112,7 +112,7 @@ else
     protected override void OnInitialized()
     {
         LastUpdated = DateTime.Now.ToString();
-        AppStatusUri = "http://localhost:8100/hc-ui";
+        AppStatusUri = $"{config["ApiSettings:AppStatusUri"]}/hc-ui";
 
         CheckAzureConfig();
     }
