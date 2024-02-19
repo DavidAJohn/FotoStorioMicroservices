@@ -83,7 +83,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "products.api",
-          "Port": "80"
+          "Port": "8080"
         }
       ],
       "UpstreamPathTemplate": "/Marketing/Catalog",
