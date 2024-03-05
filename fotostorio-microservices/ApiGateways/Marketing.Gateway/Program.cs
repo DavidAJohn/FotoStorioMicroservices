@@ -2,19 +2,13 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting.Internal;
-using Ocelot.Cache.CacheManager;
-using Ocelot.DependencyInjection;
-using Ocelot.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
 ConfigurationManager configuration = builder.Configuration;
 
-configuration.SetBasePath(builder.Environment.ContentRootPath)
-             .AddJsonFile($"ocelot.{builder.Environment.EnvironmentName}.json", true, true);
-
-builder.Services.AddOcelot(configuration)
-                .AddCacheManager(settings => settings.WithDictionaryHandle());
+builder.Services.AddReverseProxy()
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 builder.Services.AddHealthChecks()
                 .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "MarketingGateway" });
@@ -49,6 +43,6 @@ app.UseHealthChecks("/hc", new HealthCheckOptions()
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
-await app.UseOcelot();
+app.MapReverseProxy();
 
 app.Run();
