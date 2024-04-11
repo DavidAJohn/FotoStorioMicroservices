@@ -201,7 +201,7 @@ services:
       - "AzureSettings:MaxFileUploadSize=${MAX_FILE_UPLOAD_SIZE}"
       - "AzureSettings:FileUploadTypesAllowed=${FILE_UPLOAD_TYPES_ALLOWED}"
     ports:
-      - "8020:80"
+      - "8020:8080"
 
   store.blazorwasm:
     container_name: store.blazorwasm
