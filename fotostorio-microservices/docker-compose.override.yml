@@ -210,7 +210,7 @@ services:
       - "ApiSettings:StoreGatewayUri=http://store.gateway:8080"
       - "ApiSettings:IdentityUri=http://identity.api:8080"
     ports:
-      - "8000:80"
+      - "8000:8080"
     
 volumes:
   fs_mssqldata:
