@@ -24,8 +24,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => {
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
 
-builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
-
 builder.Services.AddTransient<SeedData>();
 
 var app = builder.Build();

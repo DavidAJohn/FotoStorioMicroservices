@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using Discount.Grpc.Protos;
+﻿using Discount.Grpc.Protos;
 using Discount.Grpc.Contracts;
 using Discount.Grpc.Models;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using Discount.Grpc.Helpers;
 
 namespace Discount.Grpc.Services;
 
@@ -12,13 +12,11 @@ public class DiscountService : DiscountProtoService.DiscountProtoServiceBase
 {
     private readonly IDiscountRepository _repository;
     private readonly ILogger<DiscountService> _logger;
-    private readonly IMapper _mapper;
 
-    public DiscountService(IDiscountRepository repository, ILogger<DiscountService> logger, IMapper mapper)
+    public DiscountService(IDiscountRepository repository, ILogger<DiscountService> logger)
     {
         _repository = repository;
         _logger = logger;
-        _mapper = mapper;
     }
 
     public override async Task<DiscountModel> GetCurrentDiscountById(GetCurrentDiscountByIdRequest request, ServerCallContext context)
@@ -32,8 +30,7 @@ public class DiscountService : DiscountProtoService.DiscountProtoServiceBase
 
         _logger.LogInformation("Discount retrieved for Id : {id}", discount.Id);
 
-        var discountModel = _mapper.Map<DiscountModel>(discount);
-        return discountModel;
+        return discount.ToDiscountModel();
     }
 
     public override async Task<DiscountModel> GetCurrentDiscountBySku(GetCurrentDiscountBySkuRequest request, ServerCallContext context)
@@ -47,30 +44,27 @@ public class DiscountService : DiscountProtoService.DiscountProtoServiceBase
 
         _logger.LogInformation("Discount retrieved for Sku : {sku}", discount.Sku);
 
-        var discountModel = _mapper.Map<DiscountModel>(discount);
-        return discountModel;
+        return discount.ToDiscountModel();
     }
 
     public override async Task<DiscountModel> CreateDiscount(CreateDiscountRequest request, ServerCallContext context)
     {
-        var discount = _mapper.Map<ProductDiscount>(request.Discount);
+        var discount = request.Discount.ToProductDiscount();
 
         await _repository.CreateDiscountAsync(discount);
         _logger.LogInformation("Discount was successfully created for Sku : {Sku}, SalePrice : {SalePrice}", discount.Sku, discount.SalePrice);
 
-        var discountModel = _mapper.Map<DiscountModel>(discount);
-        return discountModel;
+        return discount.ToDiscountModel();
     }
 
     public override async Task<DiscountModel> UpdateDiscount(UpdateDiscountRequest request, ServerCallContext context)
     {
-        var discount = _mapper.Map<ProductDiscount>(request.Discount);
+        var discount = request.Discount.ToProductDiscount();
 
         await _repository.UpdateDiscountAsync(discount);
         _logger.LogInformation("Discount was successfully updated - Sku : {Sku}, SalePrice : {SalePrice}", discount.Sku, discount.SalePrice);
 
-        var discountModel = _mapper.Map<DiscountModel>(discount);
-        return discountModel;
+        return discount.ToDiscountModel();
     }
 
     public override async Task<DeleteDiscountResponse> DeleteDiscount(DeleteDiscountRequest request, ServerCallContext context)
