@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Basket.API.Controllers;
 
@@ -8,12 +7,10 @@ namespace Basket.API.Controllers;
 public class BasketController : ControllerBase
 {
     private readonly IBasketRepository _basketRepository;
-    private readonly IMapper _mapper;
     private readonly IDiscountGrpcService _discountGrpcService;
 
-    public BasketController(IBasketRepository basketRepository, IMapper mapper, IDiscountGrpcService discountGrpcService)
+    public BasketController(IBasketRepository basketRepository, IDiscountGrpcService discountGrpcService)
     {
-        _mapper = mapper;
         _discountGrpcService = discountGrpcService;
         _basketRepository = basketRepository;
     }
@@ -38,8 +35,8 @@ public class BasketController : ControllerBase
             item.Product.Price = ((decimal)discount.SalePrice < item.Product.Price && (decimal)discount.SalePrice != 0) 
                 ? (decimal)discount.SalePrice : item.Product.Price;
         }
-
-        var customerBasket = _mapper.Map<CustomerBasketDTO, CustomerBasket>(basket);
+      
+        var customerBasket = basket.ToCustomerBasket();
         var updatedBasket = await _basketRepository.UpdateBasketAsync(customerBasket);
 
         return Ok(updatedBasket);

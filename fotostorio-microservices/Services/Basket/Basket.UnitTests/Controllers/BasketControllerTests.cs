@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Basket.API.Controllers;
+﻿using Basket.API.Controllers;
 using Basket.API.Entities;
 using Basket.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +13,6 @@ namespace Basket.UnitTests.Controllers;
 public class BasketControllerTests : ControllerBase
 {
     private readonly IBasketRepository _basketRepository = Substitute.For<IBasketRepository>();
-    private readonly IMapper _mapper = BuildMapper();
 
     private readonly int _fakeProductPrice = 50;
     private readonly int _fakeDiscountPrice = 40;
@@ -27,7 +25,7 @@ public class BasketControllerTests : ControllerBase
         var fakeBasket = GetFakeCustomerBasket(fakeBasketId);
 
         //Act
-        var basketController = new BasketController(_basketRepository, _mapper, null);
+        var basketController = new BasketController(_basketRepository, null);
         _basketRepository.GetBasketAsync(fakeBasketId).Returns(fakeBasket);
         var result = (OkObjectResult)await basketController.GetBasketById(fakeBasketId);
 
@@ -43,7 +41,7 @@ public class BasketControllerTests : ControllerBase
         var fakeBasketId = "1";
 
         //Act
-        var basketController = new BasketController(_basketRepository, _mapper, null);
+        var basketController = new BasketController(_basketRepository, null);
         _basketRepository.GetBasketAsync(fakeBasketId).ReturnsNull();
         var result = (OkObjectResult)await basketController.GetBasketById(fakeBasketId);
 
@@ -64,7 +62,7 @@ public class BasketControllerTests : ControllerBase
         discountGrpcService.GetDiscount(Arg.Any<string>())
             .Returns(new DiscountModel { Id = 1, Sku = "fakeSku", SalePrice = _fakeDiscountPrice });
 
-        var basketController = new BasketController(_basketRepository, _mapper, discountGrpcService);
+        var basketController = new BasketController(_basketRepository, discountGrpcService);
 
         _basketRepository.GetBasketAsync(Arg.Any<string>()).Returns(fakeBasket);
         _basketRepository.UpdateBasketAsync(Arg.Any<CustomerBasket>()).Returns(fakeBasket);
@@ -89,7 +87,7 @@ public class BasketControllerTests : ControllerBase
         discountGrpcService.GetDiscount(Arg.Any<string>())
             .Returns(new DiscountModel { Id = 1, Sku = "fakeSku", SalePrice = _fakeProductPrice });
 
-        var basketController = new BasketController(_basketRepository, _mapper, discountGrpcService);
+        var basketController = new BasketController(_basketRepository, discountGrpcService);
 
         _basketRepository.GetBasketAsync(Arg.Any<string>()).Returns(fakeBasket);
         _basketRepository.UpdateBasketAsync(Arg.Any<CustomerBasket>()).Returns(fakeBasket);
@@ -150,15 +148,5 @@ public class BasketControllerTests : ControllerBase
             Id = basketId,
             BasketItems = basketItems
         };
-    }
-
-    private static IMapper BuildMapper()
-    {
-        var config = new MapperConfiguration(options =>
-        {
-            options.AddProfile(new AutoMapperProfiles());
-        });
-
-        return config.CreateMapper();
     }
 }

@@ -24,8 +24,6 @@ builder.Services.AddScoped<IDiscountGrpcService, DiscountGrpcService>();
 // general config
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
-builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
