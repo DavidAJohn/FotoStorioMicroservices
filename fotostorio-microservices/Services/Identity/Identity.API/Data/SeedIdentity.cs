@@ -87,7 +87,7 @@ public class SeedIdentity
 
             var marketingUser = new AppUser
             {
-                DisplayName = "Marketing",
+                DisplayName = "Marketing User",
                 Email = marketingEmail,
                 UserName = marketingEmail,
                 Address = new Address
