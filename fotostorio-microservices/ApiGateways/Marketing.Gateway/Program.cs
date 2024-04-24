@@ -13,6 +13,17 @@ builder.Services.AddReverseProxy()
 builder.Services.AddHealthChecks()
                 .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "MarketingGateway" });
 
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyMethod()
+            .AllowAnyHeader()
+            .SetIsOriginAllowedToAllowWildcardSubdomains()
+            .AllowAnyOrigin();
+    });
+});
+
 builder.Logging.AddConsole()
                .AddDebug()
                .AddConfiguration(configuration.GetSection("Logging"));
@@ -42,6 +53,8 @@ app.UseHealthChecks("/hc", new HealthCheckOptions()
     Predicate = _ => true,
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
+
+app.UseCors("CorsPolicy");
 
 app.MapReverseProxy();
 
