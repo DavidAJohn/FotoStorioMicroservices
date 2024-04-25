@@ -19,6 +19,7 @@ builder.Services.AddCors(opt =>
     {
         policy.AllowAnyMethod()
             .AllowAnyHeader()
+            .WithExposedHeaders("Pagination")
             .SetIsOriginAllowedToAllowWildcardSubdomains()
             .AllowAnyOrigin();
     });
