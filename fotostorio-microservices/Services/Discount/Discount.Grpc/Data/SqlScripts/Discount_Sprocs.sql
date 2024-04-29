@@ -89,6 +89,25 @@ EXEC(N'
     END
     ')
 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[dbo].[GetDiscountsForSkuByDate]'))
+EXEC(N'
+    CREATE PROCEDURE [dbo].[GetDiscountsForSkuByDate]
+	    @Sku nvarchar(50),
+	    @Date datetime
+    AS
+    BEGIN
+	    SET NOCOUNT ON;
+	
+        SELECT p.[Id]
+                ,[Sku]
+                ,[SalePrice]
+        FROM [ProductDiscounts] p
+        INNER JOIN [Campaigns] c ON p.CampaignId = c.Id
+        WHERE (c.StartDate < @Date AND c.EndDate > DATEADD(dd,1, @Date))
+        AND p.[Sku] = @Sku
+    END
+    ')
+
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[dbo].[CreateDiscount]'))
 EXEC(N'
     CREATE PROCEDURE [dbo].[CreateDiscount]
