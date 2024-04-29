@@ -24,6 +24,9 @@ public class DiscountData : IDiscountData
     public async Task<ProductDiscount> GetCurrentDiscountBySku(string sku) =>
         await _sqlDiscountAccess.GetCurrentDiscountBySkuAsync(sku);
 
+    public async Task<IEnumerable<ProductDiscount>> GetDiscountsForSkuByDate(string sku, DateTime date) =>
+        await _sqlDiscountAccess.GetDiscountsForSkuByDateAsync(sku, date);
+
     public async Task<bool> CreateDiscount(ProductDiscount discount) =>
         await _sqlDiscountAccess.CreateDiscountAsync(discount);
 
@@ -32,4 +35,6 @@ public class DiscountData : IDiscountData
 
     public async Task<bool> DeleteDiscount(int id) =>
         await _sqlDiscountAccess.DeleteDiscountAsync(id);
+
+    
 }

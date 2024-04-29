@@ -94,6 +94,34 @@ public class SqlDiscountAccess : ISqlDiscountAccess
         return discount;
     }
 
+    public async Task<IEnumerable<ProductDiscount>> GetDiscountsForSkuByDateAsync(string sku, DateTime date)
+    {
+        using IDbConnection connection = new SqlConnection(_config.GetConnectionString("DiscountConnectionString"));
+
+        var sp = "GetDiscountsForSkuByDate";
+
+        var dp = new DynamicParameters();
+        dp.Add("@Sku", sku, DbType.String, ParameterDirection.Input);
+        dp.Add("@Date", date, DbType.DateTime, ParameterDirection.Input);
+
+        var discounts = await connection.QueryAsync<ProductDiscount>(sp, dp, commandType: CommandType.StoredProcedure);
+
+        if (discounts == null)
+        {
+            return new List<ProductDiscount>
+            {
+                new ProductDiscount
+                {
+                    Sku = "NODISCNT",
+                    CampaignId = 0,
+                    SalePrice = 0
+                }
+            };
+        }
+
+        return discounts;
+    }
+
     public async Task<bool> CreateDiscountAsync(ProductDiscount discount)
     {
         using IDbConnection connection = new SqlConnection(_config.GetConnectionString("DiscountConnectionString"));
@@ -146,4 +174,6 @@ public class SqlDiscountAccess : ISqlDiscountAccess
 
         return true;
     }
+
+    
 }

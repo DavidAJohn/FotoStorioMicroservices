@@ -20,6 +20,7 @@ public static class ApiEndpoints
 
         discounts.MapGet("/sku/{sku:maxlength(9)}", GetCurrentDiscountBySku);
         discounts.MapGet("/id/{id:int}", GetCurrentDiscountById);
+        discounts.MapGet("/sku/{sku:maxlength(9)}/date/{date:datetime}", GetDiscountsForSkuByDate);
         discounts.MapGet("/currentfuture", GetCurrentAndFutureDiscounts);
         discounts.MapGet("/current", GetCurrentDiscounts);
         discounts.MapGet("", GetAllDiscounts);
@@ -104,6 +105,20 @@ public static class ApiEndpoints
         try
         {
             var results = await data.GetCurrentDiscountById(id);
+            if (results == null) return Results.NotFound();
+            return Results.Ok(results);
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(ex.Message);
+        }
+    }
+
+    private static async Task<IResult> GetDiscountsForSkuByDate(string sku, DateTime date, IDiscountData data)
+    {
+        try
+        {
+            var results = await data.GetDiscountsForSkuByDate(sku, date);
             if (results == null) return Results.NotFound();
             return Results.Ok(results);
         }
