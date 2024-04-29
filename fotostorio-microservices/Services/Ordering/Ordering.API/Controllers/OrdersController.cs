@@ -84,7 +84,7 @@ public class OrdersController : ControllerBase
 
         Order order = new Order {};
 
-        if (role == "Administrator")
+        if (role == "Administrator" || role == "Marketing")
         {
             order = await _orderRepository.GetOrderByIdForAdminAsync(id, token);
         }
