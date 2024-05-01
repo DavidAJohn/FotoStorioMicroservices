@@ -37,7 +37,7 @@ public class SqlCampaignAccess : ISqlCampaignAccess
                           ,[StartDate]
                           ,[EndDate]
                       FROM [Campaigns]
-                      WHERE StartDate < GETDATE() AND EndDate > DATEADD(dd,1, GETDATE())";
+                      WHERE GETDATE() BETWEEN StartDate AND EndDate";
 
         var campaigns = await connection.QueryAsync<Campaign>(sql);
 
