@@ -29,7 +29,7 @@ EXEC(N'
             ,p.CampaignId as [CampaignId]
         FROM [ProductDiscounts] p
         INNER JOIN Campaigns c ON p.CampaignId = c.Id
-        WHERE c.StartDate < GETDATE() AND c.EndDate > DATEADD(dd,1, GETDATE())
+        WHERE GETDATE() BETWEEN c.StartDate AND c.EndDate
     END
     ')
 
@@ -66,7 +66,7 @@ EXEC(N'
             ,c.[Name] as [Campaign]
         FROM [ProductDiscounts] p
         INNER JOIN [Campaigns] c ON p.CampaignId = c.Id
-        WHERE (c.StartDate < GETDATE() AND c.EndDate > DATEADD(dd,1, GETDATE()))
+        WHERE GETDATE() BETWEEN c.StartDate AND c.EndDate
         AND p.[Id] = @Id
     END
     ')
@@ -86,7 +86,7 @@ EXEC(N'
             ,c.[Name] as Campaign
         FROM [ProductDiscounts] p
         INNER JOIN [Campaigns] c ON p.CampaignId = c.Id
-        WHERE (c.StartDate < GETDATE() AND c.EndDate > DATEADD(dd,1, GETDATE()))
+        WHERE GETDATE() BETWEEN c.StartDate AND c.EndDate
         AND p.[Sku] = @Sku
     END
     ')
@@ -107,7 +107,7 @@ EXEC(N'
                 ,c.[Name] as Campaign
         FROM [ProductDiscounts] p
         INNER JOIN [Campaigns] c ON p.CampaignId = c.Id
-        WHERE (c.StartDate < @Date AND c.EndDate > DATEADD(dd,1, @Date))
+        WHERE @Date BETWEEN c.StartDate AND c.EndDate
         AND p.[Sku] = @Sku
     END
     ')
