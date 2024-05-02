@@ -112,6 +112,25 @@ EXEC(N'
     END
     ')
 
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[dbo].[GetDiscountsByCampaignId]'))
+EXEC(N'
+    CREATE PROCEDURE [dbo].[GetDiscountsByCampaignId]
+	    @CampaignId int
+    AS
+    BEGIN
+	    SET NOCOUNT ON;
+	
+        SELECT p.[Id]
+                ,[Sku]
+                ,[SalePrice]
+                ,[CampaignId]
+                ,c.[Name] as Campaign
+        FROM [ProductDiscounts] p
+        INNER JOIN [Campaigns] c ON p.CampaignId = c.Id
+        WHERE CampaignId = @CampaignId
+    END
+    ')
+
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[dbo].[CreateDiscount]'))
 EXEC(N'
     CREATE PROCEDURE [dbo].[CreateDiscount]
