@@ -13,5 +13,6 @@ namespace Discount.minAPI.Data
         Task<bool> UpdateDiscount(ProductDiscount discount);
         Task<IEnumerable<ProductDiscount>> GetCurrentAndFutureDiscounts();
         Task<IEnumerable<ProductDiscount>> GetDiscountsForSkuByDate(string sku, DateTime date);
+        Task<IEnumerable<ProductDiscount>> GetDiscountsByCampaignId(int id);
     }
 }

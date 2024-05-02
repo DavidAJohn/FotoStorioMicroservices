@@ -122,6 +122,33 @@ public class SqlDiscountAccess : ISqlDiscountAccess
         return discounts;
     }
 
+    public async Task<IEnumerable<ProductDiscount>> GetDiscountsByCampaignIdAsync(int id)
+    {
+        using IDbConnection connection = new SqlConnection(_config.GetConnectionString("DiscountConnectionString"));
+
+        var sp = "GetDiscountsByCampaignId";
+
+        var dp = new DynamicParameters();
+        dp.Add("@CampaignId", id, DbType.Int32, ParameterDirection.Input);
+
+        var discounts = await connection.QueryAsync<ProductDiscount>(sp, dp, commandType: CommandType.StoredProcedure);
+
+        if (discounts == null)
+        {
+            return new List<ProductDiscount>
+            {
+                new ProductDiscount
+                {
+                    Sku = "NODISCNT",
+                    CampaignId = 0,
+                    SalePrice = 0
+                }
+            };
+        }
+
+        return discounts;
+    }
+
     public async Task<bool> CreateDiscountAsync(ProductDiscount discount)
     {
         using IDbConnection connection = new SqlConnection(_config.GetConnectionString("DiscountConnectionString"));
@@ -174,6 +201,4 @@ public class SqlDiscountAccess : ISqlDiscountAccess
 
         return true;
     }
-
-    
 }

@@ -21,6 +21,7 @@ public static class ApiEndpoints
         discounts.MapGet("/sku/{sku:maxlength(9)}", GetCurrentDiscountBySku);
         discounts.MapGet("/id/{id:int}", GetCurrentDiscountById);
         discounts.MapGet("/sku/{sku:maxlength(9)}/date/{date:datetime}", GetDiscountsForSkuByDate);
+        discounts.MapGet("/campaign/{id:int}", GetDiscountsByCampaignId);
         discounts.MapGet("/currentfuture", GetCurrentAndFutureDiscounts);
         discounts.MapGet("/current", GetCurrentDiscounts);
         discounts.MapGet("", GetAllDiscounts);
@@ -42,7 +43,7 @@ public static class ApiEndpoints
                 };
             });
 
-        campaigns.MapGet("/id/{id:int}", GetCampaignById);
+        campaigns.MapGet("/{id:int}", GetCampaignById);
         campaigns.MapGet("/current", GetCurrentCampaigns);
         campaigns.MapGet("", GetAllCampaigns);
         campaigns.MapPost("", CreateCampaign);
@@ -119,6 +120,20 @@ public static class ApiEndpoints
         try
         {
             var results = await data.GetDiscountsForSkuByDate(sku, date);
+            if (results == null) return Results.NotFound();
+            return Results.Ok(results);
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(ex.Message);
+        }
+    }
+
+    private static async Task<IResult> GetDiscountsByCampaignId(int id, IDiscountData data)
+    {
+        try
+        {
+            var results = await data.GetDiscountsByCampaignId(id);
             if (results == null) return Results.NotFound();
             return Results.Ok(results);
         }
