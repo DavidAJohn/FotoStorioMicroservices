@@ -109,6 +109,39 @@ public class ProductsController : ControllerBase
         return Ok(aggregatedProduct);
     }
 
+    [HttpGet("sku/{sku}")]
+    public async Task<ActionResult<AggregatedProduct>> GetProductBySku(string sku)
+    {
+        var product = await _productsService.GetProductBySkuAsync(sku);
+
+        if (product == null) return NotFound();
+
+        // check if there is a reduced sale price for the item via a request to the discount api
+        var aggregatedProduct = _mapper.Map<AggregatedProduct>(product);
+        var discount = await _discountService.GetDiscountBySku(product.Sku);
+
+        // if there is a discounted price then use it,
+        // otherwise set the sale price to the same as the existing price
+        if (discount != null)
+        {
+            aggregatedProduct.SalePrice = discount.SalePrice != 0 && discount.SalePrice < product.Price
+                ? discount.SalePrice : product.Price;
+        }
+
+        // get the stock level if the product is available
+        if (product.IsAvailable)
+        {
+            var stock = await _inventoryService.GetStockBySkuAsync(product.Sku);
+
+            if (stock != null)
+            {
+                aggregatedProduct.StockLevel = stock.CurrentStock;
+            }
+        }
+
+        return Ok(aggregatedProduct);
+    }
+
     [HttpGet("offers")]
     public async Task<ActionResult<IEnumerable<AggregatedProduct>>> GetSpecialOffers([FromQuery] ProductParameters productParams)
     {
