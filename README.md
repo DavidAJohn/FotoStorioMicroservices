@@ -13,7 +13,7 @@ A 'monolithic' version of the application can be found here: [https://github.com
 - Basket functionality using a Redis database
 - PCI DSS-compliant payment integration using Stripe Elements and JSInterop
 - Authentication and authorisation using .NET Core Identity
-- API Gateways for the store and admin sites using Ocelot
+- API Gateways for the client applications using YARP and Ocelot
 - Discount pricing database using gRPC
 - Async messaging using RabbitMQ and MassTransit
 - Inventory management using PostgreSQL and async messaging
