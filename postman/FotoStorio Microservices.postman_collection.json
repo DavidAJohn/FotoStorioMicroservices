@@ -695,6 +695,48 @@
 					"response": []
 				},
 				{
+					"name": "Get Discounts for Sku By Date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{discount_url}}/api/discounts/sku/SONA73C/date/2023-11-20T14%3A49%3A00",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"discounts",
+								"sku",
+								"SONA73C",
+								"date",
+								"2023-11-20T14%3A49%3A00"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Discounts By Campaign Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{discount_url}}/api/discounts/campaign/4",
+							"host": [
+								"{{discount_url}}"
+							],
+							"path": [
+								"api",
+								"discounts",
+								"campaign",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Discount by Id",
 					"request": {
 						"method": "GET",
@@ -832,14 +874,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{discount_url}}/api/campaigns/id/2",
+							"raw": "{{discount_url}}/api/campaigns/2",
 							"host": [
 								"{{discount_url}}"
 							],
 							"path": [
 								"api",
 								"campaigns",
-								"id",
 								"2"
 							]
 						}
@@ -1260,7 +1301,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{store_gtw_url}}/Basket?id=basket1",
+											"raw": "{{store_gtw_url}}/Basket?Id=basket1",
 											"host": [
 												"{{store_gtw_url}}"
 											],
@@ -1269,7 +1310,7 @@
 											],
 											"query": [
 												{
-													"key": "id",
+													"key": "Id",
 													"value": "basket1"
 												}
 											]
@@ -1283,7 +1324,7 @@
 										"method": "DELETE",
 										"header": [],
 										"url": {
-											"raw": "{{store_gtw_url}}/Basket?id=basket1",
+											"raw": "{{store_gtw_url}}/Basket?Id=basket1",
 											"host": [
 												"{{store_gtw_url}}"
 											],
@@ -1292,7 +1333,7 @@
 											],
 											"query": [
 												{
-													"key": "id",
+													"key": "Id",
 													"value": "basket1"
 												}
 											]
@@ -1733,6 +1774,58 @@
 									"response": []
 								},
 								{
+									"name": "Get Discounts for Sku By Date",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{Marketing_Token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Discounts/sku/SONA73C/date/2023-11-20T14%3A49%3A00",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Discounts",
+												"sku",
+												"SONA73C",
+												"date",
+												"2023-11-20T14%3A49%3A00"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Discounts By Campaign Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Discounts/Campaign/5",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Discounts",
+												"Campaign",
+												"5"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Create Discount",
 									"request": {
 										"method": "POST",
@@ -1766,7 +1859,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"sku\": \"FUJ55200L\",\r\n    \"campaignId\": 2,\r\n    \"salePrice\": 729.00,\r\n    \"id\": 6\r\n}",
+											"raw": "{\r\n    \"sku\": \"FUJ55200L\",\r\n    \"campaignId\": 5,\r\n    \"salePrice\": 729.00,\r\n    \"id\": 10\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1853,15 +1946,14 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{marketing_gtw_url}}/Marketing/Campaigns/id/2",
+											"raw": "{{marketing_gtw_url}}/Marketing/Campaigns/4",
 											"host": [
 												"{{marketing_gtw_url}}"
 											],
 											"path": [
 												"Marketing",
 												"Campaigns",
-												"id",
-												"2"
+												"4"
 											]
 										}
 									},
@@ -1874,7 +1966,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"name\": \"Test Discount Campaign\",\r\n    \"startDate\": \"2022-01-06T16:49:14.525557\",\r\n    \"endDate\": \"2022-04-05T16:49:14.5255611\"\r\n}",
+											"raw": "{\r\n    \"name\": \"Test Discount Campaign\",\r\n    \"startDate\": \"2024-03-01T16:49:14.525557\",\r\n    \"endDate\": \"2024-04-05T16:49:14.5255611\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1901,7 +1993,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"name\": \"Testing Discount Campaign\",\r\n    \"startDate\": \"2022-01-06T16:49:14.525557\",\r\n    \"endDate\": \"2022-05-06T16:49:14.5255611\",\r\n    \"id\": 3\r\n}",
+											"raw": "{\r\n    \"name\": \"Testing Discount Campaign\",\r\n    \"startDate\": \"2024-03-01T16:49:14.525557\",\r\n    \"endDate\": \"2024-05-01T16:49:14.5255611\",\r\n    \"id\": 5\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1958,6 +2050,26 @@
 												"Marketing",
 												"Catalog",
 												"3"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Catalog Item By Sku from Marketing Gateway",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Catalog/Sku/NIKZ62C",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Catalog",
+												"Sku",
+												"NIKZ62C"
 											]
 										}
 									},
@@ -2046,6 +2158,70 @@
 													"key": "sort",
 													"value": "priceDesc"
 												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Orders",
+							"item": [
+								{
+									"name": "Get Latest Orders (Marketing)",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{Marketing_Token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Orders/Latest/60",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Orders",
+												"Latest",
+												"60"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Order By Id (Marketing)",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{Marketing_Token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Orders/1",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Orders",
+												"1"
 											]
 										}
 									},
@@ -2638,6 +2814,27 @@
 							"response": []
 						},
 						{
+							"name": "Get Item By Sku from Products Aggregator",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{products_aggr_url}}/api/aggr/products/sku/NIKZ62C",
+									"host": [
+										"{{products_aggr_url}}"
+									],
+									"path": [
+										"api",
+										"aggr",
+										"products",
+										"sku",
+										"NIKZ62C"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Sort Products By Price Desc",
 							"request": {
 								"method": "GET",
@@ -2884,18 +3081,20 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"const marketing = pm.response.json();",
+									"const res = pm.response.json();",
 									"",
-									"pm.test(\"Has properties\", function () {",
-									"    pm.expect(marketing).to.have.property('displayName');",
-									"    pm.expect(marketing).to.have.property('email');",
-									"    pm.expect(marketing).to.have.property('token');",
+									"pm.test(\"Has expected properties\", function () {",
+									"    pm.expect(res).to.have.property('successful');",
+									"    pm.expect(res).to.have.property('token');",
 									"});",
 									"",
-									"if (pm.test(\"Has properties\")) {",
-									"    pm.environment.set(\"Marketing_Token\", marketing.token);",
-									"}",
-									""
+									"pm.test(\"Is Successful\"), function() {",
+									"    pm.expect(res.successful).to.equl(true);",
+									"};",
+									"",
+									"if (pm.test(\"Has expected properties\" && pm.test(\"Is Successful\"))) {",
+									"    pm.environment.set(\"Marketing_Token\", res.token);",
+									"};"
 								],
 								"type": "text/javascript"
 							}
