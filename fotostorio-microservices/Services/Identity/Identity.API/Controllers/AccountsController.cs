@@ -42,6 +42,7 @@ public class AccountsController : ControllerBase
 
         if (user == null)
         {
+            _logger.LogInformation("AccountsController.Login: User '{email}' not found", login.Email);
             return Unauthorized();
         }
 
@@ -49,6 +50,7 @@ public class AccountsController : ControllerBase
 
         if (!result.Succeeded)
         {
+            _logger.LogInformation("AccountsController.Login: Login failed for user '{email}'", login.Email);
             return BadRequest(new LoginResult { Successful = false, Error = "Login failed" });
         }
 
@@ -73,11 +75,13 @@ public class AccountsController : ControllerBase
     {
         if (await CheckEmailExistsAsync(register.Email))
         {
+            _logger.LogWarning("AccountsController.Register: Registration failed because email address '{email}' was already in use", register.Email);
+
             return new BadRequestObjectResult(
                 new RegisterResult
                 {
                     Successful = false,
-                    Error = "The email address is already in use"
+                    Error = "This email address cannot be used"
                 }
             );
         }
@@ -93,6 +97,8 @@ public class AccountsController : ControllerBase
 
         if (!result.Succeeded)
         {
+            _logger.LogWarning("AccountsController.Register: Registration failed because the user '{email}' could not be created by the UserManager", user.Email);
+
             return BadRequest();
         }
 
@@ -100,8 +106,12 @@ public class AccountsController : ControllerBase
 
         if (!roleResult.Succeeded)
         {
+            _logger.LogWarning("AccountsController.Register: Registration failed because the role 'User' could not be added to the user '{email}' by the UserManager", user.Email);
+
             return BadRequest();
         }
+
+        _logger.LogInformation("AccountsController.Register: Registration for user '{email}' was completed successfully", user.Email);
 
         return Ok(
             new RegisterResult
