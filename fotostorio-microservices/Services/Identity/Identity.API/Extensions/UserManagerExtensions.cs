@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Identity.API.Extensions;
 
 public static class UserManagerExtensions
 {
-    /// <summary>
-    ///  Finds an AppUser (and their postal address) from their email address, using Identity.UserManager
-    /// </summary>
-    /// <returns>An AppUser object</returns>
-    public static async Task<AppUser> FindUserByEmailWithAddressAsync(this UserManager<AppUser> userManager, string userEmail)
+    public async static Task<AppUser> FindUserByClaimsPrincipalWithAddressAsync(this UserManager<AppUser> input, ClaimsPrincipal user)
     {
-        return await userManager.Users
-            .Include(u => u.Address)
-            .SingleOrDefaultAsync(u => u.Email == userEmail);
+        var email = user?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
+        return await input.Users
+            .Include(x => x.Address)
+            .SingleOrDefaultAsync(x => x.Email == email);
     }
 }

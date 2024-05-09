@@ -40,6 +40,7 @@ builder.Services.AddDataProtection()
                 .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
 
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserManagerExtensionsWrapper, UserManagerExtensionsWrapper>();
 
 builder.Services.AddHttpContextAccessor();
 

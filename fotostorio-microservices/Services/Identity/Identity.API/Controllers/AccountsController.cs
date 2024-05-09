@@ -14,8 +14,9 @@ public class AccountsController : ControllerBase
     private readonly ILogger _logger;
     private readonly IMapper _mapper;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IUserManagerExtensionsWrapper _userManagerExtensionsWrapper;
 
-    public AccountsController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService, ILogger<AccountsController> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+    public AccountsController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService, ILogger<AccountsController> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor, IUserManagerExtensionsWrapper userManagerExtensionsWrapper)
     {
         _tokenService = tokenService;
         _logger = logger;
@@ -23,6 +24,7 @@ public class AccountsController : ControllerBase
         _httpContextAccessor = httpContextAccessor;
         _signInManager = signInManager;
         _userManager = userManager;
+        _userManagerExtensionsWrapper = userManagerExtensionsWrapper;
     }
 
     /// GET api/accounts/login
@@ -121,16 +123,16 @@ public class AccountsController : ControllerBase
     /// <returns>AddressDTO object</returns>
     //[Authorize]
     [HttpGet("address")]
-    public async Task<ActionResult<AddressDTO>> GetUserAddress()
+    public async Task<ActionResult> GetUserAddress()
     {
         try
         {
-            var userEmail = _httpContextAccessor.HttpContext.GetClaimValueByType("email");
-            var user = await _userManager.FindUserByEmailWithAddressAsync(userEmail);
+            var httpContext = _httpContextAccessor.HttpContext;
+            var user = await _userManagerExtensionsWrapper.FindUserByClaimsPrincipalWithAddressAsync(_userManager, httpContext.User);
 
             if (user == null)
             {
-                return new AddressDTO { };
+                return Ok(new AddressDTO { });
             }
 
             return Ok(_mapper.Map<Address, AddressDTO>(user.Address));
@@ -139,7 +141,7 @@ public class AccountsController : ControllerBase
         {
             _logger.LogError("Error in AccountsController.GetUserAddress: {message}", ex.Message);
 
-            return new AddressDTO { };
+            return Ok(new AddressDTO { });
         }
     }
 
@@ -150,14 +152,12 @@ public class AccountsController : ControllerBase
     /// <returns>AddressDTO object</returns>
     //[Authorize]
     [HttpPut("address")]
-    public async Task<ActionResult<AddressDTO>> UpdateUserAddress(AddressDTO addressDTO)
+    public async Task<ActionResult> UpdateUserAddress(AddressDTO addressDTO)
     {
-        AppUser user = null;
-
         try
         {
-            var userEmail = _httpContextAccessor.HttpContext.GetClaimValueByType("email");
-            user = await _userManager.FindUserByEmailWithAddressAsync(userEmail);
+            var httpContext = _httpContextAccessor.HttpContext;
+            var user = await _userManagerExtensionsWrapper.FindUserByClaimsPrincipalWithAddressAsync(_userManager, httpContext.User);
             user.Address = _mapper.Map<AddressDTO, Address>(addressDTO);
 
             var result = await _userManager.UpdateAsync(user);
@@ -167,13 +167,13 @@ public class AccountsController : ControllerBase
                 return Ok(_mapper.Map<Address, AddressDTO>(user.Address));
             }
 
-            return new AddressDTO { };
+            return Ok(new AddressDTO { });
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error in AccountsController.UpdateUserAddress for user '{userId}': {message}", user.Id, ex.Message);
+            _logger.LogError("Error in AccountsController.UpdateUserAddress : {message}", ex.Message);
 
-            return new AddressDTO { };
+            return Ok(new AddressDTO { });
         }
     }
 
@@ -186,7 +186,7 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<bool>> ValidateToken([FromBody] string token)
+    public async Task<ActionResult> ValidateToken([FromBody] string token)
     {
         var valid = await _tokenService.ValidateJwtToken(token);
 
