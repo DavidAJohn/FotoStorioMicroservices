@@ -73,6 +73,32 @@ public class AccountsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Register(RegisterModel register)
     {
+        if (string.IsNullOrWhiteSpace(register.Password) || string.IsNullOrWhiteSpace(register.ConfirmPassword))
+        {
+            _logger.LogWarning("AccountsController.Register: Registration failed because Password or ConfirmPassword were empty");
+
+            return new BadRequestObjectResult(
+                new RegisterResult
+                {
+                    Successful = false,
+                    Error = "Password fields must be complete and matching"
+                }
+            );
+        }
+
+        if (register.Password != register.ConfirmPassword)
+        {
+            _logger.LogWarning("AccountsController.Register: Registration failed because Password and ConfirmPassword did not match");
+
+            return new BadRequestObjectResult(
+                new RegisterResult
+                {
+                    Successful = false,
+                    Error = "Passwords do not match"
+                }
+            );
+        }
+
         if (await CheckEmailExistsAsync(register.Email))
         {
             _logger.LogWarning("AccountsController.Register: Registration failed because email address '{email}' was already in use", register.Email);
