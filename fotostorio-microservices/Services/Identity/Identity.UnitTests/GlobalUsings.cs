@@ -1,4 +1,11 @@
-﻿global using Xunit;
+﻿global using AutoMapper;
+global using Identity.API.Contracts;
+global using Identity.API.Controllers;
+global using Identity.API.Extensions;
+global using Identity.API.Helpers;
+global using Identity.API.Models;
+global using Xunit;
 global using FluentAssertions;
 global using NSubstitute;
 global using NSubstitute.ReturnsExtensions;
+global using NSubstitute.ExceptionExtensions;
