@@ -126,4 +126,154 @@ public class AccountsControllerTests
         ((LoginResult)result.Value).Successful.Should().BeTrue();
         ((LoginResult)result.Value).Token.Should().Be(test_jwt_token);
     }
+
+    [Fact]
+    public async Task Register_ShouldReturnBadRequest_WhenEmailAddressAlreadyExists()
+    {
+        // Arrange
+        var registerModel = new RegisterModel
+        {
+            DisplayName = "Test User",
+            Email = "test@test.com",
+            Password = "Test1234",
+            ConfirmPassword = "Test1234"
+        };
+
+        _userManager.FindByEmailAsync(Arg.Any<string>()).Returns(_user);
+
+        // Act
+        var result = (BadRequestObjectResult)await _accountsController.Register(registerModel);
+
+        // Assert
+        result.StatusCode.Should().Be(400);
+        result.Value.Should().BeOfType<RegisterResult>();
+        ((RegisterResult)result.Value).Successful.Should().BeFalse();
+        //((RegisterResult)result.Value).Error.Should().Be("The email address is already in use");
+        ((RegisterResult)result.Value).Error.Should().NotBeNullOrWhiteSpace();
+    }
+
+    [Fact]
+    public async Task Register_ShouldReturnBadRequest_WhenUserCouldNotBeCreated()
+    {
+        // Arrange
+        var registerModel = new RegisterModel
+        {
+            DisplayName = "Test User",
+            Email = "test@test.com",
+            Password = "Test1234",
+            ConfirmPassword = "Test1234"
+        };
+
+        _userManager.CreateAsync(Arg.Any<AppUser>(), registerModel.Password)
+            .Returns(IdentityResult.Failed());
+
+        // Act
+        var result = (BadRequestResult)await _accountsController.Register(registerModel);
+
+        // Assert
+        result.StatusCode.Should().Be(400);
+    }
+
+    [Fact]
+    public async Task Register_ShouldReturnBadRequest_WhenRoleCouldNotBeAdded()
+    {
+        // Arrange
+        var registerModel = new RegisterModel
+        {
+            DisplayName = "Test User",
+            Email = "test@test.com",
+            Password = "Test1234",
+            ConfirmPassword = "Test1234"
+        };
+
+        _userManager.CreateAsync(Arg.Any<AppUser>(), registerModel.Password)
+            .Returns(IdentityResult.Success);
+
+        _userManager.AddToRoleAsync(Arg.Any<AppUser>(), "User")
+            .Returns(IdentityResult.Failed());
+
+        // Act
+        var result = (BadRequestResult)await _accountsController.Register(registerModel);
+
+        // Assert
+        result.StatusCode.Should().Be(400);
+    }
+
+    [Fact]
+    public async Task Register_ShouldReturnBadRequest_WhenPasswordIsEmpty()
+    {
+        // Arrange
+        var registerModel = new RegisterModel
+        {
+            DisplayName = "Test User",
+            Email = "test@test.com",
+            Password = "",
+            ConfirmPassword = "Test1234"
+        };
+
+        _userManager.CreateAsync(Arg.Any<AppUser>(), registerModel.Password).Returns(IdentityResult.Failed());
+
+        // Act
+        var result = (BadRequestObjectResult)await _accountsController.Register(registerModel);
+
+        // Assert
+        result.StatusCode.Should().Be(400);
+        result.Value.Should().BeOfType<RegisterResult>();
+        ((RegisterResult)result.Value).Successful.Should().BeFalse();
+        //((RegisterResult)result.Value).Error.Should().Be("Password fields must be complete and matching");
+        ((RegisterResult)result.Value).Error.Should().NotBeNullOrWhiteSpace();
+    }
+
+    [Fact]
+    public async Task Register_ShouldReturnBadRequest_WhenPasswordsDoNotMatch()
+    {
+        // Arrange
+        var registerModel = new RegisterModel
+        {
+            DisplayName = "Test User",
+            Email = "test@test.com",
+            Password = "Test1234",
+            ConfirmPassword = "Test1235"
+        };
+
+        _userManager.CreateAsync(Arg.Any<AppUser>(), registerModel.Password).Returns(IdentityResult.Failed());
+
+        // Act
+        var result = (BadRequestObjectResult)await _accountsController.Register(registerModel);
+
+        // Assert
+        result.StatusCode.Should().Be(400);
+        result.Value.Should().BeOfType<RegisterResult>();
+        ((RegisterResult)result.Value).Successful.Should().BeFalse();
+        //((RegisterResult)result.Value).Error.Should().Be("Passwords do not match");
+        ((RegisterResult)result.Value).Error.Should().NotBeNullOrWhiteSpace();
+    }
+
+    [Fact]
+    public async Task Register_ShouldReturnOk_WhenRegistrationIsSuccessful()
+    {
+        // Arrange
+        var registerModel = new RegisterModel
+        {
+            DisplayName = "Test User",
+            Email = "test@test.com",
+            Password = "Test1234",
+            ConfirmPassword = "Test1234"
+        };
+
+        _userManager.CreateAsync(Arg.Any<AppUser>(), registerModel.Password)
+            .Returns(IdentityResult.Success);
+
+        _userManager.AddToRoleAsync(Arg.Any<AppUser>(), "User")
+            .Returns(IdentityResult.Success);
+
+        // Act
+        var result = (OkObjectResult)await _accountsController.Register(registerModel);
+
+        // Assert
+        result.StatusCode.Should().Be(200);
+        result.Value.Should().BeOfType<RegisterResult>();
+        ((RegisterResult)result.Value).Successful.Should().BeTrue();
+    }
+
 }
