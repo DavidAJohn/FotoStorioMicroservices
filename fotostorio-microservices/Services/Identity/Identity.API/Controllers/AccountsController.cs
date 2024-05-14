@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -157,7 +158,7 @@ public class AccountsController : ControllerBase
     /// Returns the authenticated user's default address
     /// </summary>
     /// <returns>AddressDTO object</returns>
-    //[Authorize]
+    [Authorize]
     [HttpGet("address")]
     public async Task<ActionResult> GetUserAddress()
     {
@@ -168,6 +169,13 @@ public class AccountsController : ControllerBase
 
             if (user == null)
             {
+                return new NotFoundObjectResult(
+                    new AddressDTO { }
+                );
+            }
+
+            if (user.Address == null)
+            {
                 return Ok(new AddressDTO { });
             }
 
@@ -177,7 +185,9 @@ public class AccountsController : ControllerBase
         {
             _logger.LogError("Error in AccountsController.GetUserAddress: {message}", ex.Message);
 
-            return Ok(new AddressDTO { });
+            return new NotFoundObjectResult(
+                new AddressDTO { }
+            );
         }
     }
 
@@ -186,7 +196,7 @@ public class AccountsController : ControllerBase
     /// Updates the authenticated user's default address
     /// </summary>
     /// <returns>AddressDTO object</returns>
-    //[Authorize]
+    [Authorize]
     [HttpPut("address")]
     public async Task<ActionResult> UpdateUserAddress(AddressDTO addressDTO)
     {
