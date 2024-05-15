@@ -584,4 +584,36 @@ public class AccountsControllerTests
         result.Value.Should().BeOfType<AddressDTO>();
         result.Value.Should().BeEquivalentTo(new AddressDTO());
     }
+
+    [Fact]
+    public async Task ValidateToken_ShouldReturnTrue_WhenTokenIsValid()
+    {
+        // Arrange
+        var test_jwt_token = "test";
+
+        _tokenService.ValidateJwtToken(test_jwt_token).Returns(true);
+
+        // Act
+        var result = (OkObjectResult)await _accountsController.ValidateToken(test_jwt_token);
+
+        // Assert
+        result.StatusCode.Should().Be(200);
+        result.Value.Should().BeOfType<bool>();
+        result.Value.As<bool>().Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task ValidateToken_ShouldReturn401Unauthorised_WhenTokenIsInvalid()
+    {
+        // Arrange
+        var test_jwt_token = "test";
+
+        _tokenService.ValidateJwtToken(test_jwt_token).Returns(false);
+
+        // Act
+        var result = (UnauthorizedResult)await _accountsController.ValidateToken(test_jwt_token);
+
+        // Assert
+        result.StatusCode.Should().Be(401);
+    }
 }
