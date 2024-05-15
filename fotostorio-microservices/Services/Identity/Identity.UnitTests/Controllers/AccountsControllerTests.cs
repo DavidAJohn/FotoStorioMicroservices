@@ -431,4 +431,157 @@ public class AccountsControllerTests
         result.Value.Should().BeOfType<AddressDTO>();
         result.Value.Should().BeEquivalentTo(new AddressDTO());
     }
+
+    [Fact]
+    public async Task UpdateUserAddress_ShouldUpdateUserAddress_WhenAddressUpdateIsSuccessful()
+    {
+        // Arrange
+        IHttpContextAccessor httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+        httpContextAccessor.HttpContext = new DefaultHttpContext();
+        httpContextAccessor.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.Email, "test@test.com")
+        }));
+
+        var store = Substitute.For<IUserStore<AppUser>>();
+        var userManager = Substitute.For<UserManager<AppUser>>(store, null, null, null, null, null, null, null, null);
+        var signInManager = Substitute.For<SignInManager<AppUser>>(userManager, httpContextAccessor, Substitute.For<IUserClaimsPrincipalFactory<AppUser>>(), null, null, null, null);
+
+        var sut = new AccountsController(
+            userManager,
+            signInManager,
+            _tokenService,
+            _logger,
+            _mapper,
+            httpContextAccessor,
+            _userManagerExtensionsWrapper
+        );
+
+        var updatedAddressDTO = new AddressDTO
+        {
+            FirstName = "Updated Test",
+            LastName = "User",
+            Street = "Updated Street",
+            SecondLine = "Test Village",
+            City = "Test City",
+            County = "Test County",
+            PostCode = "TE57 1NG"
+        };
+
+        _userManagerExtensionsWrapper
+            .FindUserByClaimsPrincipalWithAddressAsync(userManager, Arg.Any<ClaimsPrincipal>())
+            .Returns(_user);
+
+        userManager.UpdateAsync(_user).Returns(IdentityResult.Success);
+
+        // Act
+        var result = (OkObjectResult)await sut.UpdateUserAddress(updatedAddressDTO);
+
+        // Assert
+        result.StatusCode.Should().Be(200);
+        result.Value.Should().BeOfType<AddressDTO>();
+        result.Value.Should().BeEquivalentTo(updatedAddressDTO);
+    }
+
+    [Fact]
+    public async Task UpdateUserAddress_ShouldUpdateUserAddress_WhenAddressUpdateIsNotSuccessful()
+    {
+        // Arrange
+        IHttpContextAccessor httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+        httpContextAccessor.HttpContext = new DefaultHttpContext();
+        httpContextAccessor.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.Email, "test@test.com")
+        }));
+
+        var store = Substitute.For<IUserStore<AppUser>>();
+        var userManager = Substitute.For<UserManager<AppUser>>(store, null, null, null, null, null, null, null, null);
+        var signInManager = Substitute.For<SignInManager<AppUser>>(userManager, httpContextAccessor, Substitute.For<IUserClaimsPrincipalFactory<AppUser>>(), null, null, null, null);
+
+        var sut = new AccountsController(
+            userManager,
+            signInManager,
+            _tokenService,
+            _logger,
+            _mapper,
+            httpContextAccessor,
+            _userManagerExtensionsWrapper
+        );
+
+        var updatedAddressDTO = new AddressDTO
+        {
+            FirstName = "Updated Test",
+            LastName = "User",
+            Street = "Updated Street",
+            SecondLine = "Test Village",
+            City = "Test City",
+            County = "Test County",
+            PostCode = "TE57 1NG"
+        };
+
+        _userManagerExtensionsWrapper
+            .FindUserByClaimsPrincipalWithAddressAsync(userManager, Arg.Any<ClaimsPrincipal>())
+            .Returns(_user);
+
+        userManager.UpdateAsync(_user).Returns(IdentityResult.Failed(Array.Empty<IdentityError>()));
+
+        // Act
+        var result = (OkObjectResult)await sut.UpdateUserAddress(updatedAddressDTO);
+
+        // Assert
+        result.StatusCode.Should().Be(200);
+        result.Value.Should().BeOfType<AddressDTO>();
+        result.Value.Should().BeEquivalentTo(new AddressDTO());
+    }
+
+    [Fact]
+    public async Task UpdateUserAddress_ShouldReturnEmptyAddressDTO_WhenExceptionIsThrown()
+    {
+        // Arrange
+        IHttpContextAccessor httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+        httpContextAccessor.HttpContext = new DefaultHttpContext();
+        httpContextAccessor.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.Email, "test@test.com")
+        }));
+
+        var store = Substitute.For<IUserStore<AppUser>>();
+        var userManager = Substitute.For<UserManager<AppUser>>(store, null, null, null, null, null, null, null, null);
+        var signInManager = Substitute.For<SignInManager<AppUser>>(userManager, httpContextAccessor, Substitute.For<IUserClaimsPrincipalFactory<AppUser>>(), null, null, null, null);
+
+        var sut = new AccountsController(
+            userManager,
+            signInManager,
+            _tokenService,
+            _logger,
+            _mapper,
+            httpContextAccessor,
+            _userManagerExtensionsWrapper
+        );
+
+        var updatedAddressDTO = new AddressDTO
+        {
+            FirstName = "Updated Test",
+            LastName = "User",
+            Street = "Updated Street",
+            SecondLine = "Test Village",
+            City = "Test City",
+            County = "Test County",
+            PostCode = "TE57 1NG"
+        };
+
+        _userManagerExtensionsWrapper
+            .FindUserByClaimsPrincipalWithAddressAsync(userManager, Arg.Any<ClaimsPrincipal>())
+            .ThrowsAsync(new Exception("Simulated exception"));
+
+        userManager.UpdateAsync(_user).Returns(IdentityResult.Success);
+
+        // Act
+        var result = (OkObjectResult)await sut.UpdateUserAddress(updatedAddressDTO);
+
+        // Assert
+        result.StatusCode.Should().Be(200);
+        result.Value.Should().BeOfType<AddressDTO>();
+        result.Value.Should().BeEquivalentTo(new AddressDTO());
+    }
 }
