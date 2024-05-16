@@ -1734,6 +1734,25 @@
 									"response": []
 								},
 								{
+									"name": "Get Current and Future Discounts",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{marketing_gtw_url}}/Marketing/Discounts/CurrentFuture",
+											"host": [
+												"{{marketing_gtw_url}}"
+											],
+											"path": [
+												"Marketing",
+												"Discounts",
+												"CurrentFuture"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "Get Discount by Sku",
 									"request": {
 										"method": "GET",
@@ -2042,14 +2061,14 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{marketing_gtw_url}}/Marketing/Catalog/3",
+											"raw": "{{marketing_gtw_url}}/Marketing/Catalog/6",
 											"host": [
 												"{{marketing_gtw_url}}"
 											],
 											"path": [
 												"Marketing",
 												"Catalog",
-												"3"
+												"6"
 											]
 										}
 									},
@@ -3465,6 +3484,21 @@
 				},
 				{
 					"name": "Check if token is valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Returns True\"), function() {\r",
+									"    pm.expect(res).to.equl(true);\r",
+									"};"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -3499,12 +3533,20 @@
 					"response": []
 				},
 				{
-					"name": "Check if email exists",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "Check token (empty body - expect 400 Bad Request)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -3523,20 +3565,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{identity_url}}/api/accounts/emailExists?email=dave@test.com",
+							"raw": "{{identity_url}}/api/accounts/token",
 							"host": [
 								"{{identity_url}}"
 							],
 							"path": [
 								"api",
 								"accounts",
-								"emailExists"
-							],
-							"query": [
-								{
-									"key": "email",
-									"value": "dave@test.com"
-								}
+								"token"
 							]
 						}
 					},
