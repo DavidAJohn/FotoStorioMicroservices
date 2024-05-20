@@ -248,12 +248,35 @@ public class OrdersControllerTests : ControllerBase
     }
 
     [Fact]
-    public async Task GetOrdersForUser_ShouldReturnNotFound_WhenNoOrdersExist()
+    public async Task GetOrdersForUser_ShouldReturnEmptyListOfOrderDetailsDTOs_WhenNoOrdersExist()
     {
         //Arrange
         _orderRepository
             .GetOrdersForUserAsync(Arg.Any<string>(), Arg.Any<string>())
             .ReturnsNull();
+
+        var mapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<Order, OrderDetailsDTO>());
+        var mapper = mapperConfig.CreateMapper();
+
+        //Act
+        var sut = new OrdersController(_logger, _orderRepository, mapper, _httpContextAccessor, _httpContextService);
+        var result = (OkObjectResult)await sut.GetOrdersForUser();
+
+        //Assert
+        result.StatusCode.Should().Be(200);
+        result.Value.Should().BeOfType<List<OrderDetailsDTO>>();
+        (result.Value as List<OrderDetailsDTO>).Count.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task GetOrdersForUser_ShouldReturnNotFound_WhenJwtIsNull()
+    {
+        //Arrange
+        _orderRepository
+            .GetOrdersForUserAsync(Arg.Any<string>(), Arg.Any<string>())
+            .ReturnsNull();
+
+        _httpContextService.GetJwtFromContext(Arg.Any<HttpContext>()).ReturnsNull();
 
         var mapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<Order, OrderDetailsDTO>());
         var mapper = mapperConfig.CreateMapper();
@@ -294,12 +317,35 @@ public class OrdersControllerTests : ControllerBase
     }
 
     [Fact]
-    public async Task GetLatestOrders_ShouldReturnNotFound_WhenNoOrdersExist()
+    public async Task GetLatestOrders_ShouldReturnEmptyListOfOrderDetailsDTO_WhenNoOrdersExist()
     {
         //Arrange
         _orderRepository
             .GetLatestOrdersAsync(Arg.Any<string>(), Arg.Any<int>())
             .ReturnsNull();
+
+        var mapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<Order, OrderDetailsDTO>());
+        var mapper = mapperConfig.CreateMapper();
+
+        //Act
+        var sut = new OrdersController(_logger, _orderRepository, mapper, _httpContextAccessor, _httpContextService);
+        var result = (OkObjectResult)await sut.GetLatestOrders(int.MinValue);
+
+        //Assert
+        result.StatusCode.Should().Be(200);
+        result.Value.Should().BeOfType<List<OrderDetailsDTO>>();
+        (result.Value as List<OrderDetailsDTO>).Count.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task GetLatestOrders_ShouldReturnNotFound_WhenJwtIsNull()
+    {
+        //Arrange
+        _orderRepository
+            .GetLatestOrdersAsync(Arg.Any<string>(), Arg.Any<int>())
+            .ReturnsNull();
+
+        _httpContextService.GetJwtFromContext(Arg.Any<HttpContext>()).ReturnsNull();
 
         var mapperConfig = new MapperConfiguration(cfg => cfg.CreateMap<Order, OrderDetailsDTO>());
         var mapper = mapperConfig.CreateMapper();

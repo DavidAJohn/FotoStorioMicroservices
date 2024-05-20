@@ -115,7 +115,7 @@ public class OrderRepository : IOrderRepository
             .Include(o => o.Items)
             .ToListAsync();
 
-        if (orders == null) return null;
+        if (orders.Count == 0) return null;
 
         return orders;
     }
@@ -134,7 +134,7 @@ public class OrderRepository : IOrderRepository
             .Include(o => o.Items)
             .ToListAsync();
 
-        if (orders == null) return null;
+        if (orders.Count == 0) return null;
 
         return orders;
     }

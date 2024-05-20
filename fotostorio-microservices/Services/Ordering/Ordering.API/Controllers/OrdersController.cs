@@ -117,15 +117,18 @@ public class OrdersController : ControllerBase
     public async Task<IActionResult> GetOrdersForUser()
     {
         var token = _contextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
+        if (token == null) { return NotFound(); }
+
         var email = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "email");
 
         var orders = await _orderRepository.GetOrdersForUserAsync(token, email);
+        _logger.LogInformation("Request for previous orders for: {email}", email);
 
         if (orders == null)
         {
-            _logger.LogError("Orders for user: {email}, not found", email);
+            _logger.LogInformation("No orders found for user: {email}", email);
 
-            return NotFound();
+            return Ok(new List<OrderDetailsDTO>() { });
         }
         else
         {
@@ -144,15 +147,18 @@ public class OrdersController : ControllerBase
     public async Task<IActionResult> GetLatestOrders(int days)
     {
         var token = _contextService.GetJwtFromContext(_httpContextAccessor.HttpContext);
+        if (token == null) { return NotFound(); }
+
         var email = _contextService.GetClaimValueByType(_httpContextAccessor.HttpContext, "email");
 
         var orders = await _orderRepository.GetLatestOrdersAsync(token, days);
+        _logger.LogInformation("Request for latest orders made by: {email}", email);
 
         if (orders == null)
         {
-            _logger.LogError("Orders for user: {email}, not found", email);
+            _logger.LogInformation("Request for orders in the last {numOfDays} days - returned null", days);
 
-            return NotFound();
+            return Ok(new List<OrderDetailsDTO>(){});
         }
         else
         {
