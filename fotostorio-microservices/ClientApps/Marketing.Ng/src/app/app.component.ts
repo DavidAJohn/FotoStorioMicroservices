@@ -10,4 +10,5 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'FotoStorio Marketing';
+  currentYear = new Date().getFullYear();
 }
