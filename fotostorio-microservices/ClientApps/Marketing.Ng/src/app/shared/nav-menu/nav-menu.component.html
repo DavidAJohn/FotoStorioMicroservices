@@ -1,0 +1,40 @@
+<nav class="bg-blue-900 hidden md:block">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-center h-16">
+
+            @if (navMenuItems != null)
+            {
+                <div>
+                    <div class="text-white text-sm">
+                        <a routerLink="/" class="hover:text-white px-3 py-2 my-2 mr-4 rounded-md uppercase font-bold">
+                            <!-- heroicon: home (solid) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform hover:scale-110" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="mx-2 text-white">|</div>
+
+                @for (navItem of navMenuItems; track navItem.id)
+                {
+                    <div class="nav-menu-item">
+                        <div class="text-white text-sm">
+                            <a routerLink="{{navItem.url}}" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">{{navItem.displayName}}</a>
+                        </div>
+                    </div>
+                    <div class="mx-2 text-white">|</div>
+                }
+
+                <div>
+                    <div class="text-white text-sm">
+                        <a routerLink="/" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">
+                            Additional Link
+                        </a>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</nav>
