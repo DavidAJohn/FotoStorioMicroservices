@@ -14,4 +14,12 @@ import { MobileMenuComponent } from '@shared/mobile-menu/mobile-menu.component';
 })
 export class AppComponent {
   title = 'FotoStorio Marketing';
+
+  hideMobileMenu = true;
+  mobMenuClass = 'hidden';
+
+  toggleMobileMenu(): void {
+    this.hideMobileMenu = !this.hideMobileMenu;
+    this.mobMenuClass = this.hideMobileMenu ? 'hidden' : '';
+  }
 }
