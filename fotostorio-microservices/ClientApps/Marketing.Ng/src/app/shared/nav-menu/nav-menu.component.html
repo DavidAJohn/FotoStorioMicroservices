@@ -1,7 +1,6 @@
 <nav class="bg-blue-900 hidden md:block">
     <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div class="flex items-center justify-center h-16">
-
             @if (navMenuItems != null)
             {
                 <div>
@@ -20,21 +19,17 @@
                 {
                     <div class="nav-menu-item">
                         <div class="text-white text-sm">
-                            <a routerLink="{{navItem.url}}" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">{{navItem.displayName}}</a>
+                            <a routerLink="{{navItem.url}}" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">
+                                {{navItem.displayName}}
+                            </a>
                         </div>
                     </div>
-                    <div class="mx-2 text-white">|</div>
+                    @if (!$last)
+                    {
+                        <div class="mx-2 text-white">|</div>
+                    }
                 }
-
-                <div>
-                    <div class="text-white text-sm">
-                        <a routerLink="/" class="hover:bg-fotoblue hover:text-white px-3 py-2 my-2 rounded-md uppercase font-bold">
-                            Additional Link
-                        </a>
-                    </div>
-                </div>
             }
-
         </div>
     </div>
 </nav>

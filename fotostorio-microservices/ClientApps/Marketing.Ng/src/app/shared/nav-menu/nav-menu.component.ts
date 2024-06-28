@@ -14,5 +14,6 @@ export class NavMenuComponent {
   navMenuItems: NavMenuItem[] = [
     { id: 1, displayName: "Home", url: "/" },
     { id: 2, displayName: "Test", url: "/test" },
+    { id: 3, displayName: "Additional Link", url: "/link" },
   ];
 }
