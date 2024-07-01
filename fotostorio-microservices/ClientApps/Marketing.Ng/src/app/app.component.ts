@@ -4,13 +4,14 @@ import { RouterOutlet } from '@angular/router';
 import { FooterComponent } from "@shared/footer/footer.component";
 import { NavMenuComponent } from "@shared/nav-menu/nav-menu.component";
 import { MobileMenuComponent } from '@shared/mobile-menu/mobile-menu.component';
+import { LoginDisplayComponent } from "@shared/login-display/login-display.component";
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
     standalone: true,
-    imports: [RouterOutlet, FooterComponent, NavMenuComponent, MobileMenuComponent]
+    imports: [RouterOutlet, FooterComponent, NavMenuComponent, MobileMenuComponent, LoginDisplayComponent]
 })
 export class AppComponent {
   title = 'FotoStorio Marketing';
