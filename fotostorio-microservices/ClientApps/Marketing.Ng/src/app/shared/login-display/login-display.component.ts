@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { AuthenticationService } from '@app/_services'
+import { User } from '@app/_models';
+
 @Component({
   selector: 'app-login-display',
   standalone: true,
@@ -9,5 +12,13 @@ import { RouterLink } from '@angular/router';
   styleUrl: './login-display.component.css'
 })
 export class LoginDisplayComponent {
-  displayName = 'Marketing Admin';
+  user?: User | null;
+
+  constructor(private authenticationService: AuthenticationService) {
+    this.authenticationService.user.subscribe(x => this.user = x);
+  }
+
+  logout() {
+    this.authenticationService.logout();
+  }
 }

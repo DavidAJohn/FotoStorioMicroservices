@@ -1,21 +1,19 @@
 <div>
     <div>
         <div class="md:mr-4">
-            @if (displayName != "")
+            @if (user)
             {
                 <span class="hidden sm:inline text-gray-50 text-sm font-medium md:mr-2">Logged in as:</span>
-                <span class="hidden sm:inline text-gray-300 text-sm font-medium md:mr-6">{{displayName}}</span>
+                <span class="hidden sm:inline text-gray-300 text-sm font-medium md:mr-6">{{user.emailAddress}}</span>
+                <button (click)="logout()" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                    Log out
+                </button>
             }
-            <a routerLink="logout" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                Log out
-            </a>
+            @else {
+                <a routerLink="account/login" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                    Log In
+                </a>
+            }
         </div>
     </div>
-    <!-- <NotAuthorized>
-        <div class="md:mr-4">
-            <a routerLink="login" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                Log In
-            </a>
-        </div>
-    </NotAuthorized> -->
 </div>
