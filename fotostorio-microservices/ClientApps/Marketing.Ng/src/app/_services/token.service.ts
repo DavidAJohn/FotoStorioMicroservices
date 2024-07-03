@@ -42,4 +42,10 @@ export class TokenService {
 
     return decodedToken.given_name;
   }
+
+  public getRole(token: string) {
+    const decodedToken = this.decodeToken(token);
+
+    return decodedToken.role;
+  }
 }
