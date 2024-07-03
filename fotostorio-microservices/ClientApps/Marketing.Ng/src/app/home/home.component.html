@@ -1,1 +1,62 @@
-<p>home works!</p>
+<div class="text-3xl mb-24 mt-8 font-bold text-center">
+    <span class="text-blue-800">FotoStorio</span> Marketing Dashboard
+</div>
+
+<div class="my-10 grid gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 xl:gap-14">
+
+    <div class="mx-auto w-80">
+        <img src="https://i.ibb.co/0Kcr8qN/fotostorio-admin-website.jpg" class="w-full h-56 opacity-90 object-cover object-top shadow-md rounded-md">
+        <div class="relative px-4 -mt-16 text-center">
+            <div class="bg-white p-4 rounded-lg shadow-lg">
+                <h4 class="mt-1 text-xl font-semibold uppercase leading-tight truncate">Discounts</h4>
+                <div class="mt-4">
+                    <span class="text-teal-600 text-lg font-semibold">{{discountsMessage}}</span>
+                </div>
+                <div class="my-4">
+                    <span class="text-sm text-gray-600">
+                        For full details, see the <a href="/discounts" class="text-blue-800">Discounts</a> page
+                    </span>
+                </div>  
+            </div>
+        </div>
+    </div>
+
+    <div class="mx-auto w-80">
+        <img src="https://i.ibb.co/frjVScs/fotostorio-marketing-campaigns.jpg" class="w-full h-56 opacity-90 object-cover object-center shadow-md rounded-md">
+        <div class="relative px-4 -mt-16 text-center">
+            <div class="bg-white p-4 rounded-lg shadow-lg">
+                <h4 class="mt-1 text-xl font-semibold uppercase leading-tight truncate">Campaigns</h4>
+                <div class="mt-4">
+                    <span class="text-teal-600 text-lg font-semibold">{{campaignsMessage}}</span>
+                </div>
+                <div class="my-4">
+                    <span class="text-sm text-gray-600">
+                        For full details, see the <a href="/campaigns" class="text-blue-800">Campaigns</a> page
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mx-auto w-80">
+        <img src="https://i.ibb.co/9cx8D52/fotostorio-admin-orders.jpg" class="w-full h-56 opacity-90 object-cover object-center shadow-md rounded-md">
+        <div class="relative px-4 -mt-16 text-center">
+            <div class="bg-white p-4 rounded-lg shadow-lg">
+                <h4 class="mt-1 text-xl font-semibold uppercase leading-tight truncate">Recent Orders</h4>
+                <div class="mt-4">
+                    <span class="text-teal-600 text-lg font-semibold">{{ordersMessage}}</span>
+                </div>
+                <div class="my-4">
+                    <span class="text-sm text-gray-600">
+                        For full details, see the <a href="/orders" class="text-blue-800">Orders</a> page
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="text-xl mt-24 mb-8 font-semibold text-center">
+    There are currently <span class="text-teal-600">{{productCountToDisplay}}</span> products listed in the store
+</div>

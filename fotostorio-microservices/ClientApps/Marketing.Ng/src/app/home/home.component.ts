@@ -8,5 +8,8 @@ import { Component } from '@angular/core';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-
+  discountsMessage = '2 products discounted';
+  campaignsMessage = '1 active campaign';
+  ordersMessage = '4 recent orders';
+  productCountToDisplay = 24;
 }
