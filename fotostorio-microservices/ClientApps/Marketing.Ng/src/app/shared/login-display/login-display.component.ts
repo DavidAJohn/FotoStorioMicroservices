@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { AuthenticationService } from '@app/_services'
+import { AuthenticationService, TokenService } from '@app/_services'
 import { User } from '@app/_models';
 
 @Component({
@@ -14,8 +14,13 @@ import { User } from '@app/_models';
 export class LoginDisplayComponent {
   user?: User | null;
 
-  constructor(private authenticationService: AuthenticationService) {
-    this.authenticationService.user.subscribe(x => this.user = x);
+  constructor(private authenticationService: AuthenticationService, private tokenService: TokenService) {
+    this.authenticationService.user.subscribe(x => {
+      this.user = x;
+      if (this.user && this.user.token) {
+        this.user.displayName = this.tokenService.getDisplayName(this.user.token);
+      }
+    });
   }
 
   logout() {

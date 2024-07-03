@@ -4,7 +4,14 @@
             @if (user)
             {
                 <span class="hidden sm:inline text-gray-50 text-sm font-medium md:mr-2">Logged in as:</span>
-                <span class="hidden sm:inline text-gray-300 text-sm font-medium md:mr-6">{{user.emailAddress}}</span>
+                <span class="hidden sm:inline text-gray-300 text-sm font-medium md:mr-6">
+                    @if (user.displayName) {
+                        {{user.displayName}}
+                    }
+                    @else {
+                        {{user.emailAddress}}
+                    }
+                </span>
                 <button (click)="logout()" class="text-gray-300 hover:bg-blue-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                     Log out
                 </button>
