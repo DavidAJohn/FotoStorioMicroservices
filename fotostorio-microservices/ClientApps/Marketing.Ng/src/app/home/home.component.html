@@ -57,6 +57,8 @@
 
 </div>
 
-<div class="text-xl mt-24 mb-8 font-semibold text-center">
-    There are currently <span class="text-teal-600">{{productCountToDisplay}}</span> products listed in the store
-</div>
+@if (productCountToDisplay >= 0) {
+    <div class="text-xl mt-24 mb-8 font-semibold text-center">
+        There are currently <span class="text-teal-600">{{productCountToDisplay}}</span> products listed in the store
+    </div>
+}

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Discount, Campaign } from '@app/_models';
-import { DiscountService, CampaignService } from '@app/_services/';
+import { DiscountService, CampaignService, ProductService } from '@app/_services/';
 
 @Component({
   selector: 'app-home',
@@ -14,12 +14,12 @@ export class HomeComponent {
   discountsMessage = 'Unknown';
   campaignsMessage = 'Unknown';
   ordersMessage = '4 recent orders';
-  productCountToDisplay = 24;
+  productCountToDisplay = -1;
 
   currentDiscounts: Discount[] = [];
   currentCampaigns: Campaign[] = [];
 
-  constructor(private discountService: DiscountService, private campaignService: CampaignService) { 
+  constructor(private discountService: DiscountService, private campaignService: CampaignService, private productService: ProductService) { 
     this.discountService.getCurrentDiscounts()
       .subscribe({
         next: discounts => {
@@ -31,7 +31,7 @@ export class HomeComponent {
         }
       });
 
-      this.campaignService.getCurrentCampaigns()
+    this.campaignService.getCurrentCampaigns()
       .subscribe({
         next: campaigns => {
           this.currentCampaigns = campaigns;
@@ -39,6 +39,23 @@ export class HomeComponent {
         },
         error: error => {
           console.error('Error receiving campaigns: ', error);
+        }
+      });
+
+    this.productService.getProductCount()
+      .subscribe({
+        next: response => {
+          let paginationHeaders = response.headers.get('Pagination');
+
+          if (paginationHeaders) {
+            let pagination = JSON.parse(paginationHeaders);
+            this.productCountToDisplay = pagination.TotalCount ?? -1;
+          } else {
+            console.log('No pagination headers found.');
+          }
+        },
+        error: error => {
+          console.error('Error receiving product count: ', error);
         }
       });
   }
