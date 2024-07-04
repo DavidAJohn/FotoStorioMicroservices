@@ -7,7 +7,8 @@ import { routes } from './app.routes';
 import { errorInterceptor } from './_helpers/error.interceptor';
 
 export function tokenGetter() {
-  return localStorage.getItem("user");
+  let user = JSON.parse(localStorage.getItem("user") || "{}");
+  return user.token;
 }
 
 export const appConfig: ApplicationConfig = {
@@ -17,7 +18,7 @@ export const appConfig: ApplicationConfig = {
       JwtModule.forRoot({
           config: {
               tokenGetter: tokenGetter,
-              allowedDomains: ["localhost:4200"],
+              allowedDomains: ["localhost:4200", "localhost:8011"],
               disallowedRoutes: ["http://localhost:4200/api/accounts/login"],
           },
       }),
