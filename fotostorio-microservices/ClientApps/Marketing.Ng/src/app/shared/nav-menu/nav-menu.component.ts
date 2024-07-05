@@ -12,8 +12,8 @@ import { NavMenuItem } from '@models/NavMenuItem';
 })
 export class NavMenuComponent {
   navMenuItems: NavMenuItem[] = [
-    { id: 1, displayName: "Home", url: "/" },
-    { id: 2, displayName: "Test", url: "/test" },
-    { id: 3, displayName: "Additional Link", url: "/link" },
+    { id: 1, displayName: "Discounts", url: "/discounts" },
+    { id: 2, displayName: "Campaigns", url: "/campaigns" },
+    { id: 3, displayName: "Orders", url: "/orders" },
   ];
 }
