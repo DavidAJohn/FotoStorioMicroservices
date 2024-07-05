@@ -3,3 +3,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn-fotofuchsia {
+    @apply p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm hover:opacity-90;
+}
+
+.btn-fotoblue {
+    @apply p-2 my-3 bg-fotoblue text-white rounded-sm text-sm hover:opacity-90;
+}
+
+.alert-box {
+    @apply bg-red-100 border-solid border border-red-700 text-red-700 font-semibold my-8 py-2 rounded-sm relative w-full;
+}
