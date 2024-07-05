@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Discount, Campaign } from '@app/_models';
-import { DiscountService, CampaignService, ProductService } from '@app/_services/';
+import { DiscountService, CampaignService, ProductService, OrderService } from '@app/_services/';
 
 @Component({
   selector: 'app-home',
@@ -13,13 +13,17 @@ import { DiscountService, CampaignService, ProductService } from '@app/_services
 export class HomeComponent {
   discountsMessage = 'Unknown';
   campaignsMessage = 'Unknown';
-  ordersMessage = '4 recent orders';
+  ordersMessage = 'Unknown';
   productCountToDisplay = -1;
 
   currentDiscounts: Discount[] = [];
   currentCampaigns: Campaign[] = [];
 
-  constructor(private discountService: DiscountService, private campaignService: CampaignService, private productService: ProductService) { 
+  constructor(private discountService: DiscountService, 
+    private campaignService: CampaignService, 
+    private productService: ProductService,
+    private orderService: OrderService) {
+
     this.discountService.getCurrentDiscounts()
       .subscribe({
         next: discounts => {
@@ -58,6 +62,23 @@ export class HomeComponent {
           console.error('Error receiving product count: ', error);
         }
       });
+
+    this.orderService.getOrderCount()
+      .subscribe({
+        next: orders => {
+          if (orders.body) {
+            //console.log('Received orders: ', orders);
+            this.setOrdersMessage(orders.body.length);
+          } else {
+            //console.log('No orders found');
+            this.ordersMessage = '0 recent orders';
+          }
+        },
+        error: error => {
+          this.ordersMessage = 'Error retrieving orders';
+          console.error('Error receiving orders: ', error);
+        }
+      });
   }
 
   setDiscountsMessage() {
@@ -66,5 +87,9 @@ export class HomeComponent {
 
   setCampaignsMessage() {
     this.campaignsMessage = `${this.currentCampaigns.length} active ${this.currentCampaigns.length == 1 ? 'campaign' : 'campaigns'}`;
+  }
+
+  setOrdersMessage(orderCount: number) {
+    this.ordersMessage = `${orderCount} recent order${orderCount == 1 ? '' : 's'}`;
   }
 }
