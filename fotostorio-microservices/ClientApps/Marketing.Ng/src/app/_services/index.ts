@@ -3,3 +3,4 @@ export * from './token.service';
 export * from './discount.service';
 export * from './campaign.service';
 export * from './product.service';
+export * from './order.service';
