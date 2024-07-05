@@ -66,11 +66,9 @@ export class HomeComponent {
     this.orderService.getOrderCount()
       .subscribe({
         next: orders => {
-          if (orders.body) {
-            //console.log('Received orders: ', orders);
-            this.setOrdersMessage(orders.body.length);
+          if (orders) {
+            this.setOrdersMessage(orders.length);
           } else {
-            //console.log('No orders found');
             this.ordersMessage = '0 recent orders';
           }
         },
