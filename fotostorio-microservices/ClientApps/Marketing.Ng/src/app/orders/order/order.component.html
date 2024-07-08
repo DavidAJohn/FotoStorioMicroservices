@@ -1,0 +1,72 @@
+<div class="h-screen">
+    <div class="px-0 lg:container lg:max-w-7xl md:mt-4">
+        <div class="w-full px-12 pt-4 pb-8 rounded-md shadow-md bg-white focus:outline-none z-10">
+            @if (errorMessage != "")
+            {
+                <div class="mx-2 animate-pulse">
+                    <div class="alert-box text-center" role="alert">
+                        <span class="block sm:inline">{{errorMessage}}</span>
+                    </div>
+                </div>
+            } @else if (order && orderItems) {
+                <div class="text-xl text-center lg:text-2xl font-bold mb-4">
+                    <h3>Order Details for #{{order.id}}</h3>
+                </div>
+                <div class="flex flex-col md:flex-row justify-center align-top w-full px-4 py-2 mb-2">
+                    <div class="w-full md:w-1/2">
+                        <div class="px-4 font-bold text-base lg:text-lg place-content-center md:text-right">Order Date: {{order.orderDate | date: 'dd/MM/yyyy HH:mm'}}</div>
+                    </div>
+                    <div class="w-full md:w-1/2 flex flex-row items-center">
+                        <div class="px-4 font-bold text-base lg:text-lg place-content-center md:text-left">Status: {{order.status}}</div>
+                        @if (order.status == "Payment Received")
+                        {
+                            <div class="text-green-600 -ml-3">
+                                <!-- heroicons: check-circle (solid) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        }
+                        @if (order.status == "Payment Failed")
+                        {
+                            <div class="text-red-600 -ml-3">
+                                <!-- heroicons: exclamation-circle (solid) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row justify-center align-top w-full p-4 bg-gray-50 rounded-md">
+                    <div class="w-full md:w-1/2">
+                        <div class="px-4 font-bold text-lg lg:text-right text-fotoblue">Items Ordered</div>
+                        <div class="p-4 text-right">
+                            @for (item of orderItems; track item.id)
+                            {
+                                <div class="font-semibold text-base flex items-center justify-end">
+                                    <div class="hidden md:inline-block w-12 h-auto mr-2"><img src="{{item.product.imageUrl}}" /></div>
+                                    <div class="inline-block flex-shrink-0">{{item.quantity}} &nbsp;x&nbsp; {{item.product.name}}</div>
+                                    <div class="hidden lg:block ml-2 font-bold"> = £{{item.quantity * item.product.price}}</div>
+                                </div>
+                            }
+                        </div>
+                        <div class="-mt-1.5 md:mt-1.5 px-4 text-right text-base font-semibold">
+                            Order Total:&nbsp; <span class="inline font-bold">£{{order.total}}</span>
+                        </div>
+                    </div>
+                </div>
+            } 
+            @else {
+                <div class="p-4 text-center font-semibold">
+                    This order could not be found
+                </div>
+            }
+        </div>
+    </div>
+    <div class="mt-8 flex justify-center">
+        <button class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm hover:opacity-90 fotofuchsia-ripple">
+            <a routerLink="/orders" class="hover:text-white">Go Back</a>
+        </button>
+    </div>
+</div>
