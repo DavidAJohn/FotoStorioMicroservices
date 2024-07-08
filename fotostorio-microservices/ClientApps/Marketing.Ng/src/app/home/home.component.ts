@@ -63,7 +63,7 @@ export class HomeComponent {
         }
       });
 
-    this.orderService.getOrderCount()
+    this.orderService.getRecentOrders()
       .subscribe({
         next: orders => {
           if (orders) {
