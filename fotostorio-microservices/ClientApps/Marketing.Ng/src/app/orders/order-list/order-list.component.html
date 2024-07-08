@@ -1,0 +1,61 @@
+<div class="h-screen">
+    <div class="px-0 md:container md:max-w-7xl md:mt-8">
+        <div class="w-full p-4 rounded-md shadow-md bg-white focus:outline-none z-10">
+            <div class="text-lg text-center md:text-xl lg:text-2xl font-bold mb-8">
+                Recent Orders
+            </div>
+            @if (errorMessage !== "") {
+                <div class="mx-2 animate-pulse">
+                    <div class="alert-box text-center" role="alert">
+                        <span class="block sm:inline">{{errorMessage}}</span>
+                    </div>
+                </div>
+            }
+            @else {
+                @if (orders)
+                {
+                    <div class="p-2 md:p-4 text-center w-auto text-sm lg:text-base">
+                        <div class="flex flex-row mb-2 font-bold uppercase">
+                            <div class="px-1 w-0 hidden md:block md:w-1/5 md:px-2">Order #</div>
+                            <div class="px-1 w-1/3 md:w-1/5 md:px-2">Date</div>
+                            <div class="px-1 w-1/3 text-right md:w-1/5 md:px-2 sm:text-center">Total</div>
+                            <div class="px-1 w-0 hidden md:block md:w-1/5 md:px-2">Status</div>
+                            <div class="px-1 w-1/3 md:w-1/5 md:px-2">&nbsp;</div>
+                        </div>
+                        <div class="font-normal">
+                            @for (order of orders; track order.id)
+                            {
+                                <div class="flex flex-row items-center -mb-3">
+                                    <div class="px-1 w-0 hidden md:block md:w-1/5 md:px-2">{{order.id}}</div>
+                                    <div class="px-1 w-1/3 md:w-1/5 md:px-2">{{order.orderDate | date: 'dd/MM/yyyy HH:mm'}}</div>
+                                    <div class="px-1 w-1/3 text-right md:w-1/5 md:px-2 sm:text-center">£{{order.total}}</div>
+                                    <div class="px-1 w-0 hidden md:block md:w-1/5 md:px-2">{{order.status}}</div>
+                                    <div class="px-1 w-1/3 md:w-1/5 md:px-2">
+                                        <button type="button" class="hidden lg:block btn-fotofuchsia fotofuchsia-ripple" routerLink="/order/{{order.id}}">View Order</button>
+                                        <button type="button" class="lg:hidden btn-fotofuchsia fotofuchsia-ripple" routerLink="/order/{{order.id}}">View</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    
+                }
+                @else {
+                    <div class="p-4 text-center">
+                        No previous orders found
+                    </div>
+                    <div class="mt-4 text-center">
+                        <Button routerLink="/">
+                            Back to Home page
+                        </Button>
+                    </div>
+                }
+            }
+        </div>
+        <div class="mt-8 flex justify-center">
+            <button class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm hover:opacity-90 fotofuchsia-ripple">
+                <a routerLink="/" class="hover:text-white">Go Back</a>
+            </button>
+        </div>
+    </div>
+</div>
