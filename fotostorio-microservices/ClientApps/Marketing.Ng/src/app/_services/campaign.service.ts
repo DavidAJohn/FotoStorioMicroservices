@@ -14,4 +14,8 @@ export class CampaignService {
   getCurrentCampaigns() {
     return this.http.get<Campaign[]>(`${environment.marketingGatewayUrl}/marketing/campaigns/current`)
   }
+
+  getAllCampaigns() {
+    return this.http.get<Campaign[]>(`${environment.marketingGatewayUrl}/marketing/campaigns`)
+  }
 }
