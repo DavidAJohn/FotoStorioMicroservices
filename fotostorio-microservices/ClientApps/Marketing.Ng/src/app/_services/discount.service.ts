@@ -19,4 +19,8 @@ export class DiscountService {
     let encodedDate = encodeURIComponent(date.toString());
     return this.http.get<Discount[]>(`${environment.marketingGatewayUrl}/marketing/discounts/sku/${sku}/date/${encodedDate}`)
   }
+
+  getDiscountsByCampaignId(campaignId: number) {
+    return this.http.get<Discount[]>(`${environment.marketingGatewayUrl}/marketing/discounts/campaign/${campaignId}`)
+  }
 }
