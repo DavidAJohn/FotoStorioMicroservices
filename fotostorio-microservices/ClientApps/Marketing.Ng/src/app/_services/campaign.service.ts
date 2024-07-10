@@ -18,4 +18,8 @@ export class CampaignService {
   getAllCampaigns() {
     return this.http.get<Campaign[]>(`${environment.marketingGatewayUrl}/marketing/campaigns`)
   }
+
+  getCampaignById(id: number) {
+    return this.http.get<Campaign>(`${environment.marketingGatewayUrl}/marketing/campaigns/${id}`)
+  }
 }
