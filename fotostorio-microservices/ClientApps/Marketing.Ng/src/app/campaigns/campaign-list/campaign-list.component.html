@@ -1,0 +1,70 @@
+<div class="h-screen">
+    <div class="px-0 md:container md:max-w-7xl md:mt-8">
+        <div class="w-full p-4 rounded-md shadow-md bg-white focus:outline-none z-10">
+            <div class="text-lg text-center md:text-xl lg:text-2xl font-bold mb-8">
+                Marketing Campaigns
+            </div>
+            @if (errorMessage !== "") {
+                <div class="mx-2 animate-pulse">
+                    <div class="alert-box text-center" role="alert">
+                        <span class="block sm:inline">{{errorMessage}}</span>
+                    </div>
+                </div>
+            } 
+            @else {
+                @if (campaigns)
+                {
+                    <div class="p-2 md:p-4 text-center w-auto text-sm lg:text-base">
+                        <div class="flex flex-row mb-2 font-bold uppercase">
+                            <div class="px-1 w-0 hidden md:block md:w-1/6 md:px-2">Campaign #</div>
+                            <div class="px-1 w-1/3 text-right md:w-2/6 md:px-2 sm:text-center">Name</div>
+                            <div class="px-1 w-1/3 md:w-1/6 md:px-2">Start Date</div>
+                            <div class="px-1 w-1/3 md:w-1/6 md:px-2">End Date</div>
+                            <div class="px-1 w-0 hidden md:block md:w-1/6 md:px-2">Status</div>
+                            <div class="px-1 w-1/3 md:w-1/6 md:px-2">&nbsp;</div>
+                        </div>
+                        <div class="font-normal">
+                            @for (campaign of campaigns; track campaign.id)
+                            {
+                                <div class="flex flex-row items-center -mb-3">
+                                    <div class="px-1 w-0 hidden md:block md:w-1/6 md:px-2">{{campaign.id}}</div>
+                                    <div class="px-1 w-1/3 text-right md:w-2/6 md:px-2 sm:text-center">{{campaign.name}}</div>
+                                    <div class="px-1 w-1/3 md:w-1/6 md:px-2">{{campaign.startDate | date: 'dd/MM/yyyy'}}</div>
+                                    <div class="px-1 w-1/3 md:w-1/6 md:px-2">{{campaign.endDate | date: 'dd/MM/yyyy'}}</div>
+                                    @if (returnDateAsDate(campaign.endDate) < currentDateTime) {
+                                        <div class="px-1 w-0 text-red-500 hidden md:block md:w-1/6 md:px-2">Expired</div>
+                                    } @else if (returnDateAsDate(campaign.startDate) < currentDateTime && returnDateAsDate(campaign.endDate) > currentDateTime) {
+                                        <div class="px-1 w-0 text-green-600 hidden md:block md:w-1/6 md:px-2">Active</div>
+                                    } @else if (returnDateAsDate(campaign.startDate) > currentDateTime) {
+                                        <div class="px-1 w-0 text-blue-500 hidden md:block md:w-1/6 md:px-2">Upcoming</div>
+                                    } @else {
+                                        <div class="px-1 w-0 hidden md:block md:w-1/6 md:px-2">???</div>
+                                    }
+                                    <div class="px-1 w-1/3 md:w-1/6 md:px-2">
+                                        <button type="button" class="hidden lg:block btn-fotofuchsia fotofuchsia-ripple" routerLink="/campaign/{{campaign.id}}">View Campaign</button>
+                                        <button type="button" class="lg:hidden btn-fotofuchsia fotofuchsia-ripple" routerLink="/campaign/{{campaign.id}}">View</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>    
+                }
+                @else {
+                    <div class="p-4 text-center">
+                        No campaigns found
+                    </div>
+                    <div class="mt-4 text-center">
+                        <Button routerLink="/">
+                            Back to Home page
+                        </Button>
+                    </div>
+                }
+            }
+        </div>
+        <div class="mt-8 flex justify-center">
+            <button class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm hover:opacity-90 fotofuchsia-ripple">
+                <a routerLink="/" class="hover:text-white">Go Back</a>
+            </button>
+        </div>
+    </div>
+</div>
