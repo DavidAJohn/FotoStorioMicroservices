@@ -6,6 +6,7 @@ import { UnauthorisedComponent } from './account/unauthorised.component';
 import { OrderListComponent } from './orders/order-list/order-list.component';
 import { OrderComponent } from './orders/order/order.component';
 import { CampaignListComponent } from './campaigns/campaign-list/campaign-list.component';
+import { CampaignComponent } from './campaigns/campaign/campaign.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -15,6 +16,7 @@ export const routes: Routes = [
     { path: 'orders', component: OrderListComponent, canActivate: [AuthGuard]},
     { path: 'order/:id', component: OrderComponent, canActivate: [AuthGuard]},
     { path: 'campaigns', component: CampaignListComponent, canActivate: [AuthGuard]},
+    { path: 'campaign/:id', component: CampaignComponent, canActivate: [AuthGuard]},
     
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
