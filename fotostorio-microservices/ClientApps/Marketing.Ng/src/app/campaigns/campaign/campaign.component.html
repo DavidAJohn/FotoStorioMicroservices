@@ -60,6 +60,27 @@
                         }
                     </div>
                 </div>
+                @if (campaignDiscounts) {
+                    <div class="flex flex-row md:flex-row justify-center align-top w-full px-4 py-1">
+                        <div class="w-full md:w-1/2">
+                            <div class="px-2 text-base font-semibold md:text-right">Discounts:</div>
+                        </div>
+                        <div class="w-full md:w-1/2">
+                            <div class="px-2 text-base md:text-left">
+                                <ul>
+                                    @for (discount of campaignDiscounts; track discount.id)
+                                    {
+                                        <li>{{discount.sku}} - £{{discount.salePrice}}</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                } @else {
+                    <div class="p-4 text-center font-semibold">
+                        No discounts could be found for this campaign
+                    </div>
+                }
             } 
             @else {
                 <div class="p-4 text-center font-semibold">
