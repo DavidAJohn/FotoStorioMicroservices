@@ -60,19 +60,21 @@
                         }
                     </div>
                 </div>
-                @if (campaignDiscounts) {
-                    <div class="flex flex-row md:flex-row justify-center align-top w-full px-4 py-1">
+                @if (discountedProducts) {
+                    <div class="flex flex-row md:flex-row justify-center align-top w-full px-4 py-4">
                         <div class="w-full md:w-1/2">
-                            <div class="px-2 text-base font-semibold md:text-right">Discounts:</div>
-                        </div>
-                        <div class="w-full md:w-1/2">
-                            <div class="px-2 text-base md:text-left">
-                                <ul>
-                                    @for (discount of campaignDiscounts; track discount.id)
-                                    {
-                                        <li>{{discount.sku}} - £{{discount.salePrice}}</li>
-                                    }
-                                </ul>
+                            <div class="px-4 font-semibold text-base lg:text-center">Discounts:</div>
+                            <div class="p-4 text-center">
+                                @for (product of discountedProducts; track product.id) {
+                                    <div class="font-semibold text-base flex items-center justify-center">
+                                        <div class="hidden md:inline-block w-12 h-auto mr-2"><img src="{{product.imageUrl}}" /></div>
+                                        <div class="inline-block flex-shrink-0">{{product.name}}</div>
+                                        <div class="hidden lg:block ml-2 font-bold line-through text-slate-500">£{{product.price}}</div>
+                                        <div class="hidden lg:block ml-2 font-bold">£{{product.salePrice}}</div>
+                                    </div>
+                                    <div class="text-xs text-slate-400 text-center -mt-2 mb-2">SKU: {{product.sku}}</div>
+                                    <div class="text-xs text-slate-400 text-center -mt-2 mb-2">CATEGORY: {{product.category}}</div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -81,8 +83,7 @@
                         No discounts could be found for this campaign
                     </div>
                 }
-            } 
-            @else {
+            } @else {
                 <div class="p-4 text-center font-semibold">
                     This campaign could not be found
                 </div>

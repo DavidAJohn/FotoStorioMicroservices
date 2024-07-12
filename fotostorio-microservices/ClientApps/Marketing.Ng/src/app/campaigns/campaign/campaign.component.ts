@@ -2,8 +2,8 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 
-import { Campaign, Discount } from '@app/_models';
-import { CampaignService, DiscountService } from '@app/_services';
+import { Campaign, Discount, Product } from '@app/_models';
+import { CampaignService, DiscountService, ProductService } from '@app/_services';
 
 @Component({
   selector: 'app-campaign',
@@ -17,8 +17,12 @@ export class CampaignComponent {
   errorMessage = '';
   currentDateTime = new Date();
   campaignDiscounts: Discount[] = [];
+  discountedProducts: Product[] = [];
 
-  constructor(private campaignService: CampaignService, private discountService: DiscountService, private route: ActivatedRoute) {
+  constructor(private campaignService: CampaignService, 
+              private discountService: DiscountService, 
+              private productService: ProductService, 
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -38,8 +42,22 @@ export class CampaignComponent {
     this.discountService.getDiscountsByCampaignId(id)
       .subscribe({
         next: discounts => {
-          console.log('Campaign Discounts: ', discounts);
           this.campaignDiscounts = discounts;
+
+          // Get details of the products that are discounted
+          this.campaignDiscounts.forEach(discount => {
+            this.productService.getProductBySku(discount.sku)
+              .subscribe({
+                next: product => {
+                  product.salePrice = discount.salePrice;
+                  this.discountedProducts.push(product);
+                },
+                error: error => {
+                  console.error('Error receiving discounted product: ', error);
+                  this.errorMessage = 'Error receiving discounted product: ' + error;
+                }
+              });
+          });
         },
         error: error => {
           console.error('Error receiving campaign discounts: ', error);
