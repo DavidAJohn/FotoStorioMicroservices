@@ -6,3 +6,4 @@ export * from './Discount';
 export * from './Campaign';
 export * from './Order';
 export * from './Product';
+export * from './DiscountedProduct';
