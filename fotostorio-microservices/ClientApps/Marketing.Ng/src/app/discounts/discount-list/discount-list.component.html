@@ -1,0 +1,62 @@
+<div class="h-screen">
+    <div class="px-0 lg:container lg:max-w-7xl md:mt-4">
+        <div class="w-full px-12 pt-4 pb-8 rounded-md shadow-md bg-white focus:outline-none z-10">
+            @if (errorMessage != "") 
+            {
+                <div class="mx-2 animate-pulse">
+                    <div class="alert-box text-center" role="alert">
+                        <span class="block sm:inline">{{errorMessage}}</span>
+                    </div>
+                </div>
+            } @else if (discounts) {
+                <div class="text-xl text-center lg:text-2xl font-bold mb-12">
+                    <h3>Discounts</h3>
+                </div>
+                <div class="p-2 md:p-4 text-center w-auto text-sm lg:text-base">
+                    <div class="flex flex-row mb-2 font-bold uppercase">
+                        <div class="px-1 w-0 hidden md:block md:w-1/5 md:px-2">Product #</div>
+                        <div class="px-1 w-1/3 text-right md:w-2/5 md:px-2 sm:text-center">Product Name</div>
+                        <div class="px-1 w-1/3 md:w-1/5 md:px-2">Campaign</div>
+                        <div class="px-1 w-0 hidden md:block md:w-1/5 md:px-2">Category</div>
+                        <div class="px-1 w-1/3 md:w-1/5 md:px-2">&nbsp;</div>
+                    </div>
+                    <div class="font-normal">
+                        @for (product of discountedProducts; track product.discountId)
+                        {
+                            <div class="flex flex-row items-center -mb-3">
+                                <div class="px-1 w-0 hidden md:block md:w-1/5 md:px-2">{{product.productId}}</div>
+                                <div class="px-1 w-1/3 text-right md:w-2/5 md:px-2 sm:text-center -mb-4">
+                                    <div class="font-semibold text-base flex items-center justify-center">
+                                        <div class="hidden md:inline-block w-12 h-auto mr-2"><img src="{{product.imageUrl}}" /></div>
+                                        <div class="inline-block flex-shrink-0">{{product.name}}</div>
+                                        <div class="hidden lg:block ml-2 font-bold line-through text-slate-500">£{{product.price}}</div>
+                                        <div class="hidden lg:block ml-2 font-bold">£{{product.salePrice}}</div>
+                                    </div>
+                                    <div class="text-xs text-slate-400 text-center -mt-2 mb-2">SKU: {{product.sku}}</div>
+                                </div>
+                                <div class="px-1 w-1/3 md:w-1/5 md:px-2">{{product.campaign}}</div>
+                                <div class="px-1 w-0 hidden md:block md:w-1/5 md:px-2">{{product.category}}</div>
+                                <div class="px-2 w-1/3 md:w-1/5 md:px-2">
+                                    <button type="button" class="hidden lg:block btn-fotofuchsia fotofuchsia-ripple" routerLink="/campaign/{{product.campaignId}}">View Campaign</button>
+                                    <button type="button" class="lg:hidden btn-fotofuchsia fotofuchsia-ripple" routerLink="/campaign/{{product.campaignId}}">View</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            } @else {
+                <div class="text-xl text-center lg:text-2xl font-bold mb-12">
+                    <h3>Discounts</h3>
+                </div>
+                <div class="p-4 text-center font-semibold">
+                    No discounts could be found
+                </div>
+            }
+        </div>
+    </div>
+    <div class="mt-8 flex justify-center">
+        <button class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm hover:opacity-90 fotofuchsia-ripple">
+            <a routerLink="/" class="hover:text-white">Go Back</a>
+        </button>
+    </div>
+</div>
