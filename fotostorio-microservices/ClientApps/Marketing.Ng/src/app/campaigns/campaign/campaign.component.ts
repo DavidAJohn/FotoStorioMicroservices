@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterLink, ActivatedRoute } from '@angular/router';
+import { CommonModule, Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 import { Campaign, Discount, Product } from '@app/_models';
 import { CampaignService, DiscountService, ProductService } from '@app/_services';
@@ -8,7 +8,7 @@ import { CampaignService, DiscountService, ProductService } from '@app/_services
 @Component({
   selector: 'app-campaign',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './campaign.component.html',
   styleUrl: './campaign.component.css'
 })
@@ -22,6 +22,7 @@ export class CampaignComponent {
   constructor(private campaignService: CampaignService, 
               private discountService: DiscountService, 
               private productService: ProductService, 
+              private location: Location,
               private route: ActivatedRoute) {
   }
 
@@ -68,5 +69,9 @@ export class CampaignComponent {
 
   returnDateAsDate(date: Date) {
     return new Date(date);
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }
