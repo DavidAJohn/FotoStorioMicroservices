@@ -15,6 +15,14 @@ export class DiscountService {
     return this.http.get<Discount[]>(`${environment.marketingGatewayUrl}/marketing/discounts/current`)
   }
 
+  getCurrentAndFutureDiscounts() {
+    return this.http.get<Discount[]>(`${environment.marketingGatewayUrl}/marketing/discounts/currentfuture`)
+  }
+
+  getAllDiscounts() {
+    return this.http.get<Discount[]>(`${environment.marketingGatewayUrl}/marketing/discounts`)
+  }
+
   getDiscountsForSkuByDate(sku: string, date: Date) {
     let encodedDate = encodeURIComponent(date.toString());
     return this.http.get<Discount[]>(`${environment.marketingGatewayUrl}/marketing/discounts/sku/${sku}/date/${encodedDate}`)
