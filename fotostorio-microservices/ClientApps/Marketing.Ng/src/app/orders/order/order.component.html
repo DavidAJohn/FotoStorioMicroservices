@@ -45,12 +45,19 @@
                             @for (item of orderItems; track item.id)
                             {
                                 <div class="font-semibold text-base flex items-center justify-end">
-                                    @if (itemDiscounts.indexOf(item.product.sku) != -1) {
+                                    @if (itemDiscountSkus.indexOf(item.product.sku) != -1) {
                                         <div class="text-sm text-white shadow-md bg-yellow-500 border border-slate-200 mr-2 p-1">Discounted</div>
                                     }
                                     <div class="hidden md:inline-block w-12 h-auto mr-2"><img src="{{item.product.imageUrl}}" /></div>
                                     <div class="inline-block flex-shrink-0">{{item.quantity}} &nbsp;x&nbsp; {{item.product.name}}</div>
-                                    <div class="hidden lg:block ml-2 font-bold"> = £{{item.quantity * item.product.price}}</div>
+                                    @if (itemDiscountSkus.indexOf(item.product.sku) != -1) {
+                                        <div class="hidden lg:block ml-2 font-bold"> =
+                                            <span class="line-through text-slate-500">£{{item.quantity * item.product.price}}</span>
+                                            <span class="ml-2">£{{item.quantity * (getSalePriceFromDiscounts(item.product.sku))}}</span>
+                                        </div>
+                                    } @else {
+                                        <div class="hidden lg:block ml-2 font-bold"> = £{{item.quantity * item.product.price}}</div>
+                                    }
                                 </div>
                             }
                         </div>
