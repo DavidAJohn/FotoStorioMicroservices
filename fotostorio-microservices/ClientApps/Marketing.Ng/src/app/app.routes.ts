@@ -8,6 +8,7 @@ import { OrderComponent } from './orders/order/order.component';
 import { CampaignListComponent } from './campaigns/campaign-list/campaign-list.component';
 import { CampaignComponent } from './campaigns/campaign/campaign.component';
 import { DiscountListComponent } from './discounts/discount-list/discount-list.component';
+import { CampaignAddComponent } from './campaigns/campaign-add/campaign-add.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -16,6 +17,7 @@ export const routes: Routes = [
     { path: 'unauthorised', component: UnauthorisedComponent },
     { path: 'orders', component: OrderListComponent, canActivate: [AuthGuard]},
     { path: 'order/:id', component: OrderComponent, canActivate: [AuthGuard]},
+    { path: 'campaigns/create', component: CampaignAddComponent, canActivate: [AuthGuard]},
     { path: 'campaigns', component: CampaignListComponent, canActivate: [AuthGuard]},
     { path: 'campaign/:id', component: CampaignComponent, canActivate: [AuthGuard]},
     { path: 'discounts', component: DiscountListComponent, canActivate: [AuthGuard]},
