@@ -19,8 +19,16 @@
                         </div>
                         <div class="w-full md:w-1/2">
                             <div class="px-2 text-base md:text-left">
-                                <input type="text" class="w-1/2 p-2 h-6 border border-gray-300 rounded-sm" id="campaignName" formControlName="campaignName" required>
+                                <input type="text" 
+                                    id="campaignName" 
+                                    class="w-1/2 p-2 h-6 border border-gray-300 rounded-sm focus:outline-0" 
+                                    [ngClass]="{ 'border-red-500': cf.campaignName.touched && cf.campaignName.errors?.required }"
+                                    formControlName="campaignName" 
+                                    required>
                             </div>
+                            @if (cf.campaignName.touched && cf.campaignName.errors?.required) {
+                                <div class=" px-2 mt-2 text-sm italic text-red-500">Name is required</div>
+                            }
                         </div>
                     </div>
                     <div class="flex flex-row md:flex-row justify-center align-top w-full px-4 py-1">
@@ -29,8 +37,15 @@
                         </div>
                         <div class="w-full md:w-1/2">
                             <div class="px-2 text-base md:text-left">
-                                <input type="date" class="w-1/2 p-2 h-6 border border-gray-300 rounded-sm" id="campaignStartDate" formControlName="campaignStartDate" required>
+                                <input type="date" 
+                                    id="campaignStartDate"
+                                    class="w-1/2 p-2 h-6 border border-gray-300 rounded-sm focus:outline-0" 
+                                    formControlName="campaignStartDate" 
+                                    required>
                             </div>
+                            @if (submitted && cf.campaignStartDate.errors?.required) {
+                                <div class="px-2 mt-2 text-sm italic text-red-500">Start Date is required</div>
+                            }
                         </div>
                     </div>
                     <div class="flex flex-row md:flex-row justify-center align-top w-full px-4 py-1">
@@ -39,8 +54,19 @@
                         </div>
                         <div class="w-full md:w-1/2">
                             <div class="px-2 text-base md:text-left">
-                                <input type="date" class="w-1/2 p-2 h-6 border border-gray-300 rounded-sm" id="campaignEndDate" formControlName="campaignEndDate" required>
+                                <input type="date" 
+                                    id="campaignEndDate" 
+                                    class="w-1/2 p-2 h-6 border border-gray-300 rounded-sm focus:outline-0"
+                                    [ngClass]="{ 'border-red-500 text-red-500': cf.campaignEndDate.errors?.dateRange }" 
+                                    formControlName="campaignEndDate" 
+                                    required>
                             </div>
+                            @if (submitted && cf.campaignEndDate.errors?.required) {
+                                <div class="px-2 mt-2 text-sm italic text-red-500">End Date is required</div>
+                            }
+                            @if (cf.campaignEndDate.errors?.dateRange) {
+                                <div class="px-2 mt-2 text-sm italic text-red-500">End Date must be later than Start Date</div>
+                            }
                         </div>
                     </div>
                     <div class="flex justify-center mt-4">

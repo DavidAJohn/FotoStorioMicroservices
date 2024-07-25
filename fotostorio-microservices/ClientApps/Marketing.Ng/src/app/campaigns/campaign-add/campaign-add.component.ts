@@ -1,29 +1,38 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CampaignService } from '@app/_services';
 import { Campaign } from '@app/_models';
+import { createDateRangeValidator } from '@app/_helpers/date-range.validator';
 
 @Component({
   selector: 'app-campaign-add',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [RouterLink, ReactiveFormsModule, CommonModule],
   templateUrl: './campaign-add.component.html',
   styleUrl: './campaign-add.component.css'
 })
 export class CampaignAddComponent {
   errorMessage = '';
+  submitted = false;
 
   campaignForm = this.formBuilder.group({
     campaignName: ['', Validators.required],
-    campaignStartDate: ['', Validators.required],
-    campaignEndDate: ['', Validators.required]
+    campaignStartDate: [null, Validators.required],
+    campaignEndDate: [null, Validators.required]
+  }, {
+    validators: [createDateRangeValidator()]
   });
 
   constructor(private router: Router, private formBuilder: FormBuilder, private campaignService: CampaignService) {}
 
+  // getter to simplify the template validation code
+  get cf() { return this.campaignForm.controls; }
+
   onSubmit() {
     this.errorMessage = '';
+    this.submitted = true;
 
     if (this.campaignForm.valid) {
       console.log('Form values submitted', this.campaignForm.value);
