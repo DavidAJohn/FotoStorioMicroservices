@@ -1,0 +1,60 @@
+<div class="h-screen">
+    <div class="px-0 md:container md:max-w-7xl md:mt-8">
+        <div class="w-full p-4 rounded-md shadow-md bg-white focus:outline-none z-10">
+            <div class="text-lg text-center md:text-xl lg:text-2xl font-bold mb-8">
+                Create New Campaign
+            </div>
+            @if (errorMessage !== "") {
+                <div class="mx-2 animate-pulse">
+                    <div class="alert-box text-center" role="alert">
+                        <span class="block sm:inline">{{errorMessage}}</span>
+                    </div>
+                </div>
+            } 
+            @else {
+                <form [formGroup]="campaignForm" (ngSubmit)="onSubmit()">
+                    <div class="flex flex-row md:flex-row justify-center align-top w-full px-4 py-1">
+                        <div class="w-full md:w-1/2">
+                            <div class="px-2 text-base font-semibold md:text-right">Name:</div>
+                        </div>
+                        <div class="w-full md:w-1/2">
+                            <div class="px-2 text-base md:text-left">
+                                <input type="text" class="w-1/2 p-2 h-6 border border-gray-300 rounded-sm" id="campaignName" formControlName="campaignName" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-row md:flex-row justify-center align-top w-full px-4 py-1">
+                        <div class="w-full md:w-1/2">
+                            <div class="px-2 text-base font-semibold md:text-right">Start Date:</div>
+                        </div>
+                        <div class="w-full md:w-1/2">
+                            <div class="px-2 text-base md:text-left">
+                                <input type="date" class="w-1/2 p-2 h-6 border border-gray-300 rounded-sm" id="campaignStartDate" formControlName="campaignStartDate" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-row md:flex-row justify-center align-top w-full px-4 py-1">
+                        <div class="w-full md:w-1/2">
+                            <div class="px-2 text-base font-semibold md:text-right">End Date:</div>
+                        </div>
+                        <div class="w-full md:w-1/2">
+                            <div class="px-2 text-base md:text-left">
+                                <input type="date" class="w-1/2 p-2 h-6 border border-gray-300 rounded-sm" id="campaignEndDate" formControlName="campaignEndDate" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center mt-4">
+                        <button type="submit" [disabled]="!campaignForm.valid" class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm hover:opacity-90 fotofuchsia-ripple">
+                            Create Campaign
+                        </button>
+                    </div>
+                </form> 
+            }
+        </div>
+        <div class="mt-8 flex justify-center">
+            <button class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm hover:opacity-90 fotofuchsia-ripple">
+                <a routerLink="/campaigns" class="hover:text-white">Go Back</a>
+            </button>
+        </div>
+    </div>
+</div>
