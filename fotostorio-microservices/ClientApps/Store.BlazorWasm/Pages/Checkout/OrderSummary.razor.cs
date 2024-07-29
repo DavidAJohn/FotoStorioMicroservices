@@ -26,10 +26,13 @@ public partial class OrderSummary
     private string SubmitSpinnerHidden = "hidden";
     private string AddressFormID = "address-form";
     private bool ShowAddressExplanationText = false;
+    private string ImagePath = "http://localhost/images"; // default fallback image path
 
     protected override async Task OnInitializedAsync()
     {
         await GetBasket();
+
+        ImagePath = config["ImageAssetsBaseURI"];
 
         // populate the address form with the user's default address (if they have one)
         addressDTO = await accountService.GetUserAddressAsync();
