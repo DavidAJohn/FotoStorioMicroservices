@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -30,6 +31,22 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
+        if (ExtractExpiryDateFromJwt(savedToken) is not null) 
+        {
+            // check if the token has already expired and remove it if it has
+            if (ExtractExpiryDateFromJwt(savedToken) < DateTime.UtcNow)
+            {
+                await _localStorage.RemoveItemAsync("authToken");
+                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            }
+        }
+        else 
+        {
+            // if a token exists, but somehow the expiry date can't be read, remove it
+            await _localStorage.RemoveItemAsync("authToken");
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+        }
+        
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
 
         return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt")));
@@ -97,5 +114,20 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
         }
 
         return Convert.FromBase64String(base64);
+    }
+
+    private static DateTime? ExtractExpiryDateFromJwt(string jwt)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.ReadJwtToken(jwt);
+
+        if (token.Payload.TryGetValue("exp", out var expiryDate))
+        {
+            var expiryTime = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(expiryDate));
+
+            return expiryTime.UtcDateTime;
+        }
+
+        return null;
     }
 }
