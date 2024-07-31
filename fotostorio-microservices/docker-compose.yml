@@ -1,5 +1,3 @@
-version: '3.4'
-
 services:
   mssqldata:
     image: mcr.microsoft.com/mssql/server:2017-latest
