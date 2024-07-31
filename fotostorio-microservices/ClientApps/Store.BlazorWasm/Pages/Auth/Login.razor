@@ -77,7 +77,7 @@
         if (result.Successful)
         {
             toastService.ShowSuccess("You have successfully logged in to your account", "Logged In");
-            navigationManager.NavigateTo("/");
+            navigationManager.NavigateTo("/", forceLoad: true);
         }
         else
         {
