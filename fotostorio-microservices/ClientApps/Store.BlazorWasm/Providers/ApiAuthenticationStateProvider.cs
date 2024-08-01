@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,6 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace Store.BlazorWasm.Providers;
 
@@ -31,22 +31,14 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
-        if (ExtractExpiryDateFromJwt(savedToken) is not null) 
+        // if the token has already expired or the expiry date is missing, remove the token
+        if (ExtractExpiryDateFromJwt(savedToken) < DateTime.UtcNow ||
+            ExtractExpiryDateFromJwt(savedToken) == DateTime.MinValue) // DateTime.MinValue means the token does not have an expiry date
         {
-            // check if the token has already expired and remove it if it has
-            if (ExtractExpiryDateFromJwt(savedToken) < DateTime.UtcNow)
-            {
-                await _localStorage.RemoveItemAsync("authToken");
-                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
-            }
-        }
-        else 
-        {
-            // if a token exists, but somehow the expiry date can't be read, remove it
             await _localStorage.RemoveItemAsync("authToken");
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
-        
+
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
 
         return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt")));
@@ -116,18 +108,19 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
         return Convert.FromBase64String(base64);
     }
 
-    private static DateTime? ExtractExpiryDateFromJwt(string jwt)
+    private static DateTime ExtractExpiryDateFromJwt(string jwt)
     {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var token = tokenHandler.ReadJwtToken(jwt);
-
-        if (token.Payload.TryGetValue("exp", out var expiryDate))
+        try
         {
-            var expiryTime = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(expiryDate));
+            var tokenHandler = new JsonWebTokenHandler();
+            var jsonWebToken = tokenHandler.ReadJsonWebToken(jwt);
+            var expiryDate = jsonWebToken.ValidTo;
 
-            return expiryTime.UtcDateTime;
+            return expiryDate; // will be DateTime.MinValue if the token does not have an expiry date
         }
-
-        return null;
+        catch (Exception)
+        {
+            return DateTime.MinValue;
+        }
     }
 }
