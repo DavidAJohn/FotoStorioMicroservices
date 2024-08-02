@@ -1,4 +1,6 @@
-﻿namespace Admin.BlazorServer.Pages;
+﻿using System.Globalization;
+
+namespace Admin.BlazorServer.Pages;
 
 public partial class SiteStatus
 {
@@ -16,7 +18,10 @@ public partial class SiteStatus
 
     protected override void OnInitialized()
     {
-        LastUpdated = DateTime.Now.ToString();
+        TimeZoneInfo localTimeZone = TimeZoneInfo.FindSystemTimeZoneById(config["DateTimeSettings:LocalTimeZone"] ?? "UTC");
+        var dateTimeOffset = TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, localTimeZone);
+        LastUpdated = dateTimeOffset.ToString(config["DateTimeSettings:DateTimeFormat"] ?? "yyyy-MM-dd HH:mm:ss");
+
         AppStatusUri = $"{config["ApiSettings:AppStatusUri"]}/hc-ui";
 
         CheckAzureConfig();
