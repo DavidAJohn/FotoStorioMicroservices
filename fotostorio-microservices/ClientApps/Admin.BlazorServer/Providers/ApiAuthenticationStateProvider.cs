@@ -1,5 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.IdentityModel.JsonWebTokens;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
@@ -25,6 +26,14 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
 
             if (string.IsNullOrWhiteSpace(savedToken))
             {
+                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            }
+
+            // if the token has already expired or the expiry date is missing, remove the token
+            if (ExtractExpiryDateFromJwt(savedToken) < DateTime.UtcNow ||
+                ExtractExpiryDateFromJwt(savedToken) == DateTime.MinValue) // DateTime.MinValue means the token does not have an expiry date
+            {
+                await _localStorage.RemoveItemAsync("authToken");
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
 
@@ -100,5 +109,21 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
         }
 
         return Convert.FromBase64String(base64);
+    }
+
+    private static DateTime ExtractExpiryDateFromJwt(string jwt)
+    {
+        try
+        {
+            var tokenHandler = new JsonWebTokenHandler();
+            var jsonWebToken = tokenHandler.ReadJsonWebToken(jwt);
+            var expiryDate = jsonWebToken.ValidTo;
+
+            return expiryDate; // will be DateTime.MinValue if the token does not have an expiry date
+        }
+        catch (Exception)
+        {
+            return DateTime.MinValue;
+        }
     }
 }
