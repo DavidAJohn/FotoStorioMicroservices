@@ -200,6 +200,7 @@ services:
       - "AzureSettings:FileUploadTypesAllowed=${FILE_UPLOAD_TYPES_ALLOWED}"
       - "DateTimeSettings:LocalTimeZone=${LOCAL_TIME_ZONE}"
       - "DateTimeSettings:DateTimeFormat=${DATE_TIME_FORMAT}"
+      - "ApplicationStatusUrl=http://host.docker.internal:8100"
     ports:
       - "8020:8080"
 

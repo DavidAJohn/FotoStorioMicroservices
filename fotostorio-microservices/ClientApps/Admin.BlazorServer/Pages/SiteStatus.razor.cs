@@ -6,7 +6,7 @@ public partial class SiteStatus
 {
     string LastUpdated = "";
     bool AzureConfigured = false;
-    string AppStatusUri = "";
+    string ApplicationStatusUrl = "";
 
     private string healthMessage = "Checking...";
     private string healthTextColour = "text-teal-600 ";
@@ -22,7 +22,7 @@ public partial class SiteStatus
         var dateTimeOffset = TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, localTimeZone);
         LastUpdated = dateTimeOffset.ToString(config["DateTimeSettings:DateTimeFormat"] ?? "yyyy-MM-dd HH:mm:ss");
 
-        AppStatusUri = $"{config["ApiSettings:AppStatusUri"]}/hc-ui";
+        ApplicationStatusUrl = $"{config["ApplicationStatusUrl"]}/hc-ui";
 
         CheckAzureConfig();
     }
