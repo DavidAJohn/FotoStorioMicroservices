@@ -20,7 +20,9 @@ export class CampaignAddComponent {
   campaignForm = this.formBuilder.group({
     campaignName: ['', Validators.required],
     campaignStartDate: [null, Validators.required],
-    campaignEndDate: [null, Validators.required]
+    campaignEndDate: [null, Validators.required],
+    campaignStartTime: ['00:00', Validators.required],
+    campaignEndTime: ['23:59', Validators.required]
   }, {
     validators: [createDateRangeValidator()]
   });
@@ -35,12 +37,15 @@ export class CampaignAddComponent {
     this.submitted = true;
 
     if (this.campaignForm.valid) {
-      console.log('Form values submitted', this.campaignForm.value);
+      let combinedStartDate = new Date(this.campaignForm.value.campaignStartDate! + 'T' 
+                                      + this.campaignForm.value.campaignStartTime! + 'Z');
+      let combinedEndDate = new Date(this.campaignForm.value.campaignEndDate! + 'T' 
+                                      + this.campaignForm.value.campaignEndTime! + 'Z');
 
       let campaign = new Campaign();
       campaign.name = this.campaignForm.value.campaignName!;
-      campaign.startDate = new Date(this.campaignForm.value.campaignStartDate!);
-      campaign.endDate = new Date(this.campaignForm.value.campaignEndDate!);
+      campaign.startDate = new Date(combinedStartDate);
+      campaign.endDate = new Date(combinedEndDate);
 
       this.campaignService.createCampaign(campaign)
         .subscribe({
