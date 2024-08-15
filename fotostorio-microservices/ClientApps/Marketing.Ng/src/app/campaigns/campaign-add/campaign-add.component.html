@@ -4,96 +4,94 @@
             <div class="text-lg text-center md:text-xl lg:text-2xl font-bold mb-8">
                 Create New Campaign
             </div>
-            @if (errorMessage !== "") {
-                <div class="mx-2 animate-pulse">
-                    <div class="alert-box text-center" role="alert">
-                        <span class="block sm:inline">{{errorMessage}}</span>
+            <div class="px-2 md:px-4 py-2 w-full md:w-1/2 mx-auto">
+                <form [formGroup]="campaignForm" (ngSubmit)="onSubmit()">
+                    <div class="mb-3 w-full text-left">
+                        <label class="text-base font-semibold mb-2 ml-0" for="campaignName">Name</label>
+                        <input type="text" formControlName="campaignName" id="campaignName" placeholder="Enter Campaign Name" required
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-2 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                            [ngClass]="{ 'border-red-500': cf.campaignName.touched && cf.campaignName.errors?.required }" 
+                        />
+                        @if (submitted && cf.campaignName.errors) {
+                            <div class="text-red-600 text-sm italic">
+                                @if (cf.campaignName.errors.required) {
+                                    <div>Campaign Name is required</div>
+                                }
+                            </div>
+                        }
                     </div>
-                </div>
-            } 
-            @else {
-                <div class="px-2 md:px-4 py-2 w-full md:w-1/2 mx-auto">
-                    <form [formGroup]="campaignForm" (ngSubmit)="onSubmit()">
-                        <div class="mb-3 w-full text-left">
-                            <label class="text-base font-semibold mb-2 ml-0" for="campaignName">Name</label>
-                            <input type="text" formControlName="campaignName" id="campaignName" placeholder="Enter Campaign Name" required
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-2 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                                [ngClass]="{ 'border-red-500': cf.campaignName.touched && cf.campaignName.errors?.required }" 
+                    <div class="flex flex-row w-full">
+                        <div class="mb-3 mr-4 w-1/2 text-left">
+                            <label class="text-base font-semibold mb-2 ml-0" for="campaignStartDate">Start Date</label>
+                            <input type="date"  
+                                formControlName="campaignStartDate" 
+                                id="campaignStartDate" 
+                                class="shadow appearance-none border rounded w-full py-2 px-3 cursor-default text-gray-700 mt-2 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                                placeholder="Select Start Date"
+                                required
+                                [ngClass]="{ 'border-red-500': cf.campaignStartDate.touched && cf.campaignStartDate.errors?.required }" 
                             />
-                            @if (submitted && cf.campaignName.errors) {
+                            @if (submitted && cf.campaignStartDate.errors) {
                                 <div class="text-red-600 text-sm italic">
-                                    @if (cf.campaignName.errors.required) {
-                                        <div>Name is required</div>
+                                    @if (cf.campaignStartDate.errors.required) {
+                                        <div>Start Date is required</div>
                                     }
                                 </div>
                             }
                         </div>
-                        <div class="flex flex-row w-full">
-                            <div class="mb-3 mr-4 w-1/2 text-left">
-                                <label class="text-base font-semibold mb-2 ml-0" for="campaignStartDate">Start Date</label>
-                                <input type="date"  
-                                    formControlName="campaignStartDate" 
-                                    id="campaignStartDate" 
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 cursor-default text-gray-700 mt-2 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                                    placeholder="Select Start Date"
-                                    required
-                                    [ngClass]="{ 'border-red-500': cf.campaignStartDate.touched && cf.campaignStartDate.errors?.required }" 
-                                />
-                                @if (submitted && cf.campaignStartDate.errors) {
-                                    <div class="text-red-600 text-sm italic">
-                                        @if (cf.campaignStartDate.errors.required) {
-                                            <div>Start Date is required</div>
-                                        }
-                                    </div>
-                                }
-                            </div>
-                            <div class="mb-3 ml-4 w-1/2 text-left">
-                                <label class="text-base font-semibold mb-2 ml-0" for="campaignStartTime">Start Time</label>
-                                <input type="time" formControlName="campaignStartTime" id="campaignStartTime" value="00:00" required
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-2 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                                    [ngClass]="{ 'border-red-500': cf.campaignStartDate.touched && cf.campaignStartTime.errors?.required }" 
-                                />
-                                @if (submitted && cf.campaignStartTime.errors) {
-                                    <div class="text-red-600 text-sm italic">
-                                        @if (cf.campaignStartTime.errors.required) {
-                                            <div>Start Time is required</div>
-                                        }
-                                    </div>
-                                }
-                            </div>
+                        <div class="mb-3 ml-4 w-1/2 text-left">
+                            <label class="text-base font-semibold mb-2 ml-0" for="campaignStartTime">Start Time</label>
+                            <input type="time" formControlName="campaignStartTime" id="campaignStartTime" value="00:00" required
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-2 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                                [ngClass]="{ 'border-red-500': cf.campaignStartDate.touched && cf.campaignStartTime.errors?.required }" 
+                            />
+                            @if (submitted && cf.campaignStartTime.errors) {
+                                <div class="text-red-600 text-sm italic">
+                                    @if (cf.campaignStartTime.errors.required) {
+                                        <div>Start Time is required</div>
+                                    }
+                                </div>
+                            }
                         </div>
-                        <div class="flex flex-row w-full">
-                            <div class="mb-3 mr-4 w-full text-left">
-                                <label class="text-base font-semibold mb-2 ml-0" for="campaignEndDate">End Date</label>
-                                <input type="date" formControlName="campaignEndDate" id="campaignEndDate" required
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-2 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                                    [ngClass]="{ 'border-red-500': cf.campaignEndDate.errors?.dateRange }" 
-                                />
-                                @if (submitted && cf.campaignEndDate.errors?.required) {
-                                    <div class="px-2 mt-2 text-sm italic text-red-500">End Date is required</div>
-                                }
-                                @if (cf.campaignEndDate.errors?.dateRange) {
-                                    <div class="px-2 mt-2 text-sm italic text-red-500">End Date must be later than Start Date</div>
-                                }
-                            </div>
-                            <div class="mb-3 ml-4 w-full text-left">
-                                <label class="text-base font-semibold mb-2 ml-0" for="campaignEndTime">End Time</label>
-                                <input type="time" formControlName="campaignEndTime" id="campaignEndTime" value="23:59" required
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-2 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                                    [ngClass]="{ 'border-red-500': cf.campaignEndTime.errors?.required }" 
-                                />
-                                @if (submitted && cf.campaignEndTime.errors?.required) {
-                                    <div class="px-2 mt-2 text-sm italic text-red-500">End Time is required</div>
-                                }
-                            </div>
+                    </div>
+                    <div class="flex flex-row w-full">
+                        <div class="mb-3 mr-4 w-full text-left">
+                            <label class="text-base font-semibold mb-2 ml-0" for="campaignEndDate">End Date</label>
+                            <input type="date" formControlName="campaignEndDate" id="campaignEndDate" required
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-2 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                                [ngClass]="{ 'border-red-500': cf.campaignEndDate.touched && (cf.campaignEndDate.errors?.dateRange || cf.campaignEndDate.errors?.required) }" 
+                            />
+                            @if (submitted && cf.campaignEndDate.errors?.required) {
+                                <div class="px-2 mt-2 text-sm italic text-red-500">End Date is required</div>
+                            }
+                            @if (cf.campaignEndDate.errors?.dateRange) {
+                                <div class="px-2 mt-2 text-sm italic text-red-500">End Date must be later than Start Date</div>
+                            }
                         </div>
-                        <div class="flex justify-center mt-4">
-                            <button type="submit" [disabled]="!campaignForm.valid" class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm hover:opacity-90 fotofuchsia-ripple">
-                                Create Campaign
-                            </button>
+                        <div class="mb-3 ml-4 w-full text-left">
+                            <label class="text-base font-semibold mb-2 ml-0" for="campaignEndTime">End Time</label>
+                            <input type="time" formControlName="campaignEndTime" id="campaignEndTime" value="23:59" required
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-2 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                                [ngClass]="{ 'border-red-500': cf.campaignEndTime.errors?.required }" 
+                            />
+                            @if (submitted && cf.campaignEndTime.errors?.required) {
+                                <div class="px-2 mt-2 text-sm italic text-red-500">End Time is required</div>
+                            }
                         </div>
-                    </form>
-                </div> 
+                    </div>
+                    <div class="flex justify-center mt-4">
+                        <button type="submit" [disabled]="loading" class="p-2 my-3 bg-fotofuchsia text-white rounded-sm text-sm hover:opacity-90 fotofuchsia-ripple">
+                            Create Campaign
+                        </button>
+                    </div>
+                </form>
+            </div>
+            @if (errorMessage !== "" && campaignForm.invalid) {
+                <div class="w-full md:w-1/2 mx-auto animate-pulse">
+                    <div class="alert-box text-center" role="alert">
+                        <span class="block sm:inline">{{errorMessage}}</span>
+                    </div>
+                </div>
             }
         </div>
         <div class="mt-8 flex justify-center">

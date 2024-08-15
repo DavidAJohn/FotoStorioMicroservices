@@ -16,6 +16,7 @@ import { createDateRangeValidator } from '@app/_helpers/date-range.validator';
 export class CampaignAddComponent {
   errorMessage = '';
   submitted = false;
+  loading = false;
 
   campaignForm = this.formBuilder.group({
     campaignName: ['', Validators.required],
@@ -37,6 +38,8 @@ export class CampaignAddComponent {
     this.submitted = true;
 
     if (this.campaignForm.valid) {
+      this.loading = true;
+
       let combinedStartDate = new Date(this.campaignForm.value.campaignStartDate! + 'T' 
                                       + this.campaignForm.value.campaignStartTime! + 'Z');
       let combinedEndDate = new Date(this.campaignForm.value.campaignEndDate! + 'T' 
@@ -61,6 +64,7 @@ export class CampaignAddComponent {
         });
     } else {
       this.errorMessage = 'Please fill in all fields';
+      this.loading = false;
     }
   }
 }
