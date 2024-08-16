@@ -1,11 +1,10 @@
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.OpenApi.Models;
 using Polly;
-using Polly.Extensions.Http;
 using Serilog;
-using Serilog.Events;
 
 Log.Logger = new LoggerConfiguration()
         .WriteTo.Console()
@@ -20,20 +19,17 @@ try
 
     builder.Host.UseSerilog();
 
-    builder.Services.AddHttpClient("Products", c =>
-                    c.BaseAddress = new Uri(builder.Configuration["ApiSettings:ProductsUrl"]))
-                    .AddPolicyHandler(GetRetryPolicy())
-                    .AddPolicyHandler(GetCircuitBreakerPolicy());
+    builder.Services.AddHttpClient("Products", c => c.BaseAddress = 
+        new Uri(builder.Configuration["ApiSettings:ProductsUrl"]))
+        .AddStandardResilienceHandler(options => GetStandardResilienceOptions());
 
-    builder.Services.AddHttpClient("Discounts", c =>
-                    c.BaseAddress = new Uri(builder.Configuration["ApiSettings:DiscountUrl"]))
-                    .AddPolicyHandler(GetRetryPolicy())
-                    .AddPolicyHandler(GetCircuitBreakerPolicy());
+    builder.Services.AddHttpClient("Discounts", c => c.BaseAddress = 
+        new Uri(builder.Configuration["ApiSettings:DiscountUrl"]))
+        .AddStandardResilienceHandler(options => GetStandardResilienceOptions());
 
-    builder.Services.AddHttpClient("Inventory", c =>
-                    c.BaseAddress = new Uri(builder.Configuration["ApiSettings:InventoryUrl"]))
-                    .AddPolicyHandler(GetRetryPolicy())
-                    .AddPolicyHandler(GetCircuitBreakerPolicy());
+    builder.Services.AddHttpClient("Inventory", c => c.BaseAddress = 
+        new Uri(builder.Configuration["ApiSettings:InventoryUrl"]))
+        .AddStandardResilienceHandler(options => GetStandardResilienceOptions());
 
     builder.Services.AddScoped<IProductsService, ProductsService>();
     builder.Services.AddScoped<IDiscountService, DiscountService>();
@@ -92,31 +88,17 @@ finally
     Log.CloseAndFlush();
 }
 
-static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
-{
-    // Retry with jitter: https://github.com/App-vNext/Polly/wiki/Retry-with-jitter
-    Random jitter = new Random();
 
-    return HttpPolicyExtensions
-        .HandleTransientHttpError()
-        .WaitAndRetryAsync(
-            retryCount: 5,
-            sleepDurationProvider: retryAttempt =>
-                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))  // exponential backoff (2, 4, 8, 16, 32 secs)
-                  + TimeSpan.FromMilliseconds(jitter.Next(0, 1000)), // plus some jitter: up to 1 second
-            onRetry: (exception, retryCount, context) =>
-            {
-                Log.Warning("Retry {retryCount} of {policykey} at {operationKey}, due to: {exception}.", 
-                    retryCount, context.PolicyKey, context.OperationKey, exception);
-            });
-}
-
-static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+static HttpStandardResilienceOptions GetStandardResilienceOptions()
 {
-    return HttpPolicyExtensions
-        .HandleTransientHttpError()
-        .CircuitBreakerAsync(
-            handledEventsAllowedBeforeBreaking: 5,
-            durationOfBreak: TimeSpan.FromSeconds(30)
-        );
+    var options = new HttpStandardResilienceOptions();
+
+    options.Retry.MaxRetryAttempts = 5;
+    options.Retry.UseJitter = true;
+    options.Retry.Delay = TimeSpan.FromSeconds(2);
+    options.Retry.BackoffType = DelayBackoffType.Exponential;
+
+    options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(15);
+
+    return options;
 }
