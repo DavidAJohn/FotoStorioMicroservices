@@ -1,6 +1,7 @@
 ﻿@page "/"
 
 @inject IJSRuntime JsRuntime;
+@inject IConfiguration Configuration;
 
 <div class="min-h-screen">
     <div class="container max-w-7xl mt-8">
@@ -14,7 +15,7 @@
             <!-- main carousel images -->
             <div class="carousel-inner">
                 <div class="carousel-item carousel-image-1 active" >
-                    <img class="d-block" src="https://fotostorioimages.blob.core.windows.net/repo/fuji-x-t3-promo.jpg" alt="">
+                    <img class="d-block" src="@ImageAssetsBaseUri/fuji-x-t3-promo.jpg" alt="">
                     <div class="carousel-caption d-none d-md-block text-dark">
                         <NavLink href="/products/details/6">
                             <button class="my-3 btn btn-outline-light">View the Fujifilm X-T3</button>
@@ -22,7 +23,7 @@
                     </div>
                 </div>
                 <div class="carousel-item carousel-image-2" >
-                    <img class="d-block" src="https://fotostorioimages.blob.core.windows.net/repo/nikon-z6ii-promo.jpg" alt="">
+                    <img class="d-block" src="@ImageAssetsBaseUri/nikon-z6ii-promo.jpg" alt="">
                     <div class="carousel-caption d-none d-md-block text-light">
                         <NavLink href="/products/details/3">
                             <button class="my-3 btn btn-outline-light">Explore the Nikon Z6 II</button>
@@ -31,7 +32,7 @@
                 </div>
                 <div class="carousel-item carousel-image-3" >
                     <NavLink href="/products/categories/3">
-                        <img class="d-block" src="https://fotostorioimages.blob.core.windows.net/repo/lenses-promo.jpg" alt="">
+                        <img class="d-block" src="@ImageAssetsBaseUri/lenses-promo.jpg" alt="">
                         <div class="carousel-caption d-none d-md-block text-light">
                             <button class="my-3 btn btn-outline-light">View our range of lenses</button>
                         </div>
@@ -61,7 +62,7 @@
         <div class="grid grid-cols-1 grid-rows-4 md:grid-cols-3 md:grid-rows-2 gap-2 items-stretch">
             <div class="hidden md:block md:row-span-2 md:cols-span-1 bg-gray-900 text-gray-50 h-full w-full hover:opacity-80 relative overflow-hidden">
                 <a href="products" >
-                    <img src="https://fotostorioimages.blob.core.windows.net/repo/full-range.jpg" alt="Search our entire range" class="object-cover transition ease-in-out duration-500 transform hover:scale-110 ">
+                    <img src="@ImageAssetsBaseUri/full-range.jpg" alt="Search our entire range" class="object-cover transition ease-in-out duration-500 transform hover:scale-110 ">
                 </a>
                 <div class="absolute top-0 ml-4 mt-2 font-semibold text-base lg:text-xl text-gray-700">
                     <span>Search our full range</span>
@@ -69,7 +70,7 @@
             </div>
             <div class="bg-gray-900 text-gray-50 h-full w-full hover:opacity-80 relative overflow-hidden">
                 <a href="products/categories/1" >
-                    <img src="https://fotostorioimages.blob.core.windows.net/repo/nikon-dslr.jpg" alt="View DSLR cameras" class="object-cover transition ease-in-out duration-500 transform hover:scale-110 ">
+                    <img src="@ImageAssetsBaseUri/nikon-dslr.jpg" alt="View DSLR cameras" class="object-cover transition ease-in-out duration-500 transform hover:scale-110 ">
                 </a>
                 <div class="absolute top-0 ml-4 mt-2 font-semibold text-base md:text-lg text-gray-50">
                     <span>DSLR cameras</span>
@@ -77,7 +78,7 @@
             </div>
             <div class="bg-gray-900 text-gray-50 h-full w-full hover:opacity-80 relative overflow-hidden">
                 <a href="products/categories/2">
-                    <img src="https://fotostorioimages.blob.core.windows.net/repo/mirrorless-cameras.jpg" alt="View Mirrorless cameras" class="object-cover transition ease-in-out duration-500 transform hover:scale-110">
+                    <img src="@ImageAssetsBaseUri/mirrorless-cameras.jpg" alt="View Mirrorless cameras" class="object-cover transition ease-in-out duration-500 transform hover:scale-110">
                 </a>
                 <div class="absolute top-0 ml-4 mt-2 font-semibold text-base md:text-lg text-gray-50">
                     <span>Mirrorless cameras</span>
@@ -85,7 +86,7 @@
             </div>
             <div class="bg-gray-900 text-gray-50 h-full w-full hover:opacity-80 relative overflow-hidden">
                 <a href="products/categories/3" >
-                    <img src="https://fotostorioimages.blob.core.windows.net/repo/lenses-2.jpg" alt="View all Lenses" class="object-cover transition ease-in-out duration-500 transform hover:scale-110">
+                    <img src="@ImageAssetsBaseUri/lenses-2.jpg" alt="View all Lenses" class="object-cover transition ease-in-out duration-500 transform hover:scale-110">
                 </a>
                 <div class="absolute top-0 ml-4 mt-2 font-semibold text-base md:text-lg text-gray-50">
                     <span>Lenses</span>
@@ -93,7 +94,7 @@
             </div>
             <div class="bg-gray-900 text-gray-50 h-full w-full hover:opacity-80 relative overflow-hidden">
                 <a href="specialoffers">
-                    <img src="https://fotostorioimages.blob.core.windows.net/repo/lenses-1.jpg" alt="View Special Offers" class="object-cover transition ease-in-out duration-500 transform hover:scale-110">
+                    <img src="@ImageAssetsBaseUri/lenses-1.jpg" alt="View Special Offers" class="object-cover transition ease-in-out duration-500 transform hover:scale-110">
                 </a>
                 <div class="absolute top-0 ml-4 mt-2 font-semibold text-base md:text-lg text-gray-50">
                     <span>Special Offers</span>
@@ -108,22 +109,22 @@
             <div class="flex justify-around items-center flex-col md:flex-row">
                 <div class="h-24 w-24 lg:h-28 lg:w-28">
                     <a href="products/brands/1">
-                        <img src="https://fotostorioimages.blob.core.windows.net/repo/canon-logo.jpg" class="transition duration-300 transform ease-in-out hover:scale-110" />
+                        <img src="@ImageAssetsBaseUri/canon-logo.jpg" class="transition duration-300 transform ease-in-out hover:scale-110" />
                     </a>
                 </div>
                 <div class="h-24 w-24 lg:h-28 lg:w-28">
                     <a href="products/brands/2">
-                        <img src="https://fotostorioimages.blob.core.windows.net/repo/nikon-logo.jpg" class="transition duration-300 transform ease-in-out hover:scale-110" />
+                        <img src="@ImageAssetsBaseUri/nikon-logo.jpg" class="transition duration-300 transform ease-in-out hover:scale-110" />
                     </a>
                 </div>
                 <div class="h-24 w-24 lg:h-28 lg:w-28">
                     <a href="products/brands/3">
-                        <img src="https://fotostorioimages.blob.core.windows.net/repo/sony-logo.jpg" class="transition duration-300 transform ease-in-out hover:scale-110" />
+                        <img src="@ImageAssetsBaseUri/sony-logo.jpg" class="transition duration-300 transform ease-in-out hover:scale-110" />
                     </a>
                 </div>
                 <div class="h-24 w-24 lg:h-28 lg:w-28">
                     <a href="products/brands/4">
-                        <img src="https://fotostorioimages.blob.core.windows.net/repo/fujifilm-logo.jpg" class="transition duration-300 transform ease-in-out hover:scale-110" />
+                        <img src="@ImageAssetsBaseUri/fujifilm-logo.jpg" class="transition duration-300 transform ease-in-out hover:scale-110" />
                     </a>
                 </div>
             </div>
@@ -131,6 +132,15 @@
     </div>
     
 </div>
+
+@code {
+    private string ImageAssetsBaseUri = "http://localhost/images"; // default fallback
+
+    protected override void OnInitialized()
+    {
+        ImageAssetsBaseUri = Configuration["ImageAssetsBaseURI"];
+    }
+}
 
 @functions {     
 
