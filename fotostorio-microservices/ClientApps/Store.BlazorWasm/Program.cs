@@ -1,16 +1,15 @@
-using Store.BlazorWasm;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Store.BlazorWasm.Contracts;
-using Store.BlazorWasm.Services;
 using Blazored.LocalStorage;
 using Blazored.SessionStorage;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Components.Authorization;
-using Store.BlazorWasm.Providers;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Http.Resilience;
 using Polly;
-using Polly.Extensions.Http;
-using Serilog;
+using Store.BlazorWasm;
+using Store.BlazorWasm.Contracts;
+using Store.BlazorWasm.Providers;
+using Store.BlazorWasm.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -18,13 +17,11 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddHttpClient("StoreGateway", c => c.BaseAddress = 
     new Uri(builder.Configuration["ApiSettings:StoreGatewayUri"]))
-    .AddPolicyHandler(GetRetryPolicy())
-    .AddPolicyHandler(GetCircuitBreakerPolicy());
+    .AddStandardResilienceHandler(options => GetStandardResilienceOptions());
 
 builder.Services.AddHttpClient("IdentityAPI", c => c.BaseAddress =
     new Uri(builder.Configuration["ApiSettings:IdentityUri"] + "/api/"))
-    .AddPolicyHandler(GetRetryPolicy())
-    .AddPolicyHandler(GetCircuitBreakerPolicy());
+    .AddStandardResilienceHandler(options => GetStandardResilienceOptions());
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IBasketService, BasketService>();
@@ -64,30 +61,16 @@ builder.Services.AddBlazoredToast();
 await builder.Build().RunAsync();
 
 
-IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+static HttpStandardResilienceOptions GetStandardResilienceOptions()
 {
-    // Retry with jitter: https://github.com/App-vNext/Polly/wiki/Retry-with-jitter
-    Random jitter = new Random();
+    var options = new HttpStandardResilienceOptions();
 
-    return HttpPolicyExtensions
-        .HandleTransientHttpError()
-        .WaitAndRetryAsync(
-            retryCount: 5,
-            sleepDurationProvider: retryAttempt =>
-                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))  // exponential backoff (2, 4, 8, 16, 32 secs)
-                  + TimeSpan.FromMilliseconds(jitter.Next(0, 1000)), // plus some jitter: up to 1 second
-            onRetry: (exception, retryCount, context) =>
-            {
-                Log.Warning($"Retry {retryCount} of {context.PolicyKey} at {context.OperationKey}, due to: {exception}.");
-            });
-}
+    options.Retry.MaxRetryAttempts = 5;
+    options.Retry.UseJitter = true;
+    options.Retry.Delay = TimeSpan.FromSeconds(2);
+    options.Retry.BackoffType = DelayBackoffType.Exponential;
 
-IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
-{
-    return HttpPolicyExtensions
-        .HandleTransientHttpError()
-        .CircuitBreakerAsync(
-            handledEventsAllowedBeforeBreaking: 5,
-            durationOfBreak: TimeSpan.FromSeconds(30)
-        );
+    options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(15);
+
+    return options;
 }
