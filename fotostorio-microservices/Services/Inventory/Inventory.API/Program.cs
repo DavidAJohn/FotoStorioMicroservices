@@ -5,6 +5,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.OpenApi.Models;
 using Polly;
 
@@ -41,22 +42,9 @@ builder.Services.AddScoped<PaymentReceivedConsumer>();
 
 builder.Services.AddHttpContextAccessor();
 
-// Access the Identity API via a named HttpClient, also using Polly for more resilience
-builder.Services
-    .AddHttpClient("IdentityAPI", client =>
-    {
-        client.BaseAddress = new Uri(configuration["ApiSettings:IdentityUri"]);
-    })
-    .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new[]
-    {
-        TimeSpan.FromSeconds(1),
-        TimeSpan.FromSeconds(5),
-        TimeSpan.FromSeconds(10)
-    }))
-    .AddTransientHttpErrorPolicy(builder => builder.CircuitBreakerAsync(
-        handledEventsAllowedBeforeBreaking: 3,
-        durationOfBreak: TimeSpan.FromSeconds(30)
-    ));
+builder.Services.AddHttpClient("IdentityAPI", client => client.BaseAddress = 
+    new Uri(configuration["ApiSettings:IdentityUri"]))
+    .AddStandardResilienceHandler(options => GetStandardResilienceOptions());
 
 builder.Services.AddHealthChecks()
                 .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "InventoryAPI" });
@@ -106,6 +94,20 @@ app.UseHealthChecks("/hc", new HealthCheckOptions()
 
 app.Run();
 
+
+static HttpStandardResilienceOptions GetStandardResilienceOptions()
+{
+    var options = new HttpStandardResilienceOptions();
+
+    options.Retry.MaxRetryAttempts = 5;
+    options.Retry.UseJitter = true;
+    options.Retry.Delay = TimeSpan.FromSeconds(2);
+    options.Retry.BackoffType = DelayBackoffType.Exponential;
+
+    options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
+
+    return options;
+}
 
 async Task SeedInventoryData(IHost app)
 {
