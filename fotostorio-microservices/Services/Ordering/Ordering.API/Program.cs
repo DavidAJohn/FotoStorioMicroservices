@@ -3,11 +3,11 @@ using MassTransit;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.OpenApi.Models;
 using Ordering.API.Middleware;
 using Polly;
 using Serilog;
-using Serilog.Events;
 
 Log.Logger = new LoggerConfiguration()
         .WriteTo.Console()
@@ -53,22 +53,9 @@ try
 
     builder.Services.AddHttpContextAccessor();
 
-    // Access the Identity API via a named HttpClient, also using Polly for more resilience
-    builder.Services
-        .AddHttpClient("IdentityAPI", client =>
-        {
-            client.BaseAddress = new Uri(configuration["ApiSettings:IdentityUri"]);
-        })
-        .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new[]
-        {
-                    TimeSpan.FromSeconds(1),
-                    TimeSpan.FromSeconds(5),
-                    TimeSpan.FromSeconds(10)
-        }))
-        .AddTransientHttpErrorPolicy(builder => builder.CircuitBreakerAsync(
-            handledEventsAllowedBeforeBreaking: 3,
-            durationOfBreak: TimeSpan.FromSeconds(30)
-        ));
+    builder.Services.AddHttpClient("IdentityAPI", client => client.BaseAddress =
+        new Uri(configuration["ApiSettings:IdentityUri"]))
+        .AddStandardResilienceHandler(options => GetStandardResilienceOptions());
 
     builder.Services.AddHealthChecks()
                     .AddCheck("self", () => HealthCheckResult.Healthy(), new string[] { "OrderingAPI" })
@@ -160,4 +147,18 @@ async Task MigrateDatabase(IHost app)
             logger.LogError(ex, "An error occurred while migrating database");
         }
     }
+}
+
+static HttpStandardResilienceOptions GetStandardResilienceOptions()
+{
+    var options = new HttpStandardResilienceOptions();
+
+    options.Retry.MaxRetryAttempts = 5;
+    options.Retry.UseJitter = true;
+    options.Retry.Delay = TimeSpan.FromSeconds(2);
+    options.Retry.BackoffType = DelayBackoffType.Exponential;
+
+    options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
+
+    return options;
 }
