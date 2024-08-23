@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { Discount, Campaign } from '@app/_models';
 import { DiscountService, CampaignService, ProductService, OrderService } from '@app/_services/';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +16,7 @@ export class HomeComponent {
   campaignsMessage = 'Unknown';
   ordersMessage = 'Unknown';
   productCountToDisplay = -1;
+  imageAssetsUrl = environment.imageAssetsUrl ?? 'http://localhost/images';
 
   currentDiscounts: Discount[] = [];
   currentCampaigns: Campaign[] = [];
