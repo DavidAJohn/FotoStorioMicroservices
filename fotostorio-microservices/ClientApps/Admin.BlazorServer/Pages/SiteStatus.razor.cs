@@ -8,6 +8,8 @@ public partial class SiteStatus
     bool AzureConfigured = false;
     string ApplicationStatusUrl = "";
 
+    private string ImagePath = "";
+
     private string healthMessage = "Checking...";
     private string healthTextColour = "text-teal-600 ";
     private string ordersMessage = "Checking...";
@@ -23,6 +25,8 @@ public partial class SiteStatus
         LastUpdated = dateTimeOffset.ToString(config["DateTimeSettings:DateTimeFormat"] ?? "yyyy-MM-dd HH:mm:ss");
 
         ApplicationStatusUrl = $"{config["ApplicationStatusUrl"]}/hc-ui";
+
+        ImagePath = config["ImageAssetsBaseURI"] ?? "http://localhost/images"; // default fallback image path
 
         CheckAzureConfig();
     }

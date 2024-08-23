@@ -201,6 +201,7 @@ services:
       - "DateTimeSettings:LocalTimeZone=${LOCAL_TIME_ZONE}"
       - "DateTimeSettings:DateTimeFormat=${DATE_TIME_FORMAT}"
       - "ApplicationStatusUrl=http://host.docker.internal:8100"
+      - "ImageAssetsBaseURI=${IMAGE_ASSETS_BASE_URI}"
     ports:
       - "8020:8080"
 
